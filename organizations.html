@@ -27,6 +27,11 @@
                 <button class="nav-bar-button">DONATE</button>
             </div>
         </header>
+        <main>
+            <h1>Find organizations near you:</h1>
+            <button @click="getLocation()">Use current location</button>
+            <p id="user-location"></p>
+        </main>
     </div>
     <script src="app.js"></script>
 </body>
