@@ -11,7 +11,7 @@
     --lightblue: #98D7FF;
     --darkblue: #62B4E7;
     --lightbrown: #876453;
-    --button-color: #876453;
+    --button-color: #58A74C;
 }
 
 #app {
@@ -19,6 +19,10 @@
     grid-auto-rows:minmax(0px, auto);
     grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,175px))minmax(0px,1fr);
     background-color: var(--offwhite);
+}
+
+img {
+    object-fit: cover;
 }
 
 .header-background {
@@ -32,13 +36,15 @@
 
 .top-nav-bar {
     grid-column: 2 / 8;
-    background-color: var(--lightbrown);
+    background-color: #606634b7;
     height: 60px;
     z-index: 1;
     display: flex;
     justify-content: space-between;
     position: sticky;
     top: 0;
+    border-radius: bottom 10px;
+    box-shadow: 0px 15px 10px -15px rgba(77, 145, 67, 0.3);
 }
 
 .nav-links ul {
@@ -83,12 +89,17 @@
     width: 100%;
 }
 .top-nav-bar > .nav-bar-button-container > .nav-bar-button {
-    width: 150px;
+    width: 160px;
     height: 40px;
-    font-size: 20px;
+    font-size: 18px;
     color: var(--offwhite);
     background-color: var(--button-color);
     margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 2px solid rgba(77, 145, 67, 0.7);
+    border-style: outset;
+    cursor: pointer;
 }
 
 .nav-bar-button a {
@@ -306,4 +317,19 @@ img .slideshow-image {
 #mission-image {
     grid-column: 5/8;
     grid-row: 6/7;
+}
+
+footer {
+    background-color: var(--darkgreen);
+    height: 70px;
+    text-align: center;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+footer h2 {
+    margin-right: 8px;
 }
