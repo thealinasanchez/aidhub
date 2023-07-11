@@ -4,6 +4,7 @@ Vue.createApp({
         }
     },
     methods : {
+        
     },
     created : function() {
     }
