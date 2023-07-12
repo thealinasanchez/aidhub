@@ -31,12 +31,24 @@
         </header>
         <div class="get-started-image"></div>
         <main class="main-section-container">
-            <div id="volunteering-image"></div>
-            <button class="common-green-button volunteer-button">Volunteer Form</button>
-            <div id="donation-image"></div>
-            <button class="common-green-button donation-button">Donation Form</button>
+            <div v-if="!getStartedForm.open">
+                <div id="volunteering-image"></div>
+                <button @click="volunteerOpenForm()" class="common-green-button volunteer-button">Volunteer
+                    Form</button>
+                <div id="donation-image"></div>
+                <button @click="donationOpenForm()" class="common-green-button donation-button">Donation Form</button>
+            </div>
+            <form class="volunteer-donate-form" v-else>
+                <h3>This Will be the form</h3>
+                <label>Enter Text<input type="text" id="something" /></label>
+            </form>
         </main>
         <!-- close app -->
+        <footer class="get-started-footer">
+            <h2>AidHub</h2>
+            <p>Sign up for our newsletter here!</p>
+        </footer>
+
     </div>
     <script src="app.js"></script>
 </body>

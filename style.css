@@ -4,6 +4,7 @@
     box-sizing: border-box;
 }
 
+/* google font */
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap');
 
 :root {
@@ -120,78 +121,27 @@ img {
 }
 
 /* a common green button */
-.top-nav-bar>.nav-bar-button-container>.nav-bar-button {
+.top-nav-bar>.nav-bar-button-container a {
     width: 160px;
     height: 40px;
     font-size: 18px;
 }
 
-.nav-bar-button a {
+.nav-bar-button-container a {
     text-decoration: none;
     color: inherit;
+}
+
+.nav-bar-button {
+    width: 160px;
+    height: 40px;
+    font-size: 18px;
 }
 
 .nav-bar-button:hover {
     background-color: var(--offwhite);
 }
 
-.get-started-image {
-    background-image: url("volunteering1.jpg");
-    background-size: cover;
-    background-position: 50% 30%;
-    position: relative;
-    grid-column: 1/9;
-    width: 100vw;
-    height: 550px;
-}
-
-
-#volunteering-image {
-    background-image: url("volunteering2.jpg");
-    background-size: cover;
-    width: 80%;
-    margin: auto;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    border-radius: 5px;
-}
-
-/* common green button */
-.volunteer-button {
-    display: block;
-    margin: auto;
-    margin-top: 10px;
-    padding: 8px 8px;
-}
-
-#donation-image {
-    background-image: url("volunteering3.jpg");
-    background-size: cover;
-    width: 80%;
-    margin: auto;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    border-radius: 5px;
-}
-
-/* common green button */
-.donation-button {
-    display: block;
-    margin: auto;
-    margin-top: 10px;
-    padding: 8px 8px;
-    margin-bottom: 10px;
-}
-
-p {
-    grid-column: 2/7;
-}
 
 /* Slideshow container */
 .slideshow {
@@ -345,16 +295,61 @@ footer {
     padding-top: 20px;
 }
 
-#floating-panel {
-    position: absolute;
-    top: 10px;
-    margin-top: 200px;
-    left: 25%;
-    z-index: 5;
-    background-color: white;
-    padding: 5px;
-    border: 1px solid #999;
-    text-align: center;
-    line-height: 30px;
-    padding-left: 10px;
+/*                              get started page                               */
+.get-started-image {
+    background-image: url("volunteering1.jpg");
+    background-size: cover;
+    background-position: 50% 30%;
+    position: relative;
+    grid-column: 1/9;
+    height: 550px;
+}
+
+
+#volunteering-image {
+    background-image: url("volunteering2.jpg");
+    background-size: cover;
+    width: 80%;
+    margin: auto;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* common green button */
+.volunteer-button {
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    padding: 8px 8px;
+}
+
+#donation-image {
+    background-image: url("volunteering3.jpg");
+    background-size: cover;
+    width: 80%;
+    margin: auto;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* common green button */
+.donation-button {
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    padding: 8px 8px;
+    margin-bottom: 10px;
+}
+
+.volunteer-donate-form {
+    width: 100%;
+    height: 900px;
 }
