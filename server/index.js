@@ -5,7 +5,7 @@ const model = require('./model');
 const app = express();
 const port = 8080;
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.json());
 app.use(cors());
 
 // GET
