@@ -31,9 +31,20 @@
             <h1>Find organizations near you:</h1>
             <button @click="getLocation()">Use current location</button>
             <p id="user-location"></p>
+            <div id="floating-panel">
+                <input type="text" id="latlong">
+                <input type="submit" type="button" value="Reverse Geocode">
+            </div>
+
+            <div id="result"></div>
+
+            <div id="map"></div>
         </main>
     </div>
     <script src="app.js"></script>
 </body>
-
+<script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxjhIaOZpIWDreXbc8awdkGIx52bwzsZo&callback=initMap&v=weekly&challen=2"
+    async
+</script>
 </html>
