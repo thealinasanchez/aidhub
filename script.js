@@ -6,7 +6,7 @@ Vue.createApp({
             filteredOrganizations: [],
             sortNames: "",
             newOrganization: {
-                name: "",
+                orgname: "",
                 location: "",
                 missionStatement: ""
             }
@@ -45,7 +45,7 @@ Vue.createApp({
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
             
-            var encodedData = "name=" + encodeURIComponent(this.newOrganization.name) +
+            var encodedData = "orgname=" + encodeURIComponent(this.newOrganization.orgname) +
                                 "&location=" + encodeURIComponent(this.newOrganization.location) +
                                 "&missionStatement" + encodeURIComponent(this.newOrganization.missionStatement);
             var requestOptions = {
@@ -58,7 +58,7 @@ Vue.createApp({
             fetch(`http://localhost:8080/organizations/${orgId}`, requestOptions)
             .then((response) => {
                 if (response.status == 204) {
-                    this.organizations[this.modal.index].name = this.newOrganization.name;
+                    this.organizations[this.modal.index].orgname = this.newOrganization.orgname;
                     this.organizations[this.modal.index].location = this.newOrganization.location;
                     this.organizations[this.modal.index].missionStatement = this.newOrganization.missionStatement;
                 }
@@ -69,7 +69,7 @@ Vue.createApp({
             // first param is the header, second param is content of header
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-            var encodedData = "name=" + encodeURIComponent(this.modal.name) +
+            var encodedData = "orgname=" + encodeURIComponent(this.modal.orgname) +
                                 "&location=" + encodeURIComponent(this.modal.location) +
                                 "&missionStatement" + encodeURIComponent(this.modal.missionStatement);
             var requestOptions = {
