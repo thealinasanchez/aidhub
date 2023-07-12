@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vue App</title>
     <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="anotherstyle.css" rel="stylesheet" type="text/css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
@@ -28,23 +29,39 @@
             </div>
         </header>
         <main>
-            <h1>Find organizations near you:</h1>
-            <button @click="getLocation()">Use current location</button>
-            <p id="user-location"></p>
-            <div id="floating-panel">
-                <input type="text" id="latlong">
-                <input type="submit" type="button" value="Reverse Geocode">
+            <h1 id="find">Find organizations near you:</h1>
+            <div class="search-area">
+                <input type="text" placeholder="Search..." v-model="search" id="org-search">
+                <div v-on:click="resetSearch()" id="reset">x</div>
             </div>
+            <div class="organizations">
+                <div class="row-head">
+                    <div>Name
+                        <span v-on:click="sortNames()" v-if="sortOrder == 'asc'">&and;</span>
+                        <span v-on:click="sortNames()" v-else>&or;</span>
+                    </div>
+                    <div>Location</div>
+                </div>
 
-            <div id="result"></div>
-
-            <div id="map"></div>
-        </main>
+                <div v-for="org in filteredOrganizations"
+                    class="row-body"
+                    v-if="search.length > 0 && filteredOrganizations.length > 0"
+                >
+                    <div>{{org.name}}</div>
+                    <div>{{org.location}}</div>
+                    <div>{{org.missionStatement}}</div>
+                </div>
+                <div 
+                    v-for="(org,index) in organizaitons" 
+                    class="row-body" 
+                    v-else
+                >
+                    <div>{{org.name}}</div>
+                    <div>{{org.location}}</div>
+                    <div>{{org.missionStatement}}</div>
+                </div>
+            </div>
     </div>
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
-<script>
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxjhIaOZpIWDreXbc8awdkGIx52bwzsZo&callback=initMap&v=weekly&challen=2"
-    async
-</script>
 </html>
