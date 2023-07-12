@@ -51,7 +51,7 @@ app.post("/organizations", function(req,res) {
 })
 
 // PUT
-app.put("/organizations:orgId", function(req,res) {
+app.put("/organizations/:orgId", function(req,res) {
     const updatedOrg = {
         orgname: req.body.orgname,
         location: req.body.location,
@@ -71,7 +71,7 @@ app.put("/organizations:orgId", function(req,res) {
 });
 
 // DELETE
-app.delete("/organizations/orgId", function(req,res) {
+app.delete("/organizations/:orgId", function(req,res) {
     model.JournalEntry.findOneAndDelete({"_id":req.params.orgId}).then(org => {
         if(org) {
             res.status(204).send("Organization deleted.");
