@@ -33,7 +33,7 @@ app.get("/organizations/:orgId", function(req,res) {
 // POST
 app.post("/organizations", function(req,res) {
     const newEntry = new model.JournalEntry({
-        name: req.body.name,
+        orgname: req.body.orgname,
         location: req.body.location,
         mission: req.body.missionStatement
     });
@@ -53,7 +53,7 @@ app.post("/organizations", function(req,res) {
 // PUT
 app.put("/organizations:orgId", function(req,res) {
     const updatedOrg = {
-        name: req.body.name,
+        orgname: req.body.orgname,
         location: req.body.location,
         mission: req.body.missionStatement
     }
