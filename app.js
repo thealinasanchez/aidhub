@@ -1,11 +1,51 @@
 Vue.createApp({
     data() {
         return {
+            slideShow: {
+                currentIndex: 0,
+                slides: [
+                    {
+                        src: "./volunteering1.jpg",
+                        alt: "People volunteering",
+                        caption: "Caption Goes Here",
+                    },
+                    {
+                        src: "./volunteering2.jpg",
+                        alt: "People volunteering",
+                        caption: "Caption Goes Here",
+                    },
+                    {
+                        src: "./volunteering3.jpg",
+                        alt: "People volunteering",
+                        caption: "Caption Goes Here",
+                    }
+                ],
+            }
         }
     },
-    methods : {
+    methods: {
+        moveSlideShow: function () {
+            let slideShow = document.querySelector(".slideshow-container");
+            slideShow.style.transform = `translateX(-${100 * this.slideShow.currentIndex}%)`;
+        },
+        moveToSlide: function (index) {
+            if (this.slideShow.currentIndex > this.slideShow.slides.length - 1) { this.slideShow.currentIndex = 0 }
+            else if (this.slideShow.currentIndex < 0) { this.slideShow.currentIndex = this.slideShow.slides.length - 1 }
+            else { this.slideShow.currentIndex = index }
+            this.moveSlideShow();
+        },
+        moveToNextSlide: function () {
+            if (this.slideShow.currentIndex >= this.slideShow.slides.length - 1) { this.slideShow.currentIndex = 0; }
+            else { this.slideShow.currentIndex++ }
+            this.moveSlideShow();
+        },
+        moveToPreviousSlide: function () {
+            if (this.slideShow.currentIndex <= 0) { this.slideShow.currentIndex = this.slideShow.slides.length - 1 }
+            else { this.slideShow.currentIndex-- };
+            this.moveSlideShow();
+        },
         // LONGITUDE AND LATITUDE FUNCTIONS
-        getLocation: function() {
+        getLocation: function () {
             var x = document.getElementById("user-location");
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(this.showPosition, this.showError);
@@ -13,13 +53,13 @@ Vue.createApp({
                 x.innerHTML = "Geolocation is not supported by this browser.";
             }
         },
-        showPosition: function(position) {
+        showPosition: function (position) {
             var x = document.getElementById("user-location");
             x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
         },
-        showError: function(error) {
+        showError: function (error) {
             var x = document.getElementById("user-location");
-            switch(error.code) {
+            switch (error.code) {
                 case error.PERMISSION_DENIED:
                     x.innerHTML = "User denied the request for Geolocation.";
                     break;
@@ -35,8 +75,8 @@ Vue.createApp({
             }
         },
         // REVERSE GEOCODING FUNCTIONS
-        
+
     },
-    created : function() {
+    created: function () {
     }
 }).mount("#app");
