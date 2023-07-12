@@ -56,14 +56,14 @@ Vue.createApp({
                 body: encodedData,
                 headers: myHeaders
             };
-            var orgId = this.expenses[this.modal.index]._id;
+            var orgId = this.expenses[this.newOrganization.index]._id;
             console.log(orgId);
             fetch(`http://localhost:8080/organizations/${orgId}`, requestOptions)
             .then((response) => {
                 if (response.status == 204) {
-                    this.organizations[this.modal.index].orgname = this.newOrganization.orgname;
-                    this.organizations[this.modal.index].location = this.newOrganization.location;
-                    this.organizations[this.modal.index].missionStatement = this.newOrganization.missionStatement;
+                    this.organizations[this.newOrganization.index].orgname = this.newOrganization.orgname;
+                    this.organizations[this.newOrganization.index].location = this.newOrganization.location;
+                    this.organizations[this.newOrganization.index].missionStatement = this.newOrganization.missionStatement;
                 }
             })
         },
