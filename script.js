@@ -72,9 +72,9 @@ Vue.createApp({
             // first param is the header, second param is content of header
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-            var encodedData = "orgname=" + encodeURIComponent(this.modal.orgname) +
-                                "&location=" + encodeURIComponent(this.modal.location) +
-                                "&missionStatement" + encodeURIComponent(this.modal.missionStatement);
+            var encodedData = "orgname=" + encodeURIComponent(this.newOrganization.orgname) +
+                                "&location=" + encodeURIComponent(this.newOrganization.location) +
+                                "&missionStatement" + encodeURIComponent(this.newOrganization.missionStatement);
             var requestOptions = {
                 method: 'POST',
                 body: encodedData,
