@@ -35,7 +35,7 @@ app.post("/organizations", function(req,res) {
     const newEntry = new model.JournalEntry({
         orgname: req.body.orgname,
         location: req.body.location,
-        mission: req.body.missionStatement
+        missionStatement: req.body.missionStatement
     });
 
     newEntry.save().then(() => {
@@ -55,7 +55,7 @@ app.put("/organizations:orgId", function(req,res) {
     const updatedOrg = {
         orgname: req.body.orgname,
         location: req.body.location,
-        mission: req.body.missionStatement
+        missionStatement: req.body.missionStatement
     }
 
     model.JournalEntry.findByIdAndUpdate({"_id": req.params.orgId}, updatedOrg, {"new": true}).then(org => {
