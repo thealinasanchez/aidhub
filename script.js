@@ -7,7 +7,10 @@ Vue.createApp({
             sortNames: "",
             newOrganization: {
                 orgname: "",
-                location: "",
+                location: {
+                    city: "",
+                    state: ""
+                },
                 missionStatement: ""
             }
         }
