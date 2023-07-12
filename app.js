@@ -7,17 +7,17 @@ Vue.createApp({
                     {
                         src: "./volunteering1.jpg",
                         alt: "People volunteering",
-                        caption: "Caption Goes Here",
+                        caption: "",
                     },
                     {
                         src: "./volunteering2.jpg",
                         alt: "People volunteering",
-                        caption: "Caption Goes Here",
+                        caption: "",
                     },
                     {
                         src: "./volunteering3.jpg",
                         alt: "People volunteering",
-                        caption: "Caption Goes Here",
+                        caption: "",
                     }
                 ],
             }

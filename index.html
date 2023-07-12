@@ -45,51 +45,53 @@
                 :class="index == slideShow.currentIndex && 'slide-show-dot-active'" class="slideshow-dot"
                 @click="moveToSlide(index)"></span>
         </div>
-        <div class="future-stuff">
-            <h1>Future map thing here</h1>
-        </div>
-        <div id="about-image">
-            <img src="volunteering4.jpg" alt="about image" style="width: 400px; height: 500px" class="about-image">
-        </div>
-        <div class="about-text">
-            <h2>About</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
-                sit facilis et voluptate rem molestias quo, iusto quod nemo sint
-                fugiat!</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
-                sit facilis et voluptate rem molestias quo, iusto quod nemo sint
-                fugiat!</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
-                sit facilis et voluptate rem molestias quo, iusto quod nemo sint
-                fugiat!</p>
-        </div>
-        <div class="mission-text">
-            <h2>Mission</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
-                sit facilis et voluptate rem molestias quo, iusto quod nemo sint
-                fugiat!</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
-                sit facilis et voluptate rem molestias quo, iusto quod nemo sint
-                fugiat!</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
-                sit facilis et voluptate rem molestias quo, iusto quod nemo sint
-                fugiat!</p>
-        </div>
-        <div id="mission-image">
-            <img src="volunteering3.jpg" alt="about image" style="width: 523px; height: 500px" class="about-image">
-        </div>
+        <main class="main-section-container">
+            <div class="future-stuff">
+                <h1>Future map thing here</h1>
+            </div>
+            <div class="index-main-image-container">
+                <div class="index-main-image-row">
+                    <img src="volunteering4.jpg" alt="about image" class="index-main-image">
+                    <div class="index-main-image-text">
+                        <h2>About</h2>
+                        <p> &nbsp; &nbsp; &nbsp; &nbsp; Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
+                            sit facilis et voluptate rem molestias quo, iusto quod nemo sint
+                            fugiat!</p>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
+                            sit facilis et voluptate rem molestias quo, iusto quod nemo sint
+                            fugiat!</p>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
+                            sit facilis et voluptate rem molestias quo, iusto quod nemo sint
+                            fugiat!</p>
+                    </div>
+                </div>
+                <div class="index-main-image-row">
+                    <div class="index-main-image-text">
+                        <h2>Mission</h2>
+                        <p>&nbsp; &nbsp; &nbsp; &nbsp; Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
+                            sit facilis et voluptate rem molestias quo, iusto quod nemo sint
+                            fugiat!</p>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
+                            sit facilis et voluptate rem molestias quo, iusto quod nemo sint
+                            fugiat!</p>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Veniam neque eos fugit, pariatur nam qui tempora error reiciendis
+                            sit facilis et voluptate rem molestias quo, iusto quod nemo sint
+                            fugiat!</p>
+                    </div>
+                    <img src="volunteering3.jpg" alt="mission image" class="index-main-image">
+                </div>
+        </main>
+        <footer class="index-footer">
+            <h2>AidHub</h2>
+            <p>Sign up for our newsletter here!</p>
+        </footer>
     </div>
-
-    <footer>
-        <h2>AidHub</h2>
-        <p>Sign up for our newsletter here!</p>
-    </footer>
     <script src="app.js"></script>
 </body>
 
