@@ -47,17 +47,17 @@
                     class="row-body"
                     v-if="search.length > 0 && filteredOrganizations.length > 0"
                 >
-                    <div>{{organizations.name}}</div>
-                    <div>{{organizations.location}}</div>
-                    <div>{{organizations.missionStatement}}</div>
+                    <div>{{org.orgname}}</div>
+                    <div>{{org.location.city}}</div>
+                    <div>{{org.missionStatement}}</div>
                 </div>
                 <div 
                     v-for="(org,index) in organizations" 
                     class="row-body" 
                     v-else
                 >
-                    <div>{{org.name}}</div>
-                    <div>{{org.location}}</div>
+                    <div>{{org.orgname}}</div>
+                    <div>{{org.location.city}}</div>
                     <div>{{org.missionStatement}}</div>
                 </div>
             </div>
