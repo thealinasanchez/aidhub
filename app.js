@@ -1,6 +1,9 @@
 Vue.createApp({
     data() {
         return {
+            getStartedForm: {
+                open: false
+            },
             slideShow: {
                 currentIndex: 0,
                 slides: [
@@ -24,6 +27,12 @@ Vue.createApp({
         }
     },
     methods: {
+        volunteerOpenForm: function () {
+            this.getStartedForm.open = true;
+        },
+        donateOpenForm: function () {
+            this.getStartedForm.open = true;
+        },
         moveSlideShow: function () {
             let slideShow = document.querySelector(".slideshow-container");
             slideShow.style.transform = `translateX(-${100 * this.slideShow.currentIndex}%)`;
