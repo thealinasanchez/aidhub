@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidHub - Organizations</title>
-    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="anotherstyle.css" rel="stylesheet" type="text/css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
@@ -65,7 +65,11 @@
                     v-else
                 >
                     <div>{{org.orgname}}</div>
-                    <div>{{org.categories}}</div>
+                    <div>
+                        <p v-for="cat in org.categories">
+                            {{cat}}
+                        </p>
+                    </div>
                     <div>{{org.city}}</div>
                     <div>{{org.state}}</div>
                     <div>{{org.missionStatement}}</div>
