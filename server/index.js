@@ -34,7 +34,9 @@ app.get("/organizations/:orgId", function(req,res) {
 app.post("/organizations", function(req,res) {
     const newEntry = new model.JournalEntry({
         orgname: req.body.orgname,
-        location: req.body.location,
+        categories: req.body.categories,
+        city: req.body.city,
+        state: req.body.state,
         missionStatement: req.body.missionStatement
     });
 
@@ -54,7 +56,9 @@ app.post("/organizations", function(req,res) {
 app.put("/organizations/:orgId", function(req,res) {
     const updatedOrg = {
         orgname: req.body.orgname,
-        location: req.body.location,
+        categories: req.body.categories,
+        city: req.body.city,
+        state: req.body.state,
         missionStatement: req.body.missionStatement
     }
 
