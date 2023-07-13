@@ -54,6 +54,7 @@ app.post("/organizations", function(req,res) {
 
 // PUT
 app.put("/organizations/:orgId", function(req,res) {
+    // console.log(req.body.categories);
     const updatedOrg = {
         orgname: req.body.orgname,
         categories: req.body.categories,
