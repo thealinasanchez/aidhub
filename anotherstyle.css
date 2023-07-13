@@ -4,6 +4,9 @@
     box-sizing: border-box;
 }
 
+/* google font */
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap');
+
 :root {
     --darkgreen: #606634;
     --limegreen: #BBC340;
@@ -15,13 +18,15 @@
 }
 
 #app {
-    display:grid;
-    grid-auto-rows:minmax(0px, auto);
-    grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,175px))minmax(0px,1fr);
+    font-family: 'Lato', sans-serif;
+    display: grid;
+    grid-auto-rows: minmax(0px, auto);
+    grid-template-columns: minmax(0px, 1fr)repeat(6, minmax(0, 175px))minmax(0px, 1fr);
     background-color: var(--offwhite);
 }
 
-main, .main-section-container {
+main,
+.main-section-container {
     grid-column: 2/8;
 }
 
@@ -29,10 +34,26 @@ img {
     object-fit: cover;
 }
 
+.common-green-button {
+    background-color: var(--button-color);
+    color: var(--offwhite);
+    border: 2px solid rgba(77, 145, 67, 0.7);
+    border-style: outset;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.common-green-button:hover {
+    background-color: inherit;
+    color: var(--lightbrown);
+    border: 2px solid var(--lightbrown);
+}
+
 .header-background {
-    background-color: var(--darkgreen);
+    background-color: white;
     grid-column: 1 / 9;
-    height: 60px;
+    height: 70px;
     position: absolute;
     top: 0px;
     width: 100%;
@@ -40,15 +61,17 @@ img {
 
 .top-nav-bar {
     grid-column: 2 / 8;
-    background-color: #606634b7;
-    height: 60px;
+    background-color: rgba(255, 255, 255, 0.675);
+    height: 70px;
     z-index: 1;
     display: flex;
     justify-content: space-between;
     position: sticky;
     top: 0;
-    border-radius: bottom 10px;
-    box-shadow: 0px 15px 10px -15px rgba(77, 145, 67, 0.3);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0px 15px 10px -15px rgba(0, 0, 0, 0.24);
+    padding: 0px 10px;
 }
 
 .nav-links ul {
@@ -66,12 +89,13 @@ img {
     text-align: center;
 }
 
-.nav-links  ul li a {
-    color: var(--offwhite);
+.nav-links ul li a {
+    color: black;
     text-decoration: none;
+    font-size: 16px;
 }
 
-.top-nav-bar > .logo-brand-container {
+.top-nav-bar>.logo-brand-container {
     grid-column: 2 / 3;
     height: 100%;
     width: 100%;
@@ -79,51 +103,205 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--offwhite);
+    color: black;
 }
 
 
-.top-nav-bar > .nav-links {
+.top-nav-bar>.nav-links {
     grid-column: 7 / 8;
 }
 
-.top-nav-bar > .nav-bar-button-container {
-    grid-column: 5/6;
+.top-nav-bar>.nav-bar-button-container {
     max-width: 175px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
     width: 100%;
 }
-.top-nav-bar > .nav-bar-button-container > .nav-bar-button {
+
+/* a common green button */
+.top-nav-bar>.nav-bar-button-container a {
     width: 160px;
     height: 40px;
     font-size: 18px;
-    color: var(--offwhite);
-    background-color: var(--button-color);
-    margin-top: 10px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    border: 2px solid rgba(77, 145, 67, 0.7);
-    border-style: outset;
-    cursor: pointer;
 }
 
-.nav-bar-button a {
+.nav-bar-button-container a {
     text-decoration: none;
-    color: white;
+    color: inherit;
+}
+
+.nav-bar-button {
+    width: 160px;
+    height: 40px;
+    font-size: 18px;
 }
 
 .nav-bar-button:hover {
-    background-color: white;
-    color: var(--lightbrown);
-    border: 2px solid var(--lightbrown);
+    background-color: var(--offwhite);
 }
 
+
+/* Slideshow container */
+.slideshow {
+    grid-column: 1/9;
+    overflow: hidden;
+}
+
+.slideshow-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: left;
+    align-items: center;
+    transform: translateX(0%);
+    transition: all 0.5s;
+}
+
+.slideshow-image {
+    object-fit: cover;
+    width: 100vw;
+    height: 75vh;
+    background-size: cover;
+    background-position: center;
+    object-position: 50% 0%;
+    position: relative;
+}
+
+/* Next & previous buttons */
+.slide-show-prev-btn,
+.slide-show-next-btn {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.4s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+/* Position the "next button" to the right */
+.slide-show-next-btn {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+    left: auto;
+}
+
+/* On hover, add a black background color with see-through */
+.slide-show-prev-btn:hover,
+.slide-show-next-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Caption text */
+.slideshow-image-caption {
+    color: #f2f2f2;
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+}
+
+.slideshow-dots-container {
+    text-align: center;
+    margin: auto;
+    grid-column: 4 / 6;
+}
+
+/* The dots/bullets/indicators */
+.slideshow-dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    transition: background-color 0.4s ease;
+    display: inline-block;
+}
+
+.slide-show-dot-active,
+.slideshow-dot:hover {
+    background-color: #717171;
+}
+
+.future-stuff {
+    grid-column: 2/8;
+    grid-row: 4/5;
+    background-color: #000;
+    height: 500px;
+    color: white;
+}
+
+.index-main-image-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+.index-main-image-row {
+    padding: 20px 0px;
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.index-main-image {
+    width: 500px;
+    object-fit: cover;
+    object-position: 50% 0%;
+    border-radius: 5px;
+    height: 500px;
+}
+
+.index-main-image-text {
+    width: 500px;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.index-main-image-text>h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.index-main-image-text>p {
+    font-weight: normal;
+    font-size: 20px;
+}
+
+footer {
+    grid-column: 1/9;
+    grid-row: 5/6;
+    background-color: var(--darkgreen);
+    height: 80px;
+    text-align: center;
+    color: white;
+    padding-top: 20px;
+}
+
+/*                              get started page                               */
 .get-started-image {
     background-image: url("volunteering1.jpg");
     background-size: cover;
     background-position: 50% 30%;
     position: relative;
     grid-column: 1/9;
-    width: 100vw;
     height: 550px;
 }
 
@@ -141,23 +319,12 @@ img {
     border-radius: 5px;
 }
 
-#volunteer-button {
-    display:flex;
+/* common green button */
+.volunteer-button {
+    display: block;
     margin: auto;
     margin-top: 10px;
     padding: 8px 8px;
-    border: 1px solid var(--button-color);
-    background-color: var(--button-color);
-    border-radius: 3px;
-    color: white;
-    cursor: pointer;
-
-}
-
-#volunteer-button:hover {
-    background-color: white;
-    color: var(--lightbrown);
-    border: 1px solid var(--lightbrown);
 }
 
 #donation-image {
@@ -173,192 +340,21 @@ img {
     border-radius: 5px;
 }
 
-#donation-button {
-    display:flex;
+/* common green button */
+.donation-button {
+    display: block;
     margin: auto;
     margin-top: 10px;
     padding: 8px 8px;
-    border: 1px solid var(--button-color);
-    background-color: var(--button-color);
-    border-radius: 3px;
-    color: white;
-    cursor: pointer;
     margin-bottom: 10px;
 }
 
-#donation-button:hover {
-    background-color: white;
-    color: var(--lightbrown);
-    border: 1px solid var(--lightbrown);
-}
-
-p {
-    grid-column: 2/7;
-}
-
-/* SLIDESHOW STUFF */
-.slideshow-image {
-    object-fit: cover;
+.volunteer-donate-form {
     width: 100%;
-    height: 75vh;
-    background-size: cover;
-    background-position: center;
-    object-position: 50% 0%;
-    position: relative;
-    grid-row: 3/4;
-    grid-column: 1/9;
+    height: 900px;
 }
 
-/* Slideshow container */
-.slideshow-container {
-    /*max-width: 100%;*/
-    position: relative;
-    margin: auto;
-    grid-column: 1/9;
-    width: 100%;
-}
-
-/* Hide the images by default */
-.mySlides {
-    display: none;
-}
-
-/* Next & previous buttons */
-.prev, .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    margin-top: -22px;
-    padding: 16px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.4s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
-}
-
-/* Position the "next button" to the right */
-.next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
-}
-
-/* On hover, add a black background color with see-through */
-.prev:hover, .next:hover {
-    background-color: rgba(0,0,0,0.8);
-}
-
-/* Caption text */
-.text {
-    color: #f2f2f2;
-    font-size: 15px;
-    padding: 8px 12px;
-    position: absolute;
-    bottom: 8px;
-    width: 100%;
-    text-align: center;
-}
-.slideshow-dots-container {
-    text-align: center;
-    margin: auto;
-    grid-column: 4 / 6;
-}
-/* The dots/bullets/indicators */
-.slideshow-dot {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    transition: background-color 0.4s ease;
-    display: inline-block;
-}
-
-.active, .slideshow-dot:hover {
-    background-color: #717171;
-}
-
-/* Fading animation */
-.fade {
-    animation-name: fade;
-    animation-duration: 1.5s;
-}
-
-@keyframes fade {
-    from {opacity: .4}
-    to {opacity: 1}
-}
-
-.future-stuff {
-    grid-column: 2/8;
-    grid-row: 4/5;
-    background-color: #000;
-    height: 500px;
-    color: white;
-}
-
-#about-image {
-    grid-column: 2/4;
-    grid-row: 5/6;
-}
-
-.about-text {
-    grid-column: 4/8;
-    grid-row: 5/6;
-    margin-left: 10%;
-    font-size: 20px;
-    margin-top: 10px;
-}
-
-.mission-text {
-    grid-column: 2/5;
-    grid-row: 6/7;
-    font-size: 20px;
-    margin-top: 10px;
-}
-
-#mission-image {
-    grid-column: 5/8;
-    grid-row: 6/7;
-}
-
-footer {
-    background-color: var(--darkgreen);
-    height: 70px;
-    text-align: center;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
-    color: white;
-}
-
-footer h2 {
-    margin-right: 8px;
-}
-
-#floating-panel {
-    position: absolute;
-    top: 10px;
-    margin-top: 200px;
-    left: 25%;
-    z-index: 5;
-    background-color: white;
-    padding: 5px;
-    border: 1px solid #999;
-    text-align: center;
-    line-height: 30px;
-    padding-left: 10px;
-}
-
-#find {
-    grid-column: 2/8;
-    grid-row: 2/3;
-}
-
+/* organizations.html */
 .search-area {
     grid-column: 2/8;
     grid-row: 3/4;
@@ -372,19 +368,42 @@ footer h2 {
 
 #reset {
     margin-left: 5px;
-    font-size: 20px;
+    font-size: 15px;
+    margin-top: 5px;
+    cursor: pointer;
 }
 
 #org-search {
-    border-radius: 8px;
+    height: 25px;
+    font-size: 18px;
 }
 
 .organizations {
-    width: 90%;
-    margin: 24px 0;
-    text-align: left;
+    grid-column: 2/8;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.organizations span {
+    cursor: pointer;
 }
 
 .organizations > div:nth-child(even) {
     background-color: rgba(255,255,255,0.25);
+}
+
+.row-head, .row-body {
+    height: 60px;
+    display: grid;
+    grid-template-columns: 200px 200px 200px 200px 200px;
+    align-items: center;
+    padding: 12px 14px;
+    margin: 6px 0;
+}
+
+.row-head {
+    background-color: var(--darkblue);
+    border-radius: 5px;
 }
