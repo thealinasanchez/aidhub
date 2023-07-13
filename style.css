@@ -370,6 +370,7 @@ footer {
     margin-left: 5px;
     font-size: 15px;
     margin-top: 5px;
+    cursor: pointer;
 }
 
 #org-search {
