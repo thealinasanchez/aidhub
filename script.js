@@ -158,7 +158,7 @@ Vue.createApp({
     watch: {
         search(newSearch, oldSearch) {
             this.filteredOrganizations = this.organizations.filter((org) => {
-                return org.description
+                return org.city
                     .toLowerCase()
                     .includes(newSearch.toLowerCase());
             });
