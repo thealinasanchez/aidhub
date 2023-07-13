@@ -6,25 +6,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidHub - Organizations</title>
-    <link href="anotherstyle.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
     <div id="app">
         <!-- Content goes here -->
+        <div class="header-background">
+        </div>
         <header class="top-nav-bar">
             <div class="logo-brand-container">
                 <h2>AidHub</h2>
             </div>
             <nav class="nav-links">
-                <ul class="nav-links">
+                <ul>
                     <li><a class="nav-link" href="index.html">HOME</a></li>
                     <li><a class="nav-link" href="organizations.html">ORGANIZATIONS</a></li>
                 </ul>
             </nav>
             <div class="nav-bar-button-container">
-                <button class="nav-bar-button">DONATE</button>
+                <a href="getstarted.html">
+                    <button class="common-green-button nav-bar-button">GET STARTED</button>
+                </a>
             </div>
         </header>
         <main>
@@ -39,7 +43,9 @@
                         <span v-on:click="sortNames()" v-if="sortOrder == 'asc'">&and;</span>
                         <span v-on:click="sortNames()" v-else>&or;</span>
                     </div>
-                    <div>Location</div>
+                    <div>Category</div>
+                    <div>City</div>
+                    <div>State</div>
                     <div>Mission Statement</div>
                 </div>
 
@@ -49,6 +55,7 @@
                 >
                     <div>{{org.orgname}}</div>
                     <div>{{org.location.city}}</div>
+                    <div>{{org.location.state}}</div>
                     <div>{{org.missionStatement}}</div>
                 </div>
                 <div 
@@ -57,7 +64,9 @@
                     v-else
                 >
                     <div>{{org.orgname}}</div>
+                    <div>{{org.category}}</div>
                     <div>{{org.location.city}}</div>
+                    <div>{{org.location.state}}</div>
                     <div>{{org.missionStatement}}</div>
                 </div>
             </div>
