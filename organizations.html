@@ -39,7 +39,7 @@
             </div>
             <div class="organizations">
                 <div class="row-head">
-                    <div>orgname
+                    <div>Name
                         <span v-on:click="sortNames()" v-if="sortOrder == 'asc'">&and;</span>
                         <span v-on:click="sortNames()" v-else>&or;</span>
                     </div>
@@ -65,13 +65,13 @@
                     v-else
                 >
                     <div>{{org.orgname}}</div>
-                    <div>{{org.category}}</div>
-                    <div>{{org.location.city}}</div>
-                    <div>{{org.location.state}}</div>
+                    <div>{{org.categories}}</div>
+                    <div>{{org.city}}</div>
+                    <div>{{org.state}}</div>
                     <div>{{org.missionStatement}}</div>
                 </div>
             </div>
     </div>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
