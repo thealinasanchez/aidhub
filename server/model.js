@@ -12,17 +12,20 @@ const JournalEntrySchema = Schema({
         type: String,
         required: [true, "Organization must have a name."]
     },
-    location: {
-        city: {
-            type: String,
-            required: [true, "Organization must be in at least one city."]
-        },
-        state: {
-            type: String,
-            required: [true, "Organization must be in at least one state."],
-            maxLength: 2,
-            minLength: 2
-        },
+    // ask if categories needs to be formatted a specific way 
+    // since it is a list of strings
+    categories: {
+        type: [String],
+    },
+    city: {
+        type: String,
+        required: [true, "Organization must be in at least one city."]
+    },
+    state: {
+        type: String,
+        required: [true, "Organization must be in at least one state."],
+        maxLength: 2,
+        minLength: 2
     },
     missionStatement: {
         type: String,
