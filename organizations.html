@@ -34,19 +34,22 @@
         <main>
             <h1 id="find">Find organizations near you:</h1>
             <div class="search-area">
-                <input type="text" placeholder="Search..." v-model="search" id="org-search">
+                <input type="text" placeholder="City..." v-model="search" id="org-search">
                 <div v-on:click="resetSearch()" id="reset">x</div>
             </div>
             <div class="organizations">
                 <div class="row-head">
-                    <div>Name
+                    <div>NAME
                         <span v-on:click="sortNames()" v-if="sortOrder == 'asc'">&and;</span>
                         <span v-on:click="sortNames()" v-else>&or;</span>
                     </div>
-                    <div>Category(ies)</div>
-                    <div>City</div>
-                    <div>State</div>
-                    <div>Mission Statement</div>
+                    <div>CATEGORIES</div>
+                    <div>CITY
+                        <span v-on:click="sortCities()" v-if="sortOrderCities == 'asc'">&and;</span>
+                        <span v-on:click="sortCities()" v-else>&or;</span>
+                    </div>
+                    <div>STATE</div>
+                    <div>MISSION STATEMENT</div>
                 </div>
 
                 <div v-for="org in filteredOrganizations"
@@ -54,7 +57,9 @@
                     v-if="search.length > 0 && filteredOrganizations.length > 0"
                 >
                     <div>{{org.orgname}}</div>
-                    <div>{{org.categories}}</div>
+                    <div>
+                        <p v-for="cat in org.categories">{{cat}}</p>
+                    </div>
                     <div>{{org.city}}</div>
                     <div>{{org.state}}</div>
                     <div>{{org.missionStatement}}</div>
@@ -66,9 +71,7 @@
                 >
                     <div>{{org.orgname}}</div>
                     <div>
-                        <p v-for="cat in org.categories">
-                            {{cat}}
-                        </p>
+                        <p v-for="cat in org.categories">{{cat}}</p>
                     </div>
                     <div>{{org.city}}</div>
                     <div>{{org.state}}</div>
@@ -76,6 +79,6 @@
                 </div>
             </div>
     </div>
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
