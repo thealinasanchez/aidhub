@@ -29,7 +29,7 @@ Vue.createApp({
             organizations: [],
             search: "",
             filteredOrganizations: [],
-            sortNames: "",
+            sortOrder: "",
             newOrganization: {
                 orgname: "",
                 categories: [],
@@ -78,22 +78,22 @@ Vue.createApp({
             this.search = "";
         },
         sortNames: function() {
-            if (this.sortNames == 'asc') {
+            if (this.sortOrder == 'asc') {
                 function compare(a,b) {
-                    if (a.amount > b.amount) return -1;
-                    if (a.amount < b.amount) return 1;
+                    if (a.orgname > b.orgname) return -1;
+                    if (a.orgname < b.orgname) return 1;
                     return 0;
                 }
-                this.sortNames = 'desc';
+                this.sortOrder = 'desc';
             } else {
                 function compare(a,b) {
-                    if (a.amount < b.amount) return -1;
-                    if (a.amount > b.amount) return 1;
+                    if (a.orgname < b.orgname) return -1;
+                    if (a.orgname > b.orgname) return 1;
                     return 0;
                 }
-                this.sortNames = 'asc';
+                this.sortOrder = 'asc';
             }
-            this.organizations.sort(compare);
+            this.organizations = this.organizations.sort(compare);
         },
         updateOrganization: function() {
             var myHeaders = new Headers();
