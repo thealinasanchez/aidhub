@@ -34,8 +34,10 @@ app.get("/organizations/:orgId", function(req,res) {
 app.post("/organizations", function(req,res) {
     const newEntry = new model.JournalEntry({
         orgname: req.body.orgname,
-        location: req.body.location,
-        mission: req.body.missionStatement
+        categories: req.body.categories,
+        city: req.body.city,
+        state: req.body.state,
+        missionStatement: req.body.missionStatement
     });
 
     newEntry.save().then(() => {
@@ -51,11 +53,14 @@ app.post("/organizations", function(req,res) {
 })
 
 // PUT
-app.put("/organizations:orgId", function(req,res) {
+app.put("/organizations/:orgId", function(req,res) {
+    // console.log(req.body.categories);
     const updatedOrg = {
         orgname: req.body.orgname,
-        location: req.body.location,
-        mission: req.body.missionStatement
+        categories: req.body.categories,
+        city: req.body.city,
+        state: req.body.state,
+        missionStatement: req.body.missionStatement
     }
 
     model.JournalEntry.findByIdAndUpdate({"_id": req.params.orgId}, updatedOrg, {"new": true}).then(org => {
@@ -71,7 +76,7 @@ app.put("/organizations:orgId", function(req,res) {
 });
 
 // DELETE
-app.delete("/organizations/orgId", function(req,res) {
+app.delete("/organizations/:orgId", function(req,res) {
     model.JournalEntry.findOneAndDelete({"_id":req.params.orgId}).then(org => {
         if(org) {
             res.status(204).send("Organization deleted.");

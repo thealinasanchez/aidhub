@@ -13,51 +13,68 @@
 <body>
     <div id="app">
         <!-- Content goes here -->
+        <div class="header-background">
+        </div>
         <header class="top-nav-bar">
             <div class="logo-brand-container">
                 <h2>AidHub</h2>
             </div>
             <nav class="nav-links">
-                <ul class="nav-links">
+                <ul>
                     <li><a class="nav-link" href="index.html">HOME</a></li>
                     <li><a class="nav-link" href="organizations.html">ORGANIZATIONS</a></li>
                 </ul>
             </nav>
             <div class="nav-bar-button-container">
-                <button class="nav-bar-button">DONATE</button>
+                <a href="getstarted.html">
+                    <button class="common-green-button nav-bar-button">GET STARTED</button>
+                </a>
             </div>
         </header>
         <main>
             <h1 id="find">Find organizations near you:</h1>
             <div class="search-area">
-                <input type="text" placeholder="Search..." v-model="search" id="org-search">
+                <input type="text" placeholder="City..." v-model="search" id="org-search">
                 <div v-on:click="resetSearch()" id="reset">x</div>
             </div>
             <div class="organizations">
                 <div class="row-head">
-                    <div>Name
+                    <div>NAME
                         <span v-on:click="sortNames()" v-if="sortOrder == 'asc'">&and;</span>
                         <span v-on:click="sortNames()" v-else>&or;</span>
                     </div>
-                    <div>Location</div>
-                    <div>Mission Statement</div>
+                    <div>CATEGORIES</div>
+                    <div>CITY
+                        <span v-on:click="sortCities()" v-if="sortOrderCities == 'asc'">&and;</span>
+                        <span v-on:click="sortCities()" v-else>&or;</span>
+                    </div>
+                    <div>STATE</div>
+                    <div>MISSION STATEMENT</div>
                 </div>
 
                 <div v-for="org in filteredOrganizations"
                     class="row-body"
                     v-if="search.length > 0 && filteredOrganizations.length > 0"
                 >
-                    <div>{{organizations.name}}</div>
-                    <div>{{organizations.location}}</div>
-                    <div>{{organizations.missionStatement}}</div>
+                    <div>{{org.orgname}}</div>
+                    <div>
+                        <p v-for="cat in org.categories">{{cat}}</p>
+                    </div>
+                    <div>{{org.city}}</div>
+                    <div>{{org.state}}</div>
+                    <div>{{org.missionStatement}}</div>
                 </div>
                 <div 
                     v-for="(org,index) in organizations" 
                     class="row-body" 
                     v-else
                 >
-                    <div>{{org.name}}</div>
-                    <div>{{org.location}}</div>
+                    <div>{{org.orgname}}</div>
+                    <div>
+                        <p v-for="cat in org.categories">{{cat}}</p>
+                    </div>
+                    <div>{{org.city}}</div>
+                    <div>{{org.state}}</div>
                     <div>{{org.missionStatement}}</div>
                 </div>
             </div>

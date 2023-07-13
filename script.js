@@ -1,21 +1,73 @@
 Vue.createApp({
     data() {
         return {
+            getStartedForm: {
+                open: false
+            },
+            //index.html slideshow stuff
+            slideShow: {
+                currentIndex: 0,
+                slides: [
+                    {
+                        src: "./volunteering1.jpg",
+                        alt: "People volunteering",
+                        caption: "",
+                    },
+                    {
+                        src: "./volunteering2.jpg",
+                        alt: "People volunteering",
+                        caption: "",
+                    },
+                    {
+                        src: "./volunteering3.jpg",
+                        alt: "People volunteering",
+                        caption: "",
+                    }
+                ],
+            },
+            // organizations.html database variables
             organizations: [],
             search: "",
             filteredOrganizations: [],
-            sortNames: "",
+            sortOrder: "",
+            sortOrderCities: "",
             newOrganization: {
                 orgname: "",
-                location: {
-                    city: "",
-                    state: ""
-                },
+                categories: [],
+                city: "",
+                state: "",
                 missionStatement: ""
             }
         }
     },
-    methods : {
+    methods: {
+        volunteerOpenForm: function () {
+            this.getStartedForm.open = true;
+        },
+        donateOpenForm: function () {
+            this.getStartedForm.open = true;
+        },
+        moveSlideShow: function () {
+            let slideShow = document.querySelector(".slideshow-container");
+            slideShow.style.transform = `translateX(-${100 * this.slideShow.currentIndex}%)`;
+        },
+        moveToSlide: function (index) {
+            if (this.slideShow.currentIndex > this.slideShow.slides.length - 1) { this.slideShow.currentIndex = 0 }
+            else if (this.slideShow.currentIndex < 0) { this.slideShow.currentIndex = this.slideShow.slides.length - 1 }
+            else { this.slideShow.currentIndex = index }
+            this.moveSlideShow();
+        },
+        moveToNextSlide: function () {
+            if (this.slideShow.currentIndex >= this.slideShow.slides.length - 1) { this.slideShow.currentIndex = 0; }
+            else { this.slideShow.currentIndex++ }
+            this.moveSlideShow();
+        },
+        moveToPreviousSlide: function () {
+            if (this.slideShow.currentIndex <= 0) { this.slideShow.currentIndex = this.slideShow.slides.length - 1 }
+            else { this.slideShow.currentIndex-- };
+            this.moveSlideShow();
+        },
+        // organizations.html database functions
         getOrganizations: function() {
             fetch("http://localhost:8080/organizations")
             .then((response) => response.json())
@@ -27,43 +79,65 @@ Vue.createApp({
             this.search = "";
         },
         sortNames: function() {
-            if (this.sortNames == 'asc') {
+            if (this.sortOrder == 'asc') {
                 function compare(a,b) {
-                    if (a.amount > b.amount) return -1;
-                    if (a.amount < b.amount) return 1;
+                    if (a.orgname > b.orgname) return -1;
+                    if (a.orgname < b.orgname) return 1;
                     return 0;
                 }
-                this.sortNames = 'desc';
+                this.sortOrder = 'desc';
             } else {
                 function compare(a,b) {
-                    if (a.amount < b.amount) return -1;
-                    if (a.amount > b.amount) return 1;
+                    if (a.orgname < b.orgname) return -1;
+                    if (a.orgname > b.orgname) return 1;
                     return 0;
                 }
-                this.sortNames = 'asc';
+                this.sortOrder = 'asc';
             }
-            this.organizations.sort(compare);
+            this.organizations = this.organizations.sort(compare);
+        },
+        sortCities: function() {
+            if (this.sortOrderCities == 'asc') {
+                function compare(a,b) {
+                    if (a.city > b.city) return -1;
+                    if (a.city < b.city) return 1;
+                    return 0;
+                }
+                this.sortOrderCities = 'desc';
+            } else {
+                function compare(a,b) {
+                    if (a.city < b.city) return -1;
+                    if (a.city > b.city) return 1;
+                    return 0;
+                }
+                this.sortOrderCities = 'asc';
+            }
+            this.organizations = this.organizations.sort(compare);
         },
         updateOrganization: function() {
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
             
             var encodedData = "orgname=" + encodeURIComponent(this.newOrganization.orgname) +
-                                "&location=" + encodeURIComponent(this.newOrganization.location) +
+                                "&categories=" + encodeURIComponent(this.newOrganization.categories) +
+                                "&city=" + encodeURIComponent(this.newOrganization.city) +
+                                "&state=" + encodeURIComponent(this.newOrganization.state) +
                                 "&missionStatement" + encodeURIComponent(this.newOrganization.missionStatement);
             var requestOptions = {
                 method: 'PUT',
                 body: encodedData,
                 headers: myHeaders
             };
-            var orgId = this.expenses[this.modal.index]._id;
+            var orgId = this.expenses[this.newOrganization.index]._id;
             console.log(orgId);
             fetch(`http://localhost:8080/organizations/${orgId}`, requestOptions)
             .then((response) => {
                 if (response.status == 204) {
-                    this.organizations[this.modal.index].orgname = this.newOrganization.orgname;
-                    this.organizations[this.modal.index].location = this.newOrganization.location;
-                    this.organizations[this.modal.index].missionStatement = this.newOrganization.missionStatement;
+                    this.organizations[this.newOrganization.index].orgname = this.newOrganization.orgname;
+                    this.organizations[this.newOrganization.index].categories = this.newOrganization.categories;
+                    this.organizations[this.newOrganization.index].city = this.newOrganization.city;
+                    this.organizations[this.newOrganization.index].state = this.newOrganization.state;
+                    this.organizations[this.newOrganization.index].missionStatement = this.newOrganization.missionStatement;
                 }
             })
         },
@@ -72,9 +146,11 @@ Vue.createApp({
             // first param is the header, second param is content of header
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-            var encodedData = "orgname=" + encodeURIComponent(this.modal.orgname) +
-                                "&location=" + encodeURIComponent(this.modal.location) +
-                                "&missionStatement" + encodeURIComponent(this.modal.missionStatement);
+            var encodedData = "orgname=" + encodeURIComponent(this.newOrganization.orgname) +
+                                "&categories=" + encodeURIComponent(this.newOrganization.categories) +
+                                "&city=" + encodeURIComponent(this.newOrganization.city) +
+                                "&state=" + encodeURIComponent(this.newOrganization.state) +
+                                "&missionStatement" + encodeURIComponent(this.newOrganization.missionStatement);
             var requestOptions = {
                 method: 'POST',
                 body: encodedData,
@@ -95,14 +171,19 @@ Vue.createApp({
             })
         }
     },
-    created : function() {
+    created: function () {
         this.getOrganizations();
     },
-
     watch: {
         search(newSearch, oldSearch) {
             this.filteredOrganizations = this.organizations.filter((org) => {
-                return org.description
+                return org.city
+                    .toLowerCase()
+                    .includes(newSearch.toLowerCase()) ||
+                    org.orgname
+                    .toLowerCase()
+                    .includes(newSearch.toLowerCase()) ||
+                    org.state
                     .toLowerCase()
                     .includes(newSearch.toLowerCase());
             });

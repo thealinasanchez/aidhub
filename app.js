@@ -4,6 +4,7 @@ Vue.createApp({
             getStartedForm: {
                 open: false
             },
+            //index.html slideshow stuff
             slideShow: {
                 currentIndex: 0,
                 slides: [
@@ -23,6 +24,18 @@ Vue.createApp({
                         caption: "",
                     }
                 ],
+            },
+            // organizations.html database variables
+            organizations: [],
+            search: "",
+            filteredOrganizations: [],
+            sortNames: "",
+            newOrganization: {
+                orgname: "",
+                categories: [],
+                city: "",
+                state: "",
+                missionStatement: ""
             }
         }
     },
@@ -53,40 +66,103 @@ Vue.createApp({
             else { this.slideShow.currentIndex-- };
             this.moveSlideShow();
         },
-        // LONGITUDE AND LATITUDE FUNCTIONS
-        getLocation: function () {
-            var x = document.getElementById("user-location");
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(this.showPosition, this.showError);
+        // organizations.html database functions
+        getOrganizations: function () {
+            fetch("http://localhost:8080/organizations")
+                .then((response) => response.json())
+                .then((data) => {
+                    this.organizations = data;
+                });
+        },
+        resetSearch: function () {
+            this.search = "";
+        },
+        sortNames: function () {
+            if (this.sortNames == 'asc') {
+                function compare(a, b) {
+                    if (a.amount > b.amount) return -1;
+                    if (a.amount < b.amount) return 1;
+                    return 0;
+                }
+                this.sortNames = 'desc';
             } else {
-                x.innerHTML = "Geolocation is not supported by this browser.";
+                function compare(a, b) {
+                    if (a.amount < b.amount) return -1;
+                    if (a.amount > b.amount) return 1;
+                    return 0;
+                }
+                this.sortNames = 'asc';
             }
+            this.organizations.sort(compare);
         },
-        showPosition: function (position) {
-            var x = document.getElementById("user-location");
-            x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
-        },
-        showError: function (error) {
-            var x = document.getElementById("user-location");
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    x.innerHTML = "User denied the request for Geolocation.";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    x.innerHTML = "Location information is unavailable.";
-                    break;
-                case error.TIMEOUT:
-                    x.innerHTML = "The request to get user location timed out.";
-                    break;
-                case error.UNKOWN_ERROR:
-                    x.innerHTML = "An unknown error occured.";
-                    break;
-            }
-        },
-        // REVERSE GEOCODING FUNCTIONS
+        updateOrganization: function () {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
+            var encodedData = "orgname=" + encodeURIComponent(this.newOrganization.orgname) +
+                "&categories=" + encodeURIComponent(this.newOrganization.categories) +
+                "&city=" + encodeURIComponent(this.newOrganization.city) +
+                "&state=" + encodeURIComponent(this.newOrganization.state) +
+                "&missionStatement" + encodeURIComponent(this.newOrganization.missionStatement);
+            var requestOptions = {
+                method: 'PUT',
+                body: encodedData,
+                headers: myHeaders
+            };
+            var orgId = this.expenses[this.newOrganization.index]._id;
+            console.log(orgId);
+            fetch(`http://localhost:8080/organizations/${orgId}`, requestOptions)
+                .then((response) => {
+                    if (response.status == 204) {
+                        this.organizations[this.newOrganization.index].orgname = this.newOrganization.orgname;
+                        this.organizations[this.newOrganization.index].categories = this.newOrganization.categories;
+                        this.organizations[this.newOrganization.index].city = this.newOrganization.city;
+                        this.organizations[this.newOrganization.index].state = this.newOrganization.state;
+                        this.organizations[this.newOrganization.index].missionStatement = this.newOrganization.missionStatement;
+                    }
+                })
+        },
+        addOrganization: function () {
+            myHeaders = new Headers();
+            // first param is the header, second param is content of header
+            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+            var encodedData = "orgname=" + encodeURIComponent(this.newOrganization.orgname) +
+                "&categories=" + encodeURIComponent(this.newOrganization.categories) +
+                "&city=" + encodeURIComponent(this.newOrganization.city) +
+                "&state=" + encodeURIComponent(this.newOrganization.state) +
+                "&missionStatement" + encodeURIComponent(this.newOrganization.missionStatement);
+            var requestOptions = {
+                method: 'POST',
+                body: encodedData,
+                headers: myHeaders
+            };
+            fetch("http://localhost:8080/organizations", requestOptions)
+                .then((response) => {
+                    if (response.status === 201) {
+                        response.json().then(data => {
+                            this.organizations.push(data);
+                            this.newOrganization = {};
+                        })
+                        console.log("Success");
+                        this.newOrganization = {};
+                    } else {
+                        alert("Not able to add organization");
+                    }
+                })
+        }
     },
     created: function () {
+        this.getOrganizations();
+    },
+    watch: {
+        search(newSearch, oldSearch) {
+            this.filteredOrganizations = this.organizations.filter((org) => {
+                return org.description
+                    .toLowerCase()
+                    .includes(newSearch.toLowerCase());
+            });
+        }
     },
     mounted: function () {
         var Stadia_AlidadeSmoothDark = new L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
