@@ -111,6 +111,10 @@ img {
     grid-column: 7 / 8;
 }
 
+.top-nav-bar>.nav-links a:hover {
+    color: var(--lightblue);
+}
+
 .top-nav-bar>.nav-bar-button-container {
     max-width: 175px;
     display: flex;
