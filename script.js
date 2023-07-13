@@ -30,6 +30,7 @@ Vue.createApp({
             search: "",
             filteredOrganizations: [],
             sortOrder: "",
+            sortOrderCities: "",
             newOrganization: {
                 orgname: "",
                 categories: [],
@@ -92,6 +93,24 @@ Vue.createApp({
                     return 0;
                 }
                 this.sortOrder = 'asc';
+            }
+            this.organizations = this.organizations.sort(compare);
+        },
+        sortCities: function() {
+            if (this.sortOrderCities == 'asc') {
+                function compare(a,b) {
+                    if (a.city > b.city) return -1;
+                    if (a.city < b.city) return 1;
+                    return 0;
+                }
+                this.sortOrderCities = 'desc';
+            } else {
+                function compare(a,b) {
+                    if (a.city < b.city) return -1;
+                    if (a.city > b.city) return 1;
+                    return 0;
+                }
+                this.sortOrderCities = 'asc';
             }
             this.organizations = this.organizations.sort(compare);
         },
@@ -159,6 +178,12 @@ Vue.createApp({
         search(newSearch, oldSearch) {
             this.filteredOrganizations = this.organizations.filter((org) => {
                 return org.city
+                    .toLowerCase()
+                    .includes(newSearch.toLowerCase()) ||
+                    org.orgname
+                    .toLowerCase()
+                    .includes(newSearch.toLowerCase()) ||
+                    org.state
                     .toLowerCase()
                     .includes(newSearch.toLowerCase());
             });
