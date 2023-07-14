@@ -71,6 +71,7 @@ Vue.createApp({
             fetch("http://localhost:8080/organizations")
                 .then((response) => response.json())
                 .then((data) => {
+                    console.log(data);
                     this.organizations = data;
                 });
         },
@@ -165,24 +166,24 @@ Vue.createApp({
         }
     },
     mounted: function () {
-        var Stadia_AlidadeSmoothDark = new L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-            maxZoom: 20,
-            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OSM</a>'
-        });
-        let location = [37.108280, -113.583282];
-        var map = new L.Map("map", {
-            center: location,
-            zoom: 9,
-            minZoom: 9,
-            maxZoom: 9,
-            zoomControl: false
-        })
-            .addLayer(Stadia_AlidadeSmoothDark);
-        map.touchZoom.disable();
-        map.doubleClickZoom.disable();
-        map.scrollWheelZoom.disable();
-        map.boxZoom.disable();
-        map.keyboard.disable();
+        // var Stadia_AlidadeSmoothDark = new L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+        //     maxZoom: 20,
+        //     attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OSM</a>'
+        // });
+        // let location = [37.108280, -113.583282];
+        // var map = new L.Map("map", {
+        //     center: location,
+        //     zoom: 9,
+        //     minZoom: 9,
+        //     maxZoom: 9,
+        //     zoomControl: false
+        // })
+        //     .addLayer(Stadia_AlidadeSmoothDark);
+        // map.touchZoom.disable();
+        // map.doubleClickZoom.disable();
+        // map.scrollWheelZoom.disable();
+        // map.boxZoom.disable();
+        // map.keyboard.disable();
         /*
         var polygon = L.polygon([
             [51.509, -0.08],
