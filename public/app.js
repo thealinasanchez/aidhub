@@ -81,7 +81,7 @@ Vue.createApp({
             try {
                 const response = await fetch(`http://localhost:6300/api?url=https://projects.propublica.org/nonprofits/api/v2/search.json?q=`);
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
                 data.organizations.forEach(org => {
                     this.organizations.push({
                         orgname: org.name,
@@ -96,7 +96,7 @@ Vue.createApp({
                 console.error(error);
             }
             this.organizations.forEach(data => {
-                console.log(data);
+                // console.log(data);
             })
 
         },
@@ -203,9 +203,15 @@ Vue.createApp({
     watch: {
         search(newSearch, oldSearch) {
             this.filteredOrganizations = this.organizations.filter((org) => {
-                return org.description
+                return (org.orgname && org.orgname
                     .toLowerCase()
-                    .includes(newSearch.toLowerCase());
+                    .includes(newSearch.toLowerCase())) ||
+                (org.city && org.city
+                .toLowerCase()
+                .includes(newSearch.toLowerCase())) ||
+                (org.state && org.state
+                    .toLowerCase()
+                    .includes(newSearch.toLowerCase()))
             });
         }
     },
