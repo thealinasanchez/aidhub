@@ -69,7 +69,7 @@ Vue.createApp({
         },
         // organizations.html database functions
         getOrganizations: function() {
-            fetch("http://localhost:8080/organizations")
+            fetch("https://projects.propublica.org/nonprofits/search?q=&state%5Bid%5D=&ntee%5Bid%5D=&c_code%5Bid%5D=")
             .then((response) => response.json())
             .then((data) => {
                 this.organizations = data;
