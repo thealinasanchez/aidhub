@@ -407,3 +407,8 @@ footer {
     padding: 12px 14px;
     margin: 6px 0;
 }
+
+.row-head {
+    background-color: var(--darkblue);
+    border-radius: 5px;
+}
