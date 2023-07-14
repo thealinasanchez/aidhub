@@ -67,23 +67,24 @@ Vue.createApp({
             this.moveSlideShow();
         },
         // organizations.html database functions
-        getOrganizations: function () {
-            myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        getOrganizations: async function () {
 
-            var encodedData = "name=" + encodeURIComponent(this.newOrganization.orgname) +
-                                "city=" + encodeURIComponent(this.newOrganization.city) +
-                                "state=" + encodeURIComponent(this.newOrganization.state);
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders
-            };
-            fetch("http://localhost:8080/api/search.json?q=", requestOptions)
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data);
-                    this.organizations = data;
-                });
+
+
+    //   proxyUrl: 'http://localhost:8080/api', // URL of your proxy server
+    //   apiUrl: 'http://api.example.com', // URL of the target API
+    //   responseData: null // Placeholder for the response data
+
+            try {
+                const response = await fetch(`http://localhost:8080/api?url=https://projects.propublica.org/nonprofits/api/v2/search.json?q=`);
+                const data = await response.json();
+                console.log(data);
+                // this.responseData = data;
+            } catch (error) {
+                console.error(error);
+            }
+
+
         },
         resetSearch: function () {
             this.search = "";
