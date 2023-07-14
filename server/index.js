@@ -6,7 +6,7 @@ const model = require('./model');
 // const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
-const port = 8080;
+const port = 6300;
 
 app.use(express.json());
 app.use(express.static('public'));
