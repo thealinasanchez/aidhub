@@ -68,7 +68,17 @@ Vue.createApp({
         },
         // organizations.html database functions
         getOrganizations: function () {
-            fetch("http://localhost:8080/organizations")
+            myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+            var encodedData = "name=" + encodeURIComponent(this.newOrganization.orgname) +
+                                "city=" + encodeURIComponent(this.newOrganization.city) +
+                                "state=" + encodeURIComponent(this.newOrganization.state);
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders
+            };
+            fetch("http://localhost:8080/api/search.json?q=", requestOptions)
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data);
