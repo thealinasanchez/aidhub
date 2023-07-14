@@ -2,11 +2,20 @@ const express = require('express');
 const cors = require('cors');
 const model = require('./model');
 
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
 const app = express();
 const port = 8080;
 
 app.use(express.json());
 app.use(cors());
+app.use('/', createProxyMiddleware({
+    target: 'https://projects.propublica.org',
+    changeOrigin: true,
+    pathRewrite: {
+        '/^api': '/nonprofits/api/v2/search.json?q=', // Rewrite the path to match the ProPublica API
+    },
+}));
 
 // GET
 app.get("/organizations", function(req, res) {
