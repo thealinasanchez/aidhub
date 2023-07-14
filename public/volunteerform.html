@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AidHub - Organizations</title>
+    <link href="anotherstyle.css" rel="stylesheet" type="text/css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Content goes here -->
+        <div class="header-background">
+        </div>
+        <header class="top-nav-bar">
+            <div class="logo-brand-container">
+                <h2>AidHub</h2>
+            </div>
+            <nav class="nav-links">
+                <ul>
+                    <li><a class="nav-link" href="index.html">HOME</a></li>
+                    <li><a class="nav-link" href="organizations.html">ORGANIZATIONS</a></li>
+                </ul>
+            </nav>
+            <div class="nav-bar-button-container">
+                <a href="getstarted.html">
+                    <button class="common-green-button nav-bar-button">GET STARTED</button>
+                </a>
+            </div>
+        </header>
+        <main>
+            <h1 id="find">Find volunteer opportunities here:</h1>
+            <div class="volunteerthings">
+                <button onclick="toggleVolunteerForm()">Create Volunteer Opportunity</button>
+                <div id="volunteerform">
+                    <form>
+                        <span>
+                            <label for="user">User:</label>
+                            <input type="text" id="user" name="user" required>
+                        </span>
+                        <span>
+                            <label for="title">Title:</label>
+                            <input type="text" id="title" name="title" required>
+                        </span>
+                        <span>
+                            <label for="orgname">Organization Name:</label>
+                            <input type="text" id="orgname" name="orgname" required>
+                        </span>
+                        <span>
+                            <label for="city">City it is taking place in:</label>
+                            <input type="text" id="city" name="city">
+                        </span>
+                        <span>
+                            <label for="state">State it is taking place in (limit 2 characters):</label>
+                            <input type="text" id="state" name="state" maxlength="2" minlength="2" required>
+                        </span>
+                        <span>
+                            <label for="dateStart">Start Date:</label>
+                            <input type="date" id="dateStart" name="dateStart"  min="2023-07-14" required>
+                        </span>
+                        <span>
+                            <label for="dateEnd">End Date:</label>
+                            <input type="date" id="dateEnd" name="dateEnd" min="2023-07-14">
+                        </span>
+                        <span>
+                            <label for="desc">Description:</label>
+                            <textarea name="desc" id="desc" cols="30" rows="10"></textarea>
+                        </span>
+                        <span>
+                            <label for="num_people">Amount of Volunteers Needed:</label>
+                            <input type="number" min="1" required>
+                        </span>
+                        <span>
+                            <label for="website">Website:</label>
+                            <input type="text" id="website" name="website">
+                        </span>
+                    </form>
+                </div>
+
+                <div v-for="org in filteredOrganizations" class="row-body"
+                    v-if="search.length > 0 && filteredOrganizations.length > 0">
+                    <div>{{org.orgname}}</div>
+                    <div>
+                        <p v-for="cat in org.categories">{{cat}}</p>
+                    </div>
+                    <div>{{org.city}}</div>
+                    <div>{{org.state}}</div>
+                    <div>{{org.missionStatement}}</div>
+                </div>
+                <div v-for="(org,index) in organizations" class="row-body" v-else>
+                    <div>{{org.orgname}}</div>
+                    <div>
+                        <p v-for="cat in org.categories">{{cat}}</p>
+                    </div>
+                    <div>{{org.city}}</div>
+                    <div>{{org.state}}</div>
+                    <div>{{org.missionStatement}}</div>
+                </div>
+            </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
