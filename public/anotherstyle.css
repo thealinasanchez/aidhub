@@ -411,3 +411,9 @@ footer {
     background-color: var(--darkblue);
     border-radius: 5px;
 }
+
+/* VOLUNTEERFORM.HTML STUFF */
+
+.hidden {
+    display: none;
+}
