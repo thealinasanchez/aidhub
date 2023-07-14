@@ -1,4 +1,6 @@
+
 Vue.createApp({
+
     data() {
         return {
             getStartedForm: {
@@ -29,7 +31,8 @@ Vue.createApp({
             organizations: [],
             search: "",
             filteredOrganizations: [],
-            sortNames: "",
+            sortOrder: "",
+            sortOrderCities: "",
             newOrganization: {
                 orgname: "",
                 categories: [],
@@ -79,6 +82,7 @@ Vue.createApp({
                 const response = await fetch(`http://localhost:8080/api?url=https://projects.propublica.org/nonprofits/api/v2/search.json?q=`);
                 const data = await response.json();
                 console.log(data);
+                this.organizations = data;
                 // this.responseData = data;
             } catch (error) {
                 console.error(error);
@@ -90,20 +94,39 @@ Vue.createApp({
             this.search = "";
         },
         sortNames: function () {
-            if (this.sortNames == 'asc') {
+            if (this.sortOrder == 'asc') {
                 function compare(a, b) {
-                    if (a.amount > b.amount) return -1;
-                    if (a.amount < b.amount) return 1;
+                    if (a.orgname > b.orgname) return -1;
+                    if (a.orgname < b.orgname) return 1;
                     return 0;
                 }
-                this.sortNames = 'desc';
+                this.sortOrder = 'desc';
             } else {
                 function compare(a, b) {
-                    if (a.amount < b.amount) return -1;
-                    if (a.amount > b.amount) return 1;
+                    if (a.orgname < b.orgname) return -1;
+                    if (a.orgname > b.orgname) return 1;
                     return 0;
                 }
-                this.sortNames = 'asc';
+                this.sortOrder = 'asc';
+            }
+            this.organizations.sort(compare);
+        },
+
+        sortCities: function() {
+            if (this.sortOrderCities == 'asc') {
+                function compare(a,b) {
+                    if (a.city < b.city) return -1;
+                    if (a.city > b.city) return 1;
+                    return 0;
+                }
+                this.sortOrderCities = 'desc';
+            } else {
+                function compare(a,b) {
+                    if (a.city < b.city) return -1;
+                    if (a.city > b.city) return 1;
+                    return 0;
+                }
+                this.sortOrderCities =  'asc';
             }
             this.organizations.sort(compare);
         },
