@@ -1,4 +1,5 @@
 Vue.createApp({
+
     data() {
         return {
             getStartedForm: {
@@ -29,7 +30,8 @@ Vue.createApp({
             organizations: [],
             search: "",
             filteredOrganizations: [],
-            sortNames: "",
+            sortOrder: "",
+            sortOrderCities: "",
             newOrganization: {
                 orgname: "",
                 categories: [],
@@ -68,42 +70,63 @@ Vue.createApp({
         },
         // organizations.html database functions
         getOrganizations: async function () {
-
-
-
-            //   proxyUrl: 'http://localhost:8080/api', // URL of your proxy server
-            //   apiUrl: 'http://api.example.com', // URL of the target API
-            //   responseData: null // Placeholder for the response data
-
             try {
-                const response = await fetch(`http://localhost:8080/api?url=https://projects.propublica.org/nonprofits/api/v2/search.json?q=`);
+                const response = await fetch(`http://localhost:6300/api?url=https://projects.propublica.org/nonprofits/api/v2/search.json?q=`);
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
+                data.organizations.forEach(org => {
+                    this.organizations.push({
+                        orgname: org.name,
+                        city: org.city,
+                        state: org.state,
+                        ein: org.ein,
+                        ntee: org.ntee_code,
+                    })
+                })
                 // this.responseData = data;
             } catch (error) {
                 console.error(error);
             }
-
-
+            this.organizations.forEach(data => {
+                // console.log(data);
+            })
         },
         resetSearch: function () {
             this.search = "";
         },
         sortNames: function () {
-            if (this.sortNames == 'asc') {
+            if (this.sortOrder == 'asc') {
                 function compare(a, b) {
-                    if (a.amount > b.amount) return -1;
-                    if (a.amount < b.amount) return 1;
+                    if (a.orgname > b.orgname) return -1;
+                    if (a.orgname < b.orgname) return 1;
                     return 0;
                 }
-                this.sortNames = 'desc';
+                this.sortOrder = 'desc';
             } else {
                 function compare(a, b) {
-                    if (a.amount < b.amount) return -1;
-                    if (a.amount > b.amount) return 1;
+                    if (a.orgname < b.orgname) return -1;
+                    if (a.orgname > b.orgname) return 1;
                     return 0;
                 }
-                this.sortNames = 'asc';
+                this.sortOrder = 'asc';
+            }
+            this.organizations.sort(compare);
+        },
+        sortCities: function() {
+            if (this.sortOrderCities == 'asc') {
+                function compare(a,b) {
+                    if (a.city < b.city) return -1;
+                    if (a.city > b.city) return 1;
+                    return 0;
+                }
+                this.sortOrderCities = 'desc';
+            } else {
+                function compare(a,b) {
+                    if (a.city < b.city) return -1;
+                    if (a.city > b.city) return 1;
+                    return 0;
+                }
+                this.sortOrderCities =  'asc';
             }
             this.organizations.sort(compare);
         },
@@ -162,6 +185,11 @@ Vue.createApp({
                         alert("Not able to add organization");
                     }
                 })
+        },
+        // volunteerform.html functions:
+        toggleVolunteerForm: function() {
+            var form = document.getElementById("volunteer-form");
+            form.classList.toggle("hidden");
         }
     },
     created: function () {
@@ -170,9 +198,15 @@ Vue.createApp({
     watch: {
         search(newSearch, oldSearch) {
             this.filteredOrganizations = this.organizations.filter((org) => {
-                return org.description
+                return (org.orgname && org.orgname
                     .toLowerCase()
-                    .includes(newSearch.toLowerCase());
+                    .includes(newSearch.toLowerCase())) ||
+                (org.city && org.city
+                .toLowerCase()
+                .includes(newSearch.toLowerCase())) ||
+                (org.state && org.state
+                    .toLowerCase()
+                    .includes(newSearch.toLowerCase()))
             });
         }
     },
