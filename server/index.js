@@ -6,17 +6,18 @@ const app = express();
 const port = 8080;
 
 app.use(express.json());
+app.use(express.static('public'));
 app.use(cors());
 
 // GET
-app.get("/organizations", function(req, res) {
+app.get("/organizations", function (req, res) {
     model.JournalEntry.find().then(entries => {
         res.json(entries);
     });
 });
 
-app.get("/organizations/:orgId", function(req,res) {
-    model.JournalEntry.findOne({"_id":req.params.orgId}).then(expense => {
+app.get("/organizations/:orgId", function (req, res) {
+    model.JournalEntry.findOne({ "_id": req.params.orgId }).then(expense => {
         if (expense) {
             res.json(expense);
         }
@@ -31,7 +32,7 @@ app.get("/organizations/:orgId", function(req,res) {
 });
 
 // POST
-app.post("/organizations", function(req,res) {
+app.post("/organizations", function (req, res) {
     const newEntry = new model.JournalEntry({
         orgname: req.body.orgname,
         categories: req.body.categories,
@@ -53,7 +54,7 @@ app.post("/organizations", function(req,res) {
 })
 
 // PUT
-app.put("/organizations/:orgId", function(req,res) {
+app.put("/organizations/:orgId", function (req, res) {
     // console.log(req.body.categories);
     const updatedOrg = {
         orgname: req.body.orgname,
@@ -63,7 +64,7 @@ app.put("/organizations/:orgId", function(req,res) {
         missionStatement: req.body.missionStatement
     }
 
-    model.JournalEntry.findByIdAndUpdate({"_id": req.params.orgId}, updatedOrg, {"new": true}).then(org => {
+    model.JournalEntry.findByIdAndUpdate({ "_id": req.params.orgId }, updatedOrg, { "new": true }).then(org => {
         if (org) {
             res.status(204).send("Organization updated.");
         }
@@ -76,9 +77,9 @@ app.put("/organizations/:orgId", function(req,res) {
 });
 
 // DELETE
-app.delete("/organizations/:orgId", function(req,res) {
-    model.JournalEntry.findOneAndDelete({"_id":req.params.orgId}).then(org => {
-        if(org) {
+app.delete("/organizations/:orgId", function (req, res) {
+    model.JournalEntry.findOneAndDelete({ "_id": req.params.orgId }).then(org => {
+        if (org) {
             res.status(204).send("Organization deleted.");
         }
         else {
@@ -89,6 +90,6 @@ app.delete("/organizations/:orgId", function(req,res) {
     });
 });
 
-app.listen(port, function() {
+app.listen(port, function () {
     console.log(`Running server on port ${port}...`);
 });

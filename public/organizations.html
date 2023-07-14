@@ -52,10 +52,8 @@
                     <div>MISSION STATEMENT</div>
                 </div>
 
-                <div v-for="org in filteredOrganizations"
-                    class="row-body"
-                    v-if="search.length > 0 && filteredOrganizations.length > 0"
-                >
+                <div v-for="org in filteredOrganizations" class="row-body"
+                    v-if="search.length > 0 && filteredOrganizations.length > 0">
                     <div>{{org.orgname}}</div>
                     <div>
                         <p v-for="cat in org.categories">{{cat}}</p>
@@ -64,11 +62,7 @@
                     <div>{{org.state}}</div>
                     <div>{{org.missionStatement}}</div>
                 </div>
-                <div 
-                    v-for="(org,index) in organizations" 
-                    class="row-body" 
-                    v-else
-                >
+                <div v-for="(org,index) in organizations" class="row-body" v-else>
                     <div>{{org.orgname}}</div>
                     <div>
                         <p v-for="cat in org.categories">{{cat}}</p>
@@ -79,6 +73,7 @@
                 </div>
             </div>
     </div>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
+
 </html>
