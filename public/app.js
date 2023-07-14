@@ -79,15 +79,25 @@ Vue.createApp({
             //   responseData: null // Placeholder for the response data
 
             try {
-                const response = await fetch(`http://localhost:8080/api?url=https://projects.propublica.org/nonprofits/api/v2/search.json?q=`);
+                const response = await fetch(`http://localhost:6300/api?url=https://projects.propublica.org/nonprofits/api/v2/search.json?q=`);
                 const data = await response.json();
                 console.log(data);
-                this.organizations = data;
+                data.organizations.forEach(org => {
+                    this.organizations.push({
+                        orgname: org.name,
+                        city: org.city,
+                        state: org.state,
+                        ein: org.ein,
+                        ntee: org.ntee_code,
+                    })
+                })
                 // this.responseData = data;
             } catch (error) {
                 console.error(error);
             }
-
+            this.organizations.forEach(data => {
+                console.log(data);
+            })
 
         },
         resetSearch: function () {
