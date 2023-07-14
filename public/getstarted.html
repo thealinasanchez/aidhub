@@ -26,22 +26,23 @@
                 </ul>
             </nav>
             <div class="nav-bar-button-container">
-                <button class="common-green-button nav-bar-button">DONATE</button>
+                <a href="getstarted.html">
+                    <button class="common-green-button nav-bar-button">GET STARTED</button>
+                </a>
             </div>
         </header>
         <div class="get-started-image"></div>
         <main class="main-section-container">
             <div v-if="!getStartedForm.open">
                 <div id="volunteering-image"></div>
-                <button @click="volunteerOpenForm()" class="common-green-button volunteer-button">Volunteer
-                    Form</button>
+                <button class="common-green-button volunteer-button">
+                    <a href="volunteerform.html">Volunteer Opportunities</a>
+                </button>
                 <div id="donation-image"></div>
-                <button @click="donationOpenForm()" class="common-green-button donation-button">Donation Form</button>
+                <button class="common-green-button donation-button">
+                    <a href="donationform.html">Donation Opportunities</a>
+                </button>
             </div>
-            <form class="volunteer-donate-form" v-else>
-                <h3>This Will be the form</h3>
-                <label>Enter Text<input type="text" id="something" /></label>
-            </form>
         </main>
         <!-- close app -->
         <footer class="get-started-footer">
