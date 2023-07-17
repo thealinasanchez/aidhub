@@ -582,3 +582,8 @@ footer {
     cursor: not-allowed;
     background-color: gray;
 }
+
+.row-head {
+    background-color: var(--darkblue);
+    border-radius: 5px;
+}
