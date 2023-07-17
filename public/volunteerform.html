@@ -35,6 +35,7 @@
             <button @click="toggleVolunteerPostModal(index)">Create Volunteer Opportunity</button>
             <div class="volunteerPostModal" v-show="modalOpen">
                 <div class="content">
+                    <div id="close" @click="toggleVolunteerPostModal()">X</div>
                     <form id="volunteer-form">
                         <span>
                             <label for="user">User:</label>
@@ -137,30 +138,12 @@
                             >
                         </span>
                     </form>
-                    <button @click="addVolunteerPost"></button>
+                    <button @click="addVolunteerPost()">Post</button>
                 </div>
             </div>
             <h1 id="find">Find volunteer opportunities here:</h1>
             <div class="volunteerthings">
-                <div v-for="org in filteredOrganizations" class="row-body"
-                    v-if="search.length > 0 && filteredOrganizations.length > 0">
-                    <div>{{org.orgname}}</div>
-                    <div>
-                        <p v-for="cat in org.categories">{{cat}}</p>
-                    </div>
-                    <div>{{org.city}}</div>
-                    <div>{{org.state}}</div>
-                    <div>{{org.missionStatement}}</div>
-                </div>
-                <div v-for="(org,index) in organizations" class="row-body" v-else>
-                    <div>{{org.orgname}}</div>
-                    <div>
-                        <p v-for="cat in org.categories">{{cat}}</p>
-                    </div>
-                    <div>{{org.city}}</div>
-                    <div>{{org.state}}</div>
-                    <div>{{org.missionStatement}}</div>
-                </div>
+                <!-- show all volunteer opportunities -->
             </div>
     </div>
     <script src="script.js"></script>
