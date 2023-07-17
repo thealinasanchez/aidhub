@@ -271,7 +271,7 @@ Vue.createApp({
         },
         // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
         getVolunteerOpportunities: function() {
-            fetch('http://localhost:8080/volunteerOpportunities')
+            fetch('http://localhost:6300/volunteerOpportunities')
             .then(response => response.json()).then((data) => {
                 this.volunteerOpportunities = data;
             });
@@ -297,7 +297,7 @@ Vue.createApp({
                 headers: myHeaders
             };
 
-            fetch("http://localhost:8080/volunteerOpportunities", requestOptions)
+            fetch("http://localhost:6300/volunteerOpportunities", requestOptions)
             .then((response) => {
                 if(response.status === 201) {
                     response.json().then((data) => {
@@ -314,7 +314,7 @@ Vue.createApp({
             var requestOptions = {
                 method: "DELETE"
             };
-            fetch(`http://localhost:8080/volunteerOpportunities/${volpostId}`, requestOptions)
+            fetch(`http://localhost:6300/volunteerOpportunities/${volpostId}`, requestOptions)
             .then((response) => {
                 if (response.status === 204) {
                     console.log("success");
