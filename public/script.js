@@ -253,7 +253,7 @@ Vue.createApp({
         },
         // VOLUNTEERFORM.HTML STUFF
         toggleVolunteerPostModal: function (index = null) {
-            this.modalOpen = !this.modalOpen;
+            this.toggleModal = !this.toggleModal;
             if (index !== null) {
                 let modal = this.volunteerOpportunities[index];
                 this.volunteerPostModal.index = index;
@@ -313,7 +313,16 @@ Vue.createApp({
             var volpostId = this.expenses[index]._id;
             var requestOptions = {
                 method: "DELETE"
-            }
+            };
+            fetch(`http://localhost:8080/volunteerOpportunities/${volpostId}`, requestOptions)
+            .then((response) => {
+                if (response.status === 204) {
+                    console.log("success");
+                    this.volunteerOpportunities.splice(index, 1);
+                } else {
+                    alert("Unable to delete expense");
+                }
+            });
         }
 
     },
