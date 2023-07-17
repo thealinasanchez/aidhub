@@ -52,18 +52,26 @@
                     <div class="slideshow-image-caption">{{ image.caption }}</div>
                 </div>
             </div>
+            <div class="slideshow-dots-container">
+                <span v-for="(slide,index) in slideShow.slides"
+                    :class="index == slideShow.currentIndex && 'slide-show-dot-active'" class="slideshow-dot"
+                    @click="moveToSlide(index)"></span>
+            </div>
+            <a class="slide-show-next-btn" @click="moveToNextSlide()">&#10095;</a>
+            <a class="slide-show-prev-btn" @click="moveToPreviousSlide()">&#10094;</a>
         </div>
-        <a class="slide-show-next-btn" @click="moveToNextSlide()">&#10095;</a>
-        <a class="slide-show-prev-btn" @click="moveToPreviousSlide()">&#10094;</a>
         <br>
-        <div class="slideshow-dots-container">
-            <span v-for="(slide,index) in slideShow.slides"
-                :class="index == slideShow.currentIndex && 'slide-show-dot-active'" class="slideshow-dot"
-                @click="moveToSlide(index)"></span>
-        </div>
         <main class="main-section-container">
-            <h1>Organizations Near You!</h1>
-            <div id="map"></div>
+            <div class="index-ask-location-container" v-if="indexLocation.askForLocation">
+                <div class="index-ask-location-blur">
+                    <div class="index-ask-location-card">
+                        <h2>Find Organizations Near You</h2>
+                        <button class="index-ask-location-button" @click="indexAskLocationAccept()">Use Current
+                            Location</button>
+                    </div>
+                </div>
+            </div>
+            <div id="map" v-else></div>
             <div class="index-main-image-container">
                 <div class="index-main-image-row">
                     <img src="volunteering4.jpg" alt="about image" class="index-main-image">

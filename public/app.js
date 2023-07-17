@@ -1,4 +1,3 @@
-
 Vue.createApp({
     data() {
         return {
@@ -26,6 +25,9 @@ Vue.createApp({
                         caption: "",
                     },
                 ],
+            },
+            indexLocation: {
+                askForLocation: true
             },
 
             /* organizations.html start */
@@ -222,6 +224,9 @@ Vue.createApp({
             }
             this.organizations.sort(compare);
         },
+        indexAskLocationAccept: function () {
+            this.indexLocation.askForLocation = false;
+        },
         // updateOrganization: function () {
         //     var myHeaders = new Headers();
         //     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -308,35 +313,66 @@ Vue.createApp({
                     .toLowerCase()
                     .includes(newCategory.toLowerCase());
             })
+        },
+        'indexLocation.askForLocation'(newAskForLocation, oldAskForLocation) {
+            if (page != 'index') {
+                return;
+            }
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    fetch('http://localhost:6300/location?ip=' + data.ip).then((response) => {
+                        if (response.status === 200) {
+                            return response.json();
+                        } else {
+                            console.log("Couldn't get location", response.status);
+                        }
+                    }).then((data) => {
+                        let loc = data.loc.split(",");
+                        let ipLocation = {
+                            city: data.city ? data.city : "",
+                            state: data.region ? data.region : "",
+                            country: data.country ? data.country : "",
+                            latitude: -91,
+                            longitude: -181,
+                        }
+                        ipLocation.latitude = Number(loc[0]);
+                        ipLocation.longitude = Number(loc[1]);
+                        if (ipLocation.latitude != -91 && ipLocation.longitude != -181) {
+                            var Stadia_AlidadeSmoothDark = new L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+                                maxZoom: 20,
+                                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OSM</a>'
+                            });
+                            let location = [ipLocation.latitude, ipLocation.longitude];
+                            var map = new L.Map("map", {
+                                center: location,
+                                zoom: 11,
+                                minZoom: 11,
+                                maxZoom: 11,
+                                zoomControl: false
+                            })
+                                .addLayer(Stadia_AlidadeSmoothDark);
+                            map.touchZoom.disable();
+                            map.doubleClickZoom.disable();
+                            map.scrollWheelZoom.disable();
+                            map.boxZoom.disable();
+                            map.keyboard.disable();
+                        } else {
+                            console.log("No Map for you");
+                        }
+                    })
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                }
+                );
         }
     },
     created: function () {
     },
     mounted: function () {
         if (this.page == 'index') {
-            var Stadia_AlidadeSmoothDark = new L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-                maxZoom: 20,
-                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OSM</a>'
-            });
-            let location = [37.108280, -113.583282];
-            var map = new L.Map("map", {
-                center: location,
-                zoom: 9,
-                minZoom: 9,
-                maxZoom: 9,
-                zoomControl: false
-            })
-                .addLayer(Stadia_AlidadeSmoothDark);
-            map.touchZoom.disable();
-            map.doubleClickZoom.disable();
-            map.scrollWheelZoom.disable();
-            map.boxZoom.disable();
-            map.keyboard.disable();
-            var polygon = L.polygon([
-                [51.509, -0.08],
-                [51.503, -0.06],
-                [51.51, -0.047]
-            ]).addTo(map);
+            console.log("index");
         } else if (this.page == 'organizations') {
             this.getOrganizations();
             this.getOrganizationStates();

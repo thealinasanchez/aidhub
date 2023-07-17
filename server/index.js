@@ -91,6 +91,24 @@ app.get("/categories", function (req, res) {
     res.status(200).json(NTEENUMS);
 });
 
+app.get("/location", function (req, res) {
+    let url = `http://ipinfo.io/${req.query.ip}?token=${process.env.IPINFO_TOKEN}`;
+    fetch(url).then(response => {
+        if (response.status == 200) {
+            return response.json();
+        }
+        else {
+            console.log(response)
+            res.status(404).json({ error: "Location not found." });
+        }
+    }
+    ).then(data => {
+        res.status(200).json(data);
+    }).catch(error => {
+        res.status(500).json({ error: error });
+    });
+});
+
 // POST
 // app.post("/organizations", function (req, res) {
 //     const newEntry = new model.JournalEntry({
