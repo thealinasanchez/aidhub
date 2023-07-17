@@ -33,7 +33,7 @@
         </header>
         <main>
             <button @click="toggleVolunteerPostModal(index)">Create Volunteer Opportunity</button>
-            <div class="volunteerPostModal" v-show="modalOpen">
+            <div class="volunteerPostModal" v-show="toggleModal">
                 <div class="content">
                     <div id="close" @click="toggleVolunteerPostModal()">X</div>
                     <form id="volunteer-form">
