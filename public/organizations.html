@@ -7,11 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidHub - Organizations</title>
     <link href="style.css" rel="stylesheet" type="text/css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
     <div id="app">
+        {{ page = 'organizations'}}
         <!-- Content goes here -->
         <div class="header-background">
         </div>
@@ -130,7 +136,7 @@
                 <span><em>{{ organizationsPage.results }}</em> Results</span>
             </div>
         </main>
-        <footer class="index-footer">
+        <footer class="org-footer">
             <h2>AidHub</h2>
             <p>Sign up for our newsletter here!</p>
         </footer>

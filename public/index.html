@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidHub</title>
     <link href="style.css" rel="stylesheet" type="text/css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
     <!-- Map Visualization Stuff -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -20,6 +25,7 @@
 
 <body>
     <div id="app">
+        {{ page = 'index'}}
         <div class="header-background">
         </div>
         <header class="top-nav-bar">
@@ -56,6 +62,7 @@
                 @click="moveToSlide(index)"></span>
         </div>
         <main class="main-section-container">
+            <h1>Organizations Near You!</h1>
             <div id="map"></div>
             <div class="index-main-image-container">
                 <div class="index-main-image-row">
