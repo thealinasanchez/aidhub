@@ -109,27 +109,27 @@ app.get("/location", function (req, res) {
     });
 });
 
-// POST
-// app.post("/organizations", function (req, res) {
-//     const newEntry = new model.JournalEntry({
-//         orgname: req.body.orgname,
-//         categories: req.body.categories,
-//         city: req.body.city,
-//         state: req.body.state,
-//         missionStatement: req.body.missionStatement
-//     });
+POST
+app.post("/volunteerOpportunities", function (req, res) {
+    const newEntry = new model.VolunteerForm({
+        orgname: req.body.orgname,
+        categories: req.body.categories,
+        city: req.body.city,
+        state: req.body.state,
+        missionStatement: req.body.missionStatement
+    });
 
-//     newEntry.save().then(() => {
-//         console.log("New organization/journal entry added.");
-//         res.status(201).send(newEntry);
-//     }).catch((errors) => {
-//         let error_list = [];
-//         for (var key in errors.errors) {
-//             error_list.push(errors.errors[key].message)
-//         }
-//         res.status(422).send(error_list);
-//     })
-// })
+    newEntry.save().then(() => {
+        console.log("New organization/journal entry added.");
+        res.status(201).send(newEntry);
+    }).catch((errors) => {
+        let error_list = [];
+        for (var key in errors.errors) {
+            error_list.push(errors.errors[key].message)
+        }
+        res.status(422).send(error_list);
+    })
+})
 
 // // PUT
 // app.put("/organizations/:orgId", function (req, res) {
