@@ -1,0 +1,44 @@
+{
+    "code_nums": [
+        {
+            "ntee_num": "1",
+            "category": "Arts, Culture & Humanities"
+        },
+        {
+            "ntee_num": "2",
+            "category": "Education"
+        },
+        {
+            "ntee_num": "3",
+            "category": "Environment and Animals"
+        },
+        {
+            "ntee_num": "4",
+            "category": "Health"
+        },
+        {
+            "ntee_num": "5",
+            "category": "Human Services"
+        },
+        {
+            "ntee_num": "6",
+            "category": "International, Foreign Affairs"
+        },
+        {
+            "ntee_num": "7",
+            "category": "Public, Societal Benefit"
+        },
+        {
+            "ntee_num": "8",
+            "category": "Religion Related"
+        },
+        {
+            "ntee_num": "9",
+            "category": "Mutual/Membership Benefit"
+        },
+        {
+            "ntee_num": "10",
+            "category": "Unknown, Unclassified"
+        }
+    ]
+}

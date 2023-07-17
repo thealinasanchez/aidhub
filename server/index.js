@@ -3,7 +3,9 @@ const cors = require('cors');
 const axios = require('axios');
 const model = require('./model');
 
-// const { createProxyMiddleware } = require('http-proxy-middleware');
+const NTEEDATA = require('./ntee_codes.json')["codes"];
+const STATES = require('./states.json')["states"];
+const NTEENUMS = require('./ntee_num.json')["code_nums"];
 
 const app = express();
 const port = 6300;
@@ -11,45 +13,82 @@ const port = 6300;
 app.use(express.json());
 app.use(express.static('public'));
 app.use(cors());
-// app.use('/', createProxyMiddleware({
-//     target: 'https://projects.propublica.org',
-//     changeOrigin: true,
-//     pathRewrite: {
-//         '/^api': '/nonprofits/api/v2/search.json?q=', // Rewrite the path to match the ProPublica API
-//     },
-// }));
 
 // GET
-app.get("/organizations", function (req, res) {
-    model.JournalEntry.find().then(entries => {
-        res.json(entries);
-    });
-});
-
-app.get('/api', async (req, res) => {
+app.get("/organizations", async function (req, res) {
+    let url = "https://projects.propublica.org/nonprofits/api/v2/search.json?";
     try {
-        const url = req.query.url;
+        let prev = false;
+        if (req.query.hasOwnProperty("q") && req.query.q != "") {
+            prev = true;
+            url += `q=${req.query.q.replace(" ", "+")}`;
+        }
+        if (req.query.hasOwnProperty("state")) {
+            url += (prev) ? '&' : '';
+            prev = true;
+            url += `state%5Bid%5D=${req.query.state.id}`;
+        }
+        if (req.query.hasOwnProperty("ntee")) {
+            url += (prev) ? '&' : ''
+            url += `ntee%5Bid%5D=${req.query.ntee.id}`;
+        }
+        if (req.query.hasOwnProperty("page")) {
+            url += (prev) ? '&' : ''
+            url += `page=${req.query.page}`;
+        }
         const response = await axios.get(url);
         res.json(response.data);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred' });
+        if (error.message === "Request failed with status code 404") {
+            res.status(404).json({ total_results: 0, error: "No results found.", organizations: [], num_pages: 0, cur_page: -1 });
+        } else {
+            console.log(error);
+            res.status(500).json({ error: error });
+        }
     }
 });
 
-app.get("/organizations/:orgId", function (req, res) {
-    model.JournalEntry.findOne({ "_id": req.params.orgId }).then(expense => {
-        if (expense) {
-            res.json(expense);
+app.get('/ntee', function (req, res) {
+    response = {};
+    if (req.query.hasOwnProperty("code")) {
+        if (!Array.isArray(req.query["code"])) {
+            req.query["code"] = [req.query["code"]];
         }
-        else {
-            console.log("Organization not found.");
-            res.status(404).send("Organization not found.");
-        }
-    }).catch(() => {
-        console.log("Bad request (GET by ID).");
-        res.status(400).send("Organization not found.");
-    })
+        req.query["code"].forEach(code => {
+            if (NTEEDATA.hasOwnProperty(code)) {
+                response[code] =
+                {
+                    category: NTEEDATA[code].category,
+                    description: NTEEDATA[code].description
+                };
+            } else if (code || code == "None") {
+                response[code] =
+                {
+                    category: "N/A",
+                    description: "N/A"
+                }
+            } else {
+                response[code] =
+                {
+                    category: "N/A",
+                    description: "N/A"
+                }
+                console.log("NTEE code not found.");
+            }
+        });
+        res.status(200).json(response);
+    }
+    else {
+        res.status(404);
+    }
+});
+
+app.get("/states", function (req, res) {
+    res.status(200).json(STATES);
+});
+
+app.get("/categories", function (req, res) {
+    res.status(200).json(NTEENUMS);
 });
 
 // POST
