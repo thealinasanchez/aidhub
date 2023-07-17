@@ -138,12 +138,15 @@
                             >
                         </span>
                     </form>
-                    <button @click="addVolunteerPost()">Post</button>
+                    <button @click="addVolunteerOpportunities()">Post</button>
                 </div>
             </div>
             <h1 id="find">Find volunteer opportunities here:</h1>
-            <div class="volunteerthings">
-                <!-- show all volunteer opportunities -->
+            <div 
+                class="volunteerthings"
+                v-for="(post, index) in volunteerOpportunities"
+            >
+                <div>{{post}}</div>
             </div>
     </div>
     <script src="script.js"></script>
