@@ -75,6 +75,19 @@ Vue.createApp({
                 website: ""
             },
             toggleModal: false,
+            volunteerOpportunities: [],
+            newVolunteerPost: {
+                user: "",
+                title: "",
+                orgname: "",
+                city: "",
+                state: "",
+                dateStart: "",
+                dateEnd: "",
+                description: "",
+                num_people: 0,
+                website: ""
+            }
         }
     },
     methods: {
@@ -238,24 +251,71 @@ Vue.createApp({
             }
             this.organizations.sort(compare);
         },
-
+        // VOLUNTEERFORM.HTML STUFF
         toggleVolunteerPostModal: function (index = null) {
             this.modalOpen = !this.modalOpen;
             if (index !== null) {
-                let exp = this.expenses[index];
+                let modal = this.volunteerOpportunities[index];
                 this.volunteerPostModal.index = index;
-                this.volunteerPostModal.user = user;
-                this.volunteerPostModal.title = title;
-                this.volunteerPostModal.orgname = orgname;
-                this.volunteerPostModal.city = city;
-                this.volunteerPostModal.state = state;
-                this.volunteerPostModal.dateStart = dateStart;
-                this.volunteerPostModal.dateEnd = dateEnd;
-                this.volunteerPostModal.description = description;
-                this.volunteerPostModal.num_people = num_people;
-                this.volunteerPostModal.website = website;
+                this.volunteerPostModal.user = modal.user;
+                this.volunteerPostModal.title = modal.title;
+                this.volunteerPostModal.orgname = modal.orgname;
+                this.volunteerPostModal.city = modal.city;
+                this.volunteerPostModal.state = modal.state;
+                this.volunteerPostModal.dateStart = modal.dateStart;
+                this.volunteerPostModal.dateEnd = modal.dateEnd;
+                this.volunteerPostModal.description = modal.description;
+                this.volunteerPostModal.num_people = modal.num_people;
+                this.volunteerPostModal.website = modal.website;
+            }
+        },
+        // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
+        getVolunteerOpportunities: function() {
+            fetch('http://localhost:8080/volunteerOpportunities')
+            .then(response => response.json()).then((data) => {
+                this.volunteerOpportunities = data;
+            });
+        },
+        addVolunteerOpportunities: function() {
+            myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+            var encodedData = "user=" + encodeURIComponent(this.newVolunteerPost.user) +
+                                "&title=" + encodeURIComponent(this.newVolunteerPost.title) +
+                                "&orgname=" + encodeURIComponent(this.newVolunteerPost.orgname) +
+                                "&city=" + encodeURIComponent(this.newVolunteerPost.city) +
+                                "&state=" + encodeURIComponent(this.newVolunteerPost.state) +
+                                "&dateStart=" + encodeURIComponent(this.newVolunteerPost.dateStart) +
+                                "&dateEnd=" + encodeURIComponent(this.newVolunteerPost.dateEnd) +
+                                "&description=" + encodeURIComponent(this.newVolunteerPost.description) +
+                                "&num_people=" + encodeURIComponent(this.newVolunteerPost.num_people) +
+                                "&website=" + encodeURIComponent(this.newVolunteerPost.website);
+            
+            var requestOptions = {
+                method: "POST",
+                body: encodedData,
+                headers: myHeaders
+            };
+
+            fetch("http://localhost:8080/volunteerOpportunities", requestOptions)
+            .then((response) => {
+                if(response.status === 201) {
+                    response.json().then((data) => {
+                        this.volunteerOpportunities.push(data);
+                        this.newVolunteerPost = {};
+                    });
+                } else {
+                    alert("Not able to post volunteer opportunity");
+                }
+            });
+        },
+        deleteVolunteerOpportunities: function (index) {
+            var volpostId = this.expenses[index]._id;
+            var requestOptions = {
+                method: "DELETE"
             }
         }
+
     },
     watch: {
         'organizationsSearchFilterState.name'(newState, oldState) {
