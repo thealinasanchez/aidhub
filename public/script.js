@@ -291,10 +291,10 @@ Vue.createApp({
                 num_people: this.newVolunteerPost.num_people,
                 website: this.newVolunteerPost.website
             }
-
+            console.log(encodedData);
             var requestOptions = {
                 method: "POST",
-                body: encodedData,
+                body: JSON.stringify(encodedData),
                 headers: {
                     "Content-Type": "application/json"
                 }
