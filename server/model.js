@@ -4,10 +4,9 @@ const dotenv = require('dotenv');
 
 dotenv.config() // Import environmental variables
 
-/*
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.DB_LINK);
-*/
+
 
 const VolunteerFormSchema = Schema ({
     user: {

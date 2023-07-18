@@ -278,23 +278,26 @@ Vue.createApp({
         },
         addVolunteerOpportunities: function() {
             myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-            var encodedData = "user=" + encodeURIComponent(this.newVolunteerPost.user) +
-                                "&title=" + encodeURIComponent(this.newVolunteerPost.title) +
-                                "&orgname=" + encodeURIComponent(this.newVolunteerPost.orgname) +
-                                "&city=" + encodeURIComponent(this.newVolunteerPost.city) +
-                                "&state=" + encodeURIComponent(this.newVolunteerPost.state) +
-                                "&dateStart=" + encodeURIComponent(this.newVolunteerPost.dateStart) +
-                                "&dateEnd=" + encodeURIComponent(this.newVolunteerPost.dateEnd) +
-                                "&description=" + encodeURIComponent(this.newVolunteerPost.description) +
-                                "&num_people=" + encodeURIComponent(this.newVolunteerPost.num_people) +
-                                "&website=" + encodeURIComponent(this.newVolunteerPost.website);
-            
+            myHeaders.append("Content-Type", "application/json");            
+            var encodedData = {
+                user: this.newVolunteerPost.user,
+                title: this.newVolunteerPost.title,
+                orgname: this.newVolunteerPost.orgname,
+                city: this.newVolunteerPost.city,
+                state: this.newVolunteerPost.state,
+                dateStart: this.newVolunteerPost.dateStart,
+                dateEnd: this.newVolunteerPost.dateEnd,
+                description: this.newVolunteerPost.description,
+                num_people: this.newVolunteerPost.num_people,
+                website: this.newVolunteerPost.website
+            }
+            console.log(encodedData);
             var requestOptions = {
                 method: "POST",
-                body: encodedData,
-                headers: myHeaders
+                body: JSON.stringify(encodedData),
+                headers: {
+                    "Content-Type": "application/json"
+                }
             };
 
             fetch("http://localhost:6300/volunteerOpportunities", requestOptions)

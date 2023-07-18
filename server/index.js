@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(cors());
 
+
 // GET
 app.get("/organizations", async function (req, res) {
     let url = "https://projects.propublica.org/nonprofits/api/v2/search.json?";
@@ -133,18 +134,138 @@ app.get("/localOrganizations", function (req, res) {
     res.json(LOCALORGANIZATIONS);
 });
 
-// POST
-// app.post("/organizations", function (req, res) {
-//     const newEntry = new model.JournalEntry({
+// GET FOR VOLUNTEERFORM SCHEMA
+app.get("/volunteerOpportunities", function (req, res) {
+    model.VolunteerForm.find().then(entries => {
+        res.json(entries);
+    });
+});
+
+app.get("/volunteerOpportunities/volpostId", function (req, res) {
+    model.VolunteerForm.findOne({ "_id": req.params.volpostId }).then(post => {
+        if (post) {
+            res.json(post);
+        }
+        else {
+            console.log("Volunteer post not found.");
+            res.status(404).send("Volunteer post not found.");
+        }
+    }).catch(() => {
+        console.log("Bad request (GET by ID).");
+        res.status(400).send("Volunteer post not found.");
+    })
+});
+
+// POST FOR VOLUNTEERFORM SCHEMA
+app.post("/volunteerOpportunities", function (req, res) {
+    const newEntry = new model.VolunteerForm({
+        user: req.body.user,
+        title: req.body.title,
+        orgname: req.body.orgname,
+        city: req.body.city,
+        state: req.body.state,
+        dateStart: req.body.dateStart,
+        dateEnd: req.body.dateEnd,
+        description: req.body.description,
+        num_people: req.body.num_people,
+        website: req.body.website
+    });
+
+    newEntry.save().then(() => {
+        console.log("New post/volunteer form entry added.");
+        res.status(201).send(newEntry);
+    }).catch((errors) => {
+        console.log(errors);
+        let error_list = [];
+        for (var key in errors.errors) {
+            error_list.push(errors.errors[key].message)
+        }
+        res.status(422).send(error_list);
+    })
+})
+
+// PUT FOR VOLUNTEERFORM SCHEMA
+app.put("/volunteerOpportunities/:volpostId", function (req, res) {
+    // console.log(req.body.categories);
+    const updatedVolunteerOpportunities = {
+        user: req.body.user,
+        title: req.body.title,
+        orgname: req.body.orgname,
+        city: req.body.city,
+        state: req.body.state,
+        dateStart: req.body.dateStart,
+        dateEnd: req.body.dateEnd,
+        description: req.body.description,
+        num_people: req.body.num_people,
+        website: req.body.website
+    }
+
+    model.VolunteerForm.findByIdAndUpdate({ "_id": req.params.volpostId }, updatedVolunteerOpportunities, { "new": true }).then(post => {
+        if (post) {
+            res.status(204).send("Volunteer post updated.");
+        }
+        else {
+            res.status(404).send("Volunteer post not found.");
+        }
+    }).catch(() => {
+        res.status(422).send("Unable to update.");
+    });
+});
+
+// DELETE FOR VOLUNTEERFORM SCHEMA
+app.delete("/volunteerOpportunities/:volpostId", function (req, res) {
+    model.VolunteerForm.findOneAndDelete({ "_id": req.params.volpostId }).then(post => {
+        if (post) {
+            res.status(204).send("Volunteer post deleted.");
+        }
+        else {
+            res.status(404).send("Volunteer post not found.");
+        }
+    }).catch(() => {
+        res.status(422).send("Unable to delete.");
+    });
+});
+
+app.listen(port, function () {
+    console.log(`Running server on port ${port}...`);
+});
+
+// // GET FOR DONATIONFORM SCHEMA
+// app.get("/donationOpportunities", function (req,res) {
+//     model.DonationForm.find().then(entries => {
+//         res.json(entries);
+//     });
+// });
+
+// app.get("/donationOpportunities/donationpostId", function(req, res) {
+//     model.DonationForm.findOne({"_id": req.params.donationpostId}).then (donationpost => {
+//         if (donationpost) {
+//             res.json(donationpost);
+//         }
+//         else {
+//             console.log("Donation post not found.");
+//             res.status(404).send("Donation post not found.");
+//         }
+//     }).catch(() => {
+//         console.log("Bad request (GET by ID).");
+//         res.status(400).send("Donation post not found.");
+//     })
+// });
+
+// // POST FOR DONATIONFORM SCHEMA
+// app.post("/donationOpportunities", function (req, res) {
+//     const newEntry = new model.DonationForm({
+//         user: req.body.user,
+//         title: req.body.title,
 //         orgname: req.body.orgname,
-//         categories: req.body.categories,
-//         city: req.body.city,
-//         state: req.body.state,
-//         missionStatement: req.body.missionStatement
+//         description: req.body.description,
+//         website: req.body.website,
+//         min_d: req.body.min_d,
+//         goal: req.body.goal
 //     });
 
 //     newEntry.save().then(() => {
-//         console.log("New organization/journal entry added.");
+//         console.log("New post/donation form entry added.");
 //         res.status(201).send(newEntry);
 //     }).catch((errors) => {
 //         let error_list = [];
@@ -155,43 +276,27 @@ app.get("/localOrganizations", function (req, res) {
 //     })
 // })
 
-// // PUT
-// app.put("/organizations/:orgId", function (req, res) {
+// // PUT FOR DONATIONFORM SCHEMA
+// app.put("/donationOpportunities/:donationpostId", function (req, res) {
 //     // console.log(req.body.categories);
-//     const updatedOrg = {
+//     const updatedDonationOpportunities = {
+//         user: req.body.user,
+//         title: req.body.title,
 //         orgname: req.body.orgname,
-//         categories: req.body.categories,
-//         city: req.body.city,
-//         state: req.body.state,
-//         missionStatement: req.body.missionStatement
+//         description: req.body.description,
+//         website: req.body.website,
+//         min_d: req.body.min_d,
+//         goal: req.body.goal
 //     }
 
-//     model.JournalEntry.findByIdAndUpdate({ "_id": req.params.orgId }, updatedOrg, { "new": true }).then(org => {
-//         if (org) {
-//             res.status(204).send("Organization updated.");
+//     model.DonationForm.findByIdAndUpdate({ "_id": req.params.donationpostId }, updatedVolunteerOpportunities, { "new": true }).then(post => {
+//         if (post) {
+//             res.status(204).send("Volunteer post updated.");
 //         }
 //         else {
-//             res.status(404).send("Organization not found.");
+//             res.status(404).send("Volunteer post not found.");
 //         }
 //     }).catch(() => {
 //         res.status(422).send("Unable to update.");
 //     });
 // });
-
-// // DELETE
-// app.delete("/organizations/:orgId", function (req, res) {
-//     model.JournalEntry.findOneAndDelete({ "_id": req.params.orgId }).then(org => {
-//         if (org) {
-//             res.status(204).send("Organization deleted.");
-//         }
-//         else {
-//             res.status(404).send("Organization not found.");
-//         }
-//     }).catch(() => {
-//         res.status(422).send("Unable to delete.");
-//     });
-// });
-
-app.listen(port, function () {
-    console.log(`Running server on port ${port}...`);
-});
