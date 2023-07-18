@@ -44,7 +44,7 @@
                                 id="user" 
                                 name="user" 
                                 required
-                                v-model="volunteerPostModal.user"
+                                v-model="newVolunteerPost.user"
                             >
                         </span>
                         <span>
@@ -54,7 +54,7 @@
                                 id="title" 
                                 name="title" 
                                 required
-                                v-model="volunteerPostModal.title"
+                                v-model="newVolunteerPost.title"
                             >
                         </span>
                         <span>
@@ -64,7 +64,7 @@
                                 id="orgname" 
                                 name="orgname" 
                                 required
-                                v-model="volunteerPostModal.orgname"
+                                v-model="newVolunteerPost.orgname"
                             >
                         </span>
                         <span>
@@ -73,7 +73,7 @@
                                 type="text" 
                                 id="city" 
                                 name="city"
-                                v-model="volunteerPostModal.city"
+                                v-model="newVolunteerPost.city"
                             >
                         </span>
                         <span>
@@ -84,7 +84,7 @@
                                 name="state" 
                                 maxlength="2" minlength="2" 
                                 required
-                                v-model="volunteerPostModal.state"
+                                v-model="newVolunteerPost.state"
                             >
                         </span>
                         <span>
@@ -95,7 +95,7 @@
                                 name="dateStart"  
                                 min="2023-07-14" 
                                 required
-                                v-model="volunteerPostModal.dateStart"
+                                v-model="newVolunteerPost.dateStart"
                             >
                         </span>
                         <span>
@@ -105,7 +105,7 @@
                                 id="dateEnd" 
                                 name="dateEnd" 
                                 min="2023-07-17"
-                                v-model="volunteerPostModal.dateEnd"
+                                v-model="newVolunteerPost.dateEnd"
                             >
                         </span>
                         <span>
@@ -114,7 +114,7 @@
                                 name="description" 
                                 id="description" 
                                 cols="30" rows="10"
-                                v-model="volunteerPostModal.description"
+                                v-model="newVolunteerPost.description"
                             ></textarea>
                         </span>
                         <span>
@@ -125,7 +125,7 @@
                                 name="num_people"
                                 min="1" 
                                 required
-                                v-model="volunteerPostModal.num_people"
+                                v-model="newVolunteerPost.num_people"
                             >
                         </span>
                         <span>
@@ -134,7 +134,7 @@
                                 type="text" 
                                 id="website" 
                                 name="website"
-                                v-model="volunteerPostModal.website"
+                                v-model="newVolunteerPost.website"
                             >
                         </span>
                     </form>
