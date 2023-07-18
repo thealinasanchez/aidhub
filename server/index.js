@@ -6,7 +6,7 @@ const model = require('./model');
 const NTEEDATA = require('./ntee_codes.json')["codes"];
 const STATES = require('./states.json')["states"];
 const NTEENUMS = require('./ntee_num.json')["code_nums"];
-
+const LOCALORGANIZATIONS = require('./organizationLocations.json')["organizations"];
 const app = express();
 const port = 6300;
 
@@ -107,6 +107,30 @@ app.get("/location", function (req, res) {
     }).catch(error => {
         res.status(500).json({ error: error });
     });
+});
+
+app.get("/findLatLong", function (req, res) {
+    let url = `https://nominatim.openstreetmap.org/search?q=${req.query.address}&format=json&limit=1`;
+    fetch(url).then(response => {
+        if (response.status == 200 && response.hasOwnProperty("lat") && response.hasOwnProperty("lon")) {
+            return response.json({
+                latitude: response[0].lat,
+                longitude: response[0].lon
+            });
+        }
+        else {
+            console.log(response)
+            res.status(404).json({ error: "Location not found." });
+        }
+    }).then(data => {
+        res.status(200).json(data);
+    }).catch(error => {
+        res.status(500).json({ error: error });
+    });
+});
+
+app.get("/localOrganizations", function (req, res) {
+    res.json(LOCALORGANIZATIONS);
 });
 
 // POST

@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidHub</title>
-    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="main.css" rel="stylesheet" type="text/css">
+    <link href="index.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,6 +71,9 @@
                             Location</button>
                     </div>
                 </div>
+            </div>
+            <div class="index-spinner-container spinner-container" v-else-if="indexLocation.spinner">
+                <img src="icons/spinner.svg" alt="spinner" class="spinner" v-if="indexLocation.spinner" />
             </div>
             <div id="map" v-else></div>
             <div class="index-main-image-container">

@@ -27,7 +27,11 @@ Vue.createApp({
                 ],
             },
             indexLocation: {
-                askForLocation: true
+                askForLocation: true,
+                state: "",
+                city: "",
+                spinner: false,
+                mapMarkers: []
             },
 
             /* organizations.html start */
@@ -113,6 +117,7 @@ Vue.createApp({
             }
             this.organizationsPage.spinner = true;
             let codes = [];
+            /*
             fetch(`http://localhost:6300/organizations?${newQuery}`)
                 .then(response => response.json())
                 .then(data => {
@@ -147,6 +152,7 @@ Vue.createApp({
                         })
                     }
                 })
+                */
         },
         getOrganizationStates: function () {
             fetch(`http://localhost:6300/states`).then(response => response.json()).then(data => {
@@ -315,14 +321,13 @@ Vue.createApp({
             })
         },
         'indexLocation.askForLocation'(newAskForLocation, oldAskForLocation) {
-            if (page != 'index') {
-                return;
-            }
+            this.indexLocation.spinner = true;
             fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
                     fetch('http://localhost:6300/location?ip=' + data.ip).then((response) => {
                         if (response.status === 200) {
+                            this.indexLocation.spinner = false;
                             return response.json();
                         } else {
                             console.log("Couldn't get location", response.status);
@@ -346,17 +351,25 @@ Vue.createApp({
                             let location = [ipLocation.latitude, ipLocation.longitude];
                             var map = new L.Map("map", {
                                 center: location,
-                                zoom: 11,
-                                minZoom: 11,
-                                maxZoom: 11,
-                                zoomControl: false
+                                zoom: 12,
+                                minZoom: 12,
+                                maxZoom: 15,
+                                // zoomControl: false
                             })
                                 .addLayer(Stadia_AlidadeSmoothDark);
-                            map.touchZoom.disable();
-                            map.doubleClickZoom.disable();
+                            // map.touchZoom.disable();
+                            // map.doubleClickZoom.disable();
                             map.scrollWheelZoom.disable();
-                            map.boxZoom.disable();
-                            map.keyboard.disable();
+                            // map.boxZoom.disable();
+                            // map.keyboard.disable();
+                            fetch(`http://localhost:6300/localOrganizations`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.forEach((organization) => {
+                                        let marker = L.marker([organization.location.latitude, organization.location.longitude]).addTo(map);
+                                        marker.bindPopup(`<b>${organization.name}</b><br/><a href=${organization.link}>${organization.link}</a>`);
+                                    })
+                                })
                         } else {
                             console.log("No Map for you");
                         }

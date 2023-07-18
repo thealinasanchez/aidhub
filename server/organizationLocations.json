@@ -1,0 +1,148 @@
+{
+    "organizations": [
+        {
+            "name": "Big Brothers Big Sisters of Utah",
+            "location": {
+                "latitude": 37.1078488184789,
+                "longitude": -113.57198729465942
+            },
+            "link": "http://www.bbbsu.org/"
+        },
+        {
+            "name": "Guatemala Children's Project",
+            "location": {
+                "latitude": 37.11138890564511,
+                "longitude": -113.57435613684697
+            },
+            "link": "http://www.guatemalachildrensproject.org/"
+        },
+        {
+            "name": "Children of Hope Academy",
+            "location": {
+                "latitude": 37.10452617969894,
+                "longitude": -113.56179100192382
+            },
+            "link": "https://childrenofhopeacademy.org/home/about-us/"
+        },
+        {
+            "name": "RRCI",
+            "location": {
+                "latitude": 37.11104690863951,
+                "longitude": -113.58070473661984
+            },
+            "link": "http://www.rrci.org/"
+        },
+        {
+            "name": "Heart Walk Foundation",
+            "location": {
+                "latitude": 37.108860712762436,
+                "longitude": -113.57650552759023
+            },
+            "link": "http://www.heartwalkfoundation.org/"
+        },
+        {
+            "name": "Youth Volunteer Corps of St. George",
+            "location": {
+                "latitude": 37.081156277648965,
+                "longitude": -113.60597211846205
+            },
+            "link": "http://www.fcaog.state.ut.us/programs/volunteer/"
+        },
+        {
+            "name": "The Saint George Charity Fund",
+            "location": {
+                "latitude": 37.06126989526155,
+                "longitude": -113.55491804666262
+            },
+            "link": "http://thesaintgeorgecharityfund.org"
+        },
+        {
+            "name": "Breathe Care Resource Center",
+            "location": {
+                "latitude": 37.126956804315824,
+                "longitude": -113.63975934052407
+            },
+            "link": "https://nowbreathecare.org/"
+        },
+        {
+            "name": "Conserve Southwest Utah",
+            "location": {
+                "latitude": 37.11431509533483,
+                "longitude": -113.54316015482667
+            },
+            "link": "http://conserveswu.org/"
+        },
+        {
+            "name": "St. George Rotary Club Foundation, Inc",
+            "location": {
+                "latitude": 37.08896684172786,
+                "longitude": -113.58432207306276
+            },
+            "link": "https://www.stgeorgerotary.org/"
+        },
+        {
+            "name": "The Saint George Charity Fund",
+            "location": {
+                "latitude": 37.10710187803262,
+                "longitude": -113.56034991186452
+            },
+            "link": "https://thesaintgeorgecharityfund.com/"
+        },
+        {
+            "name": "Self-Help Homes",
+            "location": {
+                "latitude": 37.11013104948802,
+                "longitude": -113.58787510258074
+            },
+            "link": "http://www.selfhelphomes.org/"
+        },
+        {
+            "name": "TURN Community Services",
+            "location": {
+                "latitude": 37.087133975804605,
+                "longitude": -113.57210326642067
+            },
+            "link": "https://www.turncommunityservices.org/"
+        },
+        {
+            "name": "Utah Foster Care",
+            "location": {
+                "latitude": 37.11167909737538,
+                "longitude": -113.54609945304863
+            },
+            "link": "http://utahfostercare.org/"
+        },
+        {
+            "name": "DOVE Center",
+            "location": {
+                "latitude": 37.104949120899434,
+                "longitude": -113.5572447640691
+            },
+            "link": "http://www.dovecenter.org/"
+        },
+        {
+            "name": "Leadership Dixie",
+            "location": {
+                "latitude": 37.107744318418014,
+                "longitude": -113.57224853612767
+            },
+            "link": "http://www.leadershipdixie.com/"
+        },
+        {
+            "name": "St. George Lions Club",
+            "location": {
+                "latitude": 37.10672307493028,
+                "longitude": -113.5767246644989
+            },
+            "link": "http://www.stgeorgelions.com/"
+        },
+        {
+            "name": "Memory Matters Utah",
+            "location": {
+                "latitude": 37.110902061543385,
+                "longitude": -113.58090509259455
+            },
+            "link": "http://memorymattersutah.org/"
+        }
+    ]
+}
