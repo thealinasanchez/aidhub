@@ -109,18 +109,40 @@ app.get("/location", function (req, res) {
     });
 });
 
-POST
+// GET FOR VOLUNTEERFORM SCHEMA
+app.get("/volunteerOpportunities", async (req,res) => {
+    model.VolunteerForm.find().then(function (posts) {
+        res.send(posts);
+    });
+});
+
+app.get("/volunteerOpportunities/volpostId", async(req, res) => {
+    var volpostId = req.params.volpostId;
+    try {
+        const posts = await model.VolunteerForm.findOne({_id: volpostId});
+        res.send(posts);
+    } catch(err) {
+        res.status(500).send({error: err.message});
+    }
+});
+
+// POST FOR VOLUNTEERFORM SCHEMA
 app.post("/volunteerOpportunities", function (req, res) {
     const newEntry = new model.VolunteerForm({
+        user: req.body.user,
+        title: req.body.title,
         orgname: req.body.orgname,
-        categories: req.body.categories,
         city: req.body.city,
         state: req.body.state,
-        missionStatement: req.body.missionStatement
+        dateStart: req.body.dateStart,
+        dateEnd: req.body.dateEnd,
+        description: req.body.description,
+        num_people: req.body.num_people,
+        website: req.body.website
     });
 
     newEntry.save().then(() => {
-        console.log("New organization/journal entry added.");
+        console.log("New post/volunteer form entry added.");
         res.status(201).send(newEntry);
     }).catch((errors) => {
         let error_list = [];
@@ -131,42 +153,47 @@ app.post("/volunteerOpportunities", function (req, res) {
     })
 })
 
-// // PUT
-// app.put("/organizations/:orgId", function (req, res) {
-//     // console.log(req.body.categories);
-//     const updatedOrg = {
-//         orgname: req.body.orgname,
-//         categories: req.body.categories,
-//         city: req.body.city,
-//         state: req.body.state,
-//         missionStatement: req.body.missionStatement
-//     }
+// PUT
+app.put("/volunteerOpportunities/:volpostId", function (req, res) {
+    // console.log(req.body.categories);
+    const updatedVolunteerOpportunities = {
+        user: req.body.user,
+        title: req.body.title,
+        orgname: req.body.orgname,
+        city: req.body.city,
+        state: req.body.state,
+        dateStart: req.body.dateStart,
+        dateEnd: req.body.dateEnd,
+        description: req.body.description,
+        num_people: req.body.num_people,
+        website: req.body.website
+    }
 
-//     model.JournalEntry.findByIdAndUpdate({ "_id": req.params.orgId }, updatedOrg, { "new": true }).then(org => {
-//         if (org) {
-//             res.status(204).send("Organization updated.");
-//         }
-//         else {
-//             res.status(404).send("Organization not found.");
-//         }
-//     }).catch(() => {
-//         res.status(422).send("Unable to update.");
-//     });
-// });
+    model.VolunteerForm.findByIdAndUpdate({ "_id": req.params.volpostId }, updatedVolunteerOpportunities, { "new": true }).then(post => {
+        if (post) {
+            res.status(204).send("Volunteer post updated.");
+        }
+        else {
+            res.status(404).send("Volunteer post not found.");
+        }
+    }).catch(() => {
+        res.status(422).send("Unable to update.");
+    });
+});
 
-// // DELETE
-// app.delete("/organizations/:orgId", function (req, res) {
-//     model.JournalEntry.findOneAndDelete({ "_id": req.params.orgId }).then(org => {
-//         if (org) {
-//             res.status(204).send("Organization deleted.");
-//         }
-//         else {
-//             res.status(404).send("Organization not found.");
-//         }
-//     }).catch(() => {
-//         res.status(422).send("Unable to delete.");
-//     });
-// });
+// DELETE
+app.delete("/volunteerOpportunities/:volpostId", function (req, res) {
+    model.VolunteerForm.findOneAndDelete({ "_id": req.params.volpostId }).then(post => {
+        if (post) {
+            res.status(204).send("Volunteer post deleted.");
+        }
+        else {
+            res.status(404).send("Volunteer post not found.");
+        }
+    }).catch(() => {
+        res.status(422).send("Unable to delete.");
+    });
+});
 
 app.listen(port, function () {
     console.log(`Running server on port ${port}...`);
