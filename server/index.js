@@ -110,20 +110,25 @@ app.get("/location", function (req, res) {
 });
 
 // GET FOR VOLUNTEERFORM SCHEMA
-app.get("/volunteerOpportunities", async (req,res) => {
-    model.VolunteerForm.find().then(function (posts) {
-        res.send(posts);
+app.get("/volunteerOpportunities", function (req,res) {
+    model.VolunteerForm.find().then(entries => {
+        res.json(entries);
     });
 });
 
-app.get("/volunteerOpportunities/volpostId", async(req, res) => {
-    var volpostId = req.params.volpostId;
-    try {
-        const posts = await model.VolunteerForm.findOne({_id: volpostId});
-        res.send(posts);
-    } catch(err) {
-        res.status(500).send({error: err.message});
-    }
+app.get("/volunteerOpportunities/volpostId", function(req, res) {
+    model.VolunteerForm.findOne({"_id": req.params.volpostId}).then (post => {
+        if (post) {
+            res.json(post);
+        }
+        else {
+            console.log("Volunteer post not found.");
+            res.status(404).send("Volunteer post not found.");
+        }
+    }).catch(() => {
+        console.log("Bad request (GET by ID).");
+        res.status(400).send("Volunteer post not found.");
+    })
 });
 
 // POST FOR VOLUNTEERFORM SCHEMA
