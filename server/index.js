@@ -151,6 +151,7 @@ app.post("/volunteerOpportunities", function (req, res) {
         console.log("New post/volunteer form entry added.");
         res.status(201).send(newEntry);
     }).catch((errors) => {
+        console.log(errors);
         let error_list = [];
         for (var key in errors.errors) {
             error_list.push(errors.errors[key].message)
