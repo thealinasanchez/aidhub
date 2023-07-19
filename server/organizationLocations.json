@@ -143,6 +143,30 @@
                 "longitude": -113.58090509259455
             },
             "link": "http://memorymattersutah.org/"
+        },
+        {
+            "name": "The Point at Switchpoint",
+            "location": {
+                "latitude": 37.112499024930955,
+                "longitude": -113.56279728638648
+            },
+            "link": "https://switchpointcrc.org/"
+        },
+        {
+            "name": "Salvation Army - Saint George - Food Distribution Center",
+            "location": {
+                "latitude": 37.09384446432879,
+                "longitude": -113.58394836373184
+            },
+            "link": "https://centralusa.salvationarmy.org/twin-cities/volunteer/"
+        },
+        {
+            "name": "Utah Food Bank",
+            "location": {
+                "latitude": 37.032686253050805,
+                "longitude": -113.5623198429629
+            },
+            "link": "https://www.utahfoodbank.org/"
         }
     ]
 }
