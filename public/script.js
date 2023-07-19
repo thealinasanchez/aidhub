@@ -99,7 +99,7 @@ Vue.createApp({
 
             // TRIAL STUFF
             trialOrganizations: [],
-            filteredTrialOrganizations:[],
+            filteredTrialOrganizations: [],
             volunteerorgsearch: ""
         }
     },
@@ -272,7 +272,7 @@ Vue.createApp({
         indexAskLocationAccept: function () {
             this.indexLocation.askForLocation = false;
         },
-        dropdownOrgSelection: function(name) {
+        dropdownOrgSelection: function (name) {
             this.volunteerorgsearch = name;
         },
         // VOLUNTEERFORM.HTML STUFF
@@ -294,15 +294,15 @@ Vue.createApp({
             }
         },
         // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
-        getVolunteerOpportunities: function() {
+        getVolunteerOpportunities: function () {
             fetch('http://localhost:6300/volunteerOpportunities')
-            .then(response => response.json()).then((data) => {
-                this.volunteerOpportunities = data;
-            });
+                .then(response => response.json()).then((data) => {
+                    this.volunteerOpportunities = data;
+                });
         },
-        addVolunteerOpportunities: function() {
+        addVolunteerOpportunities: function () {
             myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");            
+            myHeaders.append("Content-Type", "application/json");
             var encodedData = {
                 user: this.newVolunteerPost.user,
                 title: this.newVolunteerPost.title,
@@ -325,16 +325,16 @@ Vue.createApp({
             };
 
             fetch("http://localhost:6300/volunteerOpportunities", requestOptions)
-            .then((response) => {
-                if(response.status === 201) {
-                    response.json().then((data) => {
-                        this.volunteerOpportunities.push(data);
-                        this.newVolunteerPost = {};
-                    });
-                } else {
-                    alert("Not able to post volunteer opportunity");
-                }
-            });
+                .then((response) => {
+                    if (response.status === 201) {
+                        response.json().then((data) => {
+                            this.volunteerOpportunities.push(data);
+                            this.newVolunteerPost = {};
+                        });
+                    } else {
+                        alert("Not able to post volunteer opportunity");
+                    }
+                });
         },
         deleteVolunteerOpportunities: function (index) {
             var volpostId = this.expenses[index]._id;
@@ -342,24 +342,24 @@ Vue.createApp({
                 method: "DELETE"
             };
             fetch(`http://localhost:6300/volunteerOpportunities/${volpostId}`, requestOptions)
-            .then((response) => {
-                if (response.status === 204) {
-                    console.log("success");
-                    this.volunteerOpportunities.splice(index, 1);
-                } else {
-                    alert("Unable to delete expense");
-                }
-            });
+                .then((response) => {
+                    if (response.status === 204) {
+                        console.log("success");
+                        this.volunteerOpportunities.splice(index, 1);
+                    } else {
+                        alert("Unable to delete expense");
+                    }
+                });
         },
-        getTrialOrganizations: function() {
+        getTrialOrganizations: function () {
             fetch(`http://localhost:6300/localOrganizations`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    data.forEach((organization) => {
-                                        this.trialOrganizations.push(organization.name);
-                                        console.log(this.trialOrganizations);
-                                    })
-                                })
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach((organization) => {
+                        this.trialOrganizations.push(organization.name);
+                        console.log(this.trialOrganizations);
+                    })
+                })
         }
     },
     watch: {
@@ -454,8 +454,9 @@ Vue.createApp({
         },
         volunteerorgsearch(newsearch, oldsearch) {
             this.filteredTrialOrganizations = this.trialOrganizations.filter((name) => {
-                return name.toLowerCase().includes(newsearch);
+                return name.toLowerCase().includes(newsearch.toLowerCase());
             })
+            console.log(this.filteredOrganizations);
         }
     },
     created: function () {
