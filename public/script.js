@@ -456,7 +456,7 @@ Vue.createApp({
             this.filteredTrialOrganizations = this.trialOrganizations.filter((name) => {
                 return name.toLowerCase().includes(newsearch.toLowerCase());
             })
-            console.log(this.filteredOrganizations);
+            console.log(this.filteredTrialOrganizations);
         }
     },
     created: function () {

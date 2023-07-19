@@ -519,7 +519,7 @@ Vue.createApp({
             fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
-                    fetch(URL + 'location?ip=' + data.ip).then((response) => {
+                    fetch(URL + 'location?ip=' + "144.38.184.33").then((response) => {
                         if (response.status === 200) {
                             this.indexLocation.spinner = false;
                             return response.json();
