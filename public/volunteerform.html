@@ -58,14 +58,35 @@
                             >
                         </span>
                         <span>
-                            <label for="orgname">Organization Name:</label>
-                            <input 
-                                type="text" 
-                                id="orgname" 
-                                name="orgname" 
-                                required
-                                v-model="newVolunteerPost.orgname"
-                            >
+                            <label for="orgname">Organization Name (if personal, select "personal")</label>
+                            <label>
+                                <input 
+                                    type="radio"
+                                    v-model="newVolunteerPost.orgname"
+                                    value="personal"
+                                >
+                                Personal
+                            </label>
+                            <!-- for some reason the webpage doesn't like another input here,
+                            even with the same v-model or id or both? -->
+                            <label>
+                                <input 
+                                    type="radio"
+                                    v-model="newVolunteerPost.orgname"
+                                    value="organization"
+                                >
+                                Organization
+                            </label>
+                            <div v-if="shouldShowSearchBar">
+                                <input 
+                                    type="text" 
+                                    v-model="searchQuery" 
+                                    placeholder="Search for an organization"
+                                >
+                                <ul>
+                                    <li v-for="organization in filteredOrganizations" :key="organization.id">{{organization.orgname}}</li>
+                                </ul>
+                            </div>
                         </span>
                         <span>
                             <label for="city">City it is taking place in:</label>

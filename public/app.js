@@ -71,6 +71,35 @@ Vue.createApp({
             },
             organizationsFilteredCategories: [],
             /* organizations.html end */
+
+            /* Volunteer New Post Toggle Modal Form */
+            volunteerPostModal: {
+                index: -1,
+                user: "",
+                title: "",
+                orgname: "",
+                city: "",
+                state: "",
+                dateStart: "",
+                dateEnd: "",
+                description: "",
+                num_people: 0,
+                website: ""
+            },
+            toggleModal: false,
+            volunteerOpportunities: [],
+            newVolunteerPost: {
+                user: "",
+                title: "",
+                orgname: "personal",
+                city: "",
+                state: "",
+                dateStart: "",
+                dateEnd: "",
+                description: "",
+                num_people: 0,
+                website: ""
+            },
         }
     },
     methods: {
@@ -120,6 +149,11 @@ Vue.createApp({
             if (this.organizationsPage.current != -1) {
                 newQuery += previous ? "&" : "";
                 newQuery += "page=" + this.organizationsPage.current;
+            }
+            if (data.organizations.length !== 0) {
+                data.organizations.forEach((org) => {
+                    this.organizations.push(org);
+                })
             }
             this.organizationsPage.spinner = true;
             let codes = [];
@@ -237,63 +271,157 @@ Vue.createApp({
         indexAskLocationAccept: function () {
             this.indexLocation.askForLocation = false;
         },
-        // updateOrganization: function () {
-        //     var myHeaders = new Headers();
-        //     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        // VOLUNTEERFORM.HTML STUFF
+        toggleVolunteerPostModal: function (index = null) {
+            this.toggleModal = !this.toggleModal;
+            if (index !== null) {
+                let modal = this.volunteerOpportunities[index];
+                this.volunteerPostModal.index = index;
+                this.volunteerPostModal.user = modal.user;
+                this.volunteerPostModal.title = modal.title;
+                this.volunteerPostModal.orgname = modal.orgname;
+                this.volunteerPostModal.city = modal.city;
+                this.volunteerPostModal.state = modal.state;
+                this.volunteerPostModal.dateStart = modal.dateStart;
+                this.volunteerPostModal.dateEnd = modal.dateEnd;
+                this.volunteerPostModal.description = modal.description;
+                this.volunteerPostModal.num_people = modal.num_people;
+                this.volunteerPostModal.website = modal.website;
+            }
+        },
+        // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
+        getVolunteerOpportunities: function () {
+            fetch('http://localhost:6300/volunteerOpportunities')
+                .then(response => response.json()).then((data) => {
+                    this.volunteerOpportunities = data;
+                });
+        },
+        addVolunteerOpportunities: function () {
+            myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            var encodedData = {
+                user: this.newVolunteerPost.user,
+                title: this.newVolunteerPost.title,
+                orgname: this.newVolunteerPost.orgname,
+                city: this.newVolunteerPost.city,
+                state: this.newVolunteerPost.state,
+                dateStart: this.newVolunteerPost.dateStart,
+                dateEnd: this.newVolunteerPost.dateEnd,
+                description: this.newVolunteerPost.description,
+                num_people: this.newVolunteerPost.num_people,
+                website: this.newVolunteerPost.website
+            }
+            console.log(encodedData);
+            var requestOptions = {
+                method: "POST",
+                body: JSON.stringify(encodedData),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            };
 
-        //     var encodedData = "orgname=" + encodeURIComponent(this.newOrganization.orgname) +
-        //         "&categories=" + encodeURIComponent(this.newOrganization.categories) +
-        //         "&city=" + encodeURIComponent(this.newOrganization.city) +
-        //         "&state=" + encodeURIComponent(this.newOrganization.state) +
-        //         "&missionStatement" + encodeURIComponent(this.newOrganization.missionStatement);
-        //     var requestOptions = {
-        //         method: 'PUT',
-        //         body: encodedData,
-        //         headers: myHeaders
-        //     };
-        //     var orgId = this.expenses[this.newOrganization.index]._id;
-        //     console.log(orgId);
-        //     fetch(`http://localhost:8080/organizations/${orgId}`, requestOptions)
-        //         .then((response) => {
-        //             if (response.status == 204) {
-        //                 this.organizations[this.newOrganization.index].orgname = this.newOrganization.orgname;
-        //                 this.organizations[this.newOrganization.index].categories = this.newOrganization.categories;
-        //                 this.organizations[this.newOrganization.index].city = this.newOrganization.city;
-        //                 this.organizations[this.newOrganization.index].state = this.newOrganization.state;
-        //                 this.organizations[this.newOrganization.index].missionStatement = this.newOrganization.missionStatement;
-        //             }
-        //         })
-        // },
-        // addOrganization: function () {
-        //     myHeaders = new Headers();
-        //     // first param is the header, second param is content of header
-        //     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-        //     var encodedData = "orgname=" + encodeURIComponent(this.newOrganization.orgname) +
-        //         "&categories=" + encodeURIComponent(this.newOrganization.categories) +
-        //         "&city=" + encodeURIComponent(this.newOrganization.city) +
-        //         "&state=" + encodeURIComponent(this.newOrganization.state) +
-        //         "&missionStatement" + encodeURIComponent(this.newOrganization.missionStatement);
-        //     var requestOptions = {
-        //         method: 'POST',
-        //         body: encodedData,
-        //         headers: myHeaders
-        //     };
-        //     fetch("http://localhost:8080/organizations", requestOptions)
-        //         .then((response) => {
-        //             if (response.status === 201) {
-        //                 response.json().then(data => {
-        //                     this.organizations.push(data);
-        //                     this.newOrganization = {};
-        //                 })
-        //                 console.log("Success");
-        //                 this.newOrganization = {};
-        //             } else {
-        //                 alert("Not able to add organization");
-        //             }
-        //         })
-        // }
+            fetch("http://localhost:6300/volunteerOpportunities", requestOptions)
+                .then((response) => {
+                    if (response.status === 201) {
+                        response.json().then((data) => {
+                            this.volunteerOpportunities.push(data);
+                            this.newVolunteerPost = {};
+                        });
+                    } else {
+                        alert("Not able to post volunteer opportunity");
+                    }
+                });
+        },
+        deleteVolunteerOpportunities: function (index) {
+            var volpostId = this.expenses[index]._id;
+            var requestOptions = {
+                method: "DELETE"
+            };
+            fetch(`http://localhost:6300/volunteerOpportunities/${volpostId}`, requestOptions)
+                .then((response) => {
+                    if (response.status === 204) {
+                        console.log("success");
+                        this.volunteerOpportunities.splice(index, 1);
+                    } else {
+                        alert("Unable to delete expense");
+                    }
+                });
+        },
+        getOrganizationName() {
+            if (this.newVolunteerPost.orgame === 'organization') {
+                return '';
+            } else {
+                return this.newVolunteerPost.orgname;
+            }
+        }
+        /* user stuff */
         loggedIn: function () {
+            let options = {
+                credentials: "include"
+            }
+            fetch(URL + "session", options)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.cookie && data.userId) {
+                        this.page = "";
+                    } else {
+                        this.page = "auth";
+                    }
+                })
+        },
+        signUp: function () {
+            let myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            let options = {
+                method: "POST",
+                headers: myHeaders,
+                body: JSON.stringify(this.user)
+            }
+            fetch(URL + "users", options).then(response => {
+                if (response.status == 201) {
+                    this.createSession();
+                } else {
+                    response.text().then(text => alert(text));
+                }
+            });
+        },
+        createSession: function () {
+            let myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            let options = {
+                method: "POST",
+                headers: myHeaders,
+                body: JSON.stringify(this.user),
+                credentials: "include"
+            }
+            fetch(URL + "session", options).then(response => {
+                if (response.status == 201) {
+                    response.text().then(data => {
+                        if (data) {
+                            data = JSON.parse(data);
+                            this.page = ""
+                            this.user.name = data.name;
+                        } else {
+                            alert("No session created");
+                        }
+                    })
+                } else {
+                    response.text().then(text => alert(text));
+                }
+            });
+        },
+        logout: function () {
+            let options = {
+                method: "DELETE",
+                credentials: "include"
+            }
+            fetch(URL + "session", options).then(response => {
+                this.page = "auth";
+                this.user.name = "";
+                this.user.email = "";
+                this.user.password = "";
+            });
+        }, loggedIn: function () {
             let options = {
                 credentials: "include"
             }
@@ -463,5 +591,5 @@ Vue.createApp({
             this.getOrganizationStates();
             this.getOrganizationCategories();
         }
-    }
+    },
 }).mount("#app");

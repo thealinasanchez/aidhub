@@ -1,4 +1,3 @@
-
 Vue.createApp({
     data() {
         return {
@@ -26,6 +25,13 @@ Vue.createApp({
                         caption: "",
                     },
                 ],
+            },
+            indexLocation: {
+                askForLocation: true,
+                state: "",
+                city: "",
+                spinner: false,
+                mapMarkers: []
             },
 
             /* organizations.html start */
@@ -79,7 +85,7 @@ Vue.createApp({
             newVolunteerPost: {
                 user: "",
                 title: "",
-                orgname: "",
+                orgname: "personal",
                 city: "",
                 state: "",
                 dateStart: "",
@@ -87,7 +93,7 @@ Vue.createApp({
                 description: "",
                 num_people: 0,
                 website: ""
-            }
+            },
         }
     },
     methods: {
@@ -138,8 +144,14 @@ Vue.createApp({
                 newQuery += previous ? "&" : "";
                 newQuery += "page=" + this.organizationsPage.current;
             }
+            if (data.organizations.length !== 0) {
+                data.organizations.forEach((org) => {
+                    this.organizations.push(org);
+                })
+            }
             this.organizationsPage.spinner = true;
             let codes = [];
+            /*
             fetch(`http://localhost:6300/organizations?${newQuery}`)
                 .then(response => response.json())
                 .then(data => {
@@ -174,6 +186,7 @@ Vue.createApp({
                         })
                     }
                 })
+                */
         },
         getOrganizationStates: function () {
             fetch(`http://localhost:6300/states`).then(response => response.json()).then(data => {
@@ -251,6 +264,9 @@ Vue.createApp({
             }
             this.organizations.sort(compare);
         },
+        indexAskLocationAccept: function () {
+            this.indexLocation.askForLocation = false;
+        },
         // VOLUNTEERFORM.HTML STUFF
         toggleVolunteerPostModal: function (index = null) {
             this.toggleModal = !this.toggleModal;
@@ -326,8 +342,14 @@ Vue.createApp({
                     alert("Unable to delete expense");
                 }
             });
+        },
+        getOrganizationName() {
+            if (this.newVolunteerPost.orgame === 'organization') {
+                return '';
+            } else {
+                return this.newVolunteerPost.orgname;
+            }
         }
-
     },
     watch: {
         'organizationsSearchFilterState.name'(newState, oldState) {
@@ -358,39 +380,77 @@ Vue.createApp({
                     .toLowerCase()
                     .includes(newCategory.toLowerCase());
             })
+        },
+        'indexLocation.askForLocation'(newAskForLocation, oldAskForLocation) {
+            this.indexLocation.spinner = true;
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    fetch('http://localhost:6300/location?ip=' + data.ip).then((response) => {
+                        if (response.status === 200) {
+                            this.indexLocation.spinner = false;
+                            return response.json();
+                        } else {
+                            console.log("Couldn't get location", response.status);
+                        }
+                    }).then((data) => {
+                        let loc = data.loc.split(",");
+                        let ipLocation = {
+                            city: data.city ? data.city : "",
+                            state: data.region ? data.region : "",
+                            country: data.country ? data.country : "",
+                            latitude: -91,
+                            longitude: -181,
+                        }
+                        ipLocation.latitude = Number(loc[0]);
+                        ipLocation.longitude = Number(loc[1]);
+                        if (ipLocation.latitude != -91 && ipLocation.longitude != -181) {
+                            var Stadia_AlidadeSmoothDark = new L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+                                maxZoom: 20,
+                                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OSM</a>'
+                            });
+                            let location = [ipLocation.latitude, ipLocation.longitude];
+                            var map = new L.Map("map", {
+                                center: location,
+                                zoom: 12,
+                                minZoom: 12,
+                                maxZoom: 15,
+                                // zoomControl: false
+                            })
+                                .addLayer(Stadia_AlidadeSmoothDark);
+                            // map.touchZoom.disable();
+                            // map.doubleClickZoom.disable();
+                            map.scrollWheelZoom.disable();
+                            // map.boxZoom.disable();
+                            // map.keyboard.disable();
+                            fetch(`http://localhost:6300/localOrganizations`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.forEach((organization) => {
+                                        let marker = L.marker([organization.location.latitude, organization.location.longitude]).addTo(map);
+                                        marker.bindPopup(`<b>${organization.name}</b><br/><a href=${organization.link}>${organization.link}</a>`);
+                                    })
+                                })
+                        } else {
+                            console.log("No Map for you");
+                        }
+                    })
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                }
+                );
         }
     },
     created: function () {
     },
     mounted: function () {
         if (this.page == 'index') {
-            var Stadia_AlidadeSmoothDark = new L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-                maxZoom: 20,
-                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OSM</a>'
-            });
-            let location = [37.108280, -113.583282];
-            var map = new L.Map("map", {
-                center: location,
-                zoom: 9,
-                minZoom: 9,
-                maxZoom: 9,
-                zoomControl: false
-            })
-                .addLayer(Stadia_AlidadeSmoothDark);
-            map.touchZoom.disable();
-            map.doubleClickZoom.disable();
-            map.scrollWheelZoom.disable();
-            map.boxZoom.disable();
-            map.keyboard.disable();
-            var polygon = L.polygon([
-                [51.509, -0.08],
-                [51.503, -0.06],
-                [51.51, -0.047]
-            ]).addTo(map);
+            console.log("index");
         } else if (this.page == 'organizations') {
             this.getOrganizations();
             this.getOrganizationStates();
             this.getOrganizationCategories();
         }
-    }
+    },
 }).mount("#app");
