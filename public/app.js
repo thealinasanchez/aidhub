@@ -353,7 +353,7 @@ Vue.createApp({
             } else {
                 return this.newVolunteerPost.orgname;
             }
-        }
+        },
         /* user stuff */
         loggedIn: function () {
             let options = {
