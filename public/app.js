@@ -85,7 +85,7 @@ Vue.createApp({
             newVolunteerPost: {
                 user: "",
                 title: "",
-                orgname: "",
+                orgname: "personal",
                 city: "",
                 state: "",
                 dateStart: "",
@@ -93,7 +93,8 @@ Vue.createApp({
                 description: "",
                 num_people: 0,
                 website: ""
-            }
+            },
+            searchQuery: "",
         }
     },
     methods: {
@@ -337,7 +338,16 @@ Vue.createApp({
                     alert("Unable to delete expense");
                 }
             });
-        }
+        },
+        shouldShowSearchBar() {
+            return this.newVolunteerPost.orgname === "organization";
+        },
+
+        filteredOrganizations() {
+            return this.organizations.filter(organization => {
+                organization.orgname.toLowerCase().includes(this.searchQuery.toLowerCase());
+            });
+        },
     },
     watch: {
         'organizationsSearchFilterState.name'(newState, oldState) {
@@ -440,5 +450,5 @@ Vue.createApp({
             this.getOrganizationStates();
             this.getOrganizationCategories();
         }
-    }
+    },
 }).mount("#app");
