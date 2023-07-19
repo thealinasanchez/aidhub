@@ -12,6 +12,7 @@
 
 <body>
     <div id="app">
+        {{page = 'volunteerForm'}}
         <!-- Content goes here -->
         <div class="header-background">
         </div>
@@ -77,15 +78,18 @@
                                 >
                                 Organization
                             </label>
-                            <div v-if="shouldShowSearchBar">
+                            <div v-show="newVolunteerPost.orgname === 'organization'">
                                 <input 
-                                    type="text" 
-                                    v-model="searchQuery" 
-                                    placeholder="Search for an organization"
+                                    type="text"
+                                    v-model="volunteerorgsearch"
                                 >
-                                <ul>
-                                    <li v-for="organization in filteredOrganizations" :key="organization.id">{{organization.orgname}}</li>
-                                </ul>
+                                <datalist id="orgNameList">
+                                    <ul>
+                                        <li v-for="organization in filteredTrialOrganizations"
+                                            @click="dropdownOrgSelection(organization)"
+                                        >{{organization}}</li>
+                                    </ul>
+                                </datalist>
                             </div>
                         </span>
                         <span>
