@@ -58,7 +58,16 @@
                             >
                         </span>
                         <span>
-                            <label for="orgname">Organization Name:</label>
+                            <label for="orgname">Organization Name (if personal, select "personal")</label>
+                            <!-- <input 
+                                type="radio" 
+                                id="personal",
+                                name="personal",
+                                value="personal",
+                                v-model="newVolunteerPost.orgname"
+                            > -->
+                            <!-- for some reason the webpage doesn't like another input here,
+                            even with the same v-model or id or both? -->
                             <input 
                                 type="text" 
                                 id="orgname" 
