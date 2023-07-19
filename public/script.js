@@ -85,7 +85,7 @@ Vue.createApp({
             newVolunteerPost: {
                 user: "",
                 title: "",
-                orgname: "",
+                orgname: "personal",
                 city: "",
                 state: "",
                 dateStart: "",
@@ -93,7 +93,7 @@ Vue.createApp({
                 description: "",
                 num_people: 0,
                 website: ""
-            }
+            },
         }
     },
     methods: {
@@ -143,6 +143,11 @@ Vue.createApp({
             if (this.organizationsPage.current != -1) {
                 newQuery += previous ? "&" : "";
                 newQuery += "page=" + this.organizationsPage.current;
+            }
+            if (data.organizations.length !== 0) {
+                data.organizations.forEach((org) => {
+                    this.organizations.push(org);
+                })
             }
             this.organizationsPage.spinner = true;
             let codes = [];
@@ -337,6 +342,13 @@ Vue.createApp({
                     alert("Unable to delete expense");
                 }
             });
+        },
+        getOrganizationName() {
+            if (this.newVolunteerPost.orgame === 'organization') {
+                return '';
+            } else {
+                return this.newVolunteerPost.orgname;
+            }
         }
     },
     watch: {
@@ -440,5 +452,5 @@ Vue.createApp({
             this.getOrganizationStates();
             this.getOrganizationCategories();
         }
-    }
+    },
 }).mount("#app");
