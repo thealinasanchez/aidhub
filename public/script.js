@@ -453,10 +453,7 @@ Vue.createApp({
                 );
         },
         volunteerorgsearch(newsearch, oldsearch) {
-            this.filteredTrialOrganizations = this.trialOrganizations.filter((name) => {
-                return name.toLowerCase().includes(newsearch.toLowerCase());
-            })
-            console.log(this.filteredTrialOrganizations);
+            console.log(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
         }
     },
     created: function () {

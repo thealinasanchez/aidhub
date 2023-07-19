@@ -46,8 +46,8 @@ img {
 
 .common-green-button:hover {
     background-color: inherit;
-    color: var(--lightbrown);
-    border: 2px solid var(--lightbrown);
+    color: var(--button-color);
+    border: 2px solid var(--button-color);
 }
 
 .header-background {
@@ -112,7 +112,7 @@ img {
 }
 
 .top-nav-bar>.nav-links a:hover {
-    color: var(--lightblue);
+    color: var(--button-color);
 }
 
 .top-nav-bar>.nav-bar-button-container {
@@ -417,3 +417,18 @@ footer {
 .hidden {
     display: none;
 }
+
+main button {
+    cursor: pointer;
+    padding: 2px 6px;
+    background-color: var(--button-color);
+    border: 2px solid rgba(77, 145, 67, 0.7);
+    border-style: outset;
+    border-radius: 3px;
+    color: var(--offwhite);
+}
+
+main button:hover {
+    background-color:#55A14A;
+    border: 2px solid #55A14A;
+}  
