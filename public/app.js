@@ -144,6 +144,11 @@ Vue.createApp({
                 newQuery += previous ? "&" : "";
                 newQuery += "page=" + this.organizationsPage.current;
             }
+            if (data.organizations.length !== 0) {
+                data.organizations.forEach((org) => {
+                    this.organizations.push(org);
+                })
+            }
             this.organizationsPage.spinner = true;
             let codes = [];
             /*
@@ -338,15 +343,13 @@ Vue.createApp({
                 }
             });
         },
-        shouldShowSearchBar() {
-            return this.newVolunteerPost.orgname === "organization";
-        },
-
-        filteredOrganizations() {
-            return this.organizations.filter(organization => {
-                organization.orgname.toLowerCase().includes(this.searchQuery.toLowerCase());
-            });
-        },
+        getOrganizationName() {
+            if (this.newVolunteerPost.orgame === 'organization') {
+                return '';
+            } else {
+                return this.newVolunteerPost.orgname;
+            }
+        }
     },
     watch: {
         'organizationsSearchFilterState.name'(newState, oldState) {
