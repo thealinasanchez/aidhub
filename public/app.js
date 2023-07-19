@@ -94,7 +94,6 @@ Vue.createApp({
                 num_people: 0,
                 website: ""
             },
-            searchQuery: "",
         }
     },
     methods: {
