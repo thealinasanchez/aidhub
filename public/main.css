@@ -10,7 +10,9 @@
     --offwhite: #F7F7F7;
     --lightblue: #98D7FF;
     --darkblue: #62B4E7;
-    --footer-color: #4c9aa7;
+    /* --footer-color: #4c9aa7; */
+    /* I think the location button and footer color should match - alina */
+    --footer-color: #24a0ed;
     --lightbrown: #876453;
     --button-color: #58A74C;
     --search-button-color: #4c9aa7;
