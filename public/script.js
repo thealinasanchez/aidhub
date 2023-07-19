@@ -1,3 +1,4 @@
+
 Vue.createApp({
     data() {
         return {
@@ -37,6 +38,7 @@ Vue.createApp({
             /* organizations.html start */
             search: "",
             organizations: [],
+            filteredOrganizations: [],
             organizationsPage: {
                 results: 0,
                 current: -1,
@@ -94,6 +96,11 @@ Vue.createApp({
                 num_people: 0,
                 website: ""
             },
+
+            // TRIAL STUFF
+            trialOrganizations: [],
+            filteredTrialOrganizations:[],
+            volunteerorgsearch: ""
         }
     },
     methods: {
@@ -151,42 +158,40 @@ Vue.createApp({
             }
             this.organizationsPage.spinner = true;
             let codes = [];
-            /*
-            fetch(`http://localhost:6300/organizations?${newQuery}`)
-                .then(response => response.json())
-                .then(data => {
-                    this.organizationsPage.results = data.total_results;
-                    this.organizationsPage.current = data.cur_page;
-                    this.organizationsPage.total = data.num_pages;
-                    if (data.organizations.length != 0) {
-                        data.organizations.forEach(org => {
-                            this.organizations.push(
-                                {
-                                    orgname: org.name,
-                                    city: org.city,
-                                    state: org.state,
-                                    ein: org.ein,
-                                    ntee: org.ntee_code ? org.ntee_code : "None",
-                                    category: "",
-                                    description: ""
-                                }
-                            )
-                            codes.push(org.ntee_code ? org.ntee_code : "None");
-                        })
-                    } else {
-                        this.organizationsPage.spinner = false;
-                    }
-                    if (codes.length > 0) {
-                        fetch(`http://localhost:6300/ntee?code=${codes.join("&code=")}`).then(response => response.json()).then(data => {
-                            for (let i = 0; i < this.organizations.length; i++) {
-                                this.organizations[i]["category"] = data[this.organizations[i].ntee].category;
-                                this.organizations[i]["description"] = data[this.organizations[i].ntee].description;
-                            }
-                            this.organizationsPage.spinner = false;
-                        })
-                    }
-                })
-                */
+            // fetch(`http://localhost:6300/organizations?${newQuery}`)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         this.organizationsPage.results = data.total_results;
+            //         this.organizationsPage.current = data.cur_page;
+            //         this.organizationsPage.total = data.num_pages;
+            //         if (data.organizations.length != 0) {
+            //             data.organizations.forEach(org => {
+            //                 this.organizations.push(
+            //                     {
+            //                         orgname: org.name,
+            //                         city: org.city,
+            //                         state: org.state,
+            //                         ein: org.ein,
+            //                         ntee: org.ntee_code ? org.ntee_code : "None",
+            //                         category: "",
+            //                         description: ""
+            //                     }
+            //                 )
+            //                 codes.push(org.ntee_code ? org.ntee_code : "None");
+            //             })
+            //         } else {
+            //             this.organizationsPage.spinner = false;
+            //         }
+            //         if (codes.length > 0) {
+            //             fetch(`http://localhost:6300/ntee?code=${codes.join("&code=")}`).then(response => response.json()).then(data => {
+            //                 for (let i = 0; i < this.organizations.length; i++) {
+            //                     this.organizations[i]["category"] = data[this.organizations[i].ntee].category;
+            //                     this.organizations[i]["description"] = data[this.organizations[i].ntee].description;
+            //                 }
+            //                 this.organizationsPage.spinner = false;
+            //             })
+            //         }
+            //     })
         },
         getOrganizationStates: function () {
             fetch(`http://localhost:6300/states`).then(response => response.json()).then(data => {
@@ -267,6 +272,9 @@ Vue.createApp({
         indexAskLocationAccept: function () {
             this.indexLocation.askForLocation = false;
         },
+        dropdownOrgSelection: function(name) {
+            this.volunteerorgsearch = name;
+        },
         // VOLUNTEERFORM.HTML STUFF
         toggleVolunteerPostModal: function (index = null) {
             this.toggleModal = !this.toggleModal;
@@ -343,12 +351,15 @@ Vue.createApp({
                 }
             });
         },
-        getOrganizationName() {
-            if (this.newVolunteerPost.orgame === 'organization') {
-                return '';
-            } else {
-                return this.newVolunteerPost.orgname;
-            }
+        getTrialOrganizations: function() {
+            fetch(`http://localhost:6300/localOrganizations`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.forEach((organization) => {
+                                        this.trialOrganizations.push(organization.name);
+                                        console.log(this.trialOrganizations);
+                                    })
+                                })
         }
     },
     watch: {
@@ -440,6 +451,11 @@ Vue.createApp({
                     console.log('Error:', error);
                 }
                 );
+        },
+        volunteerorgsearch(newsearch, oldsearch) {
+            this.filteredTrialOrganizations = this.trialOrganizations.filter((name) => {
+                return name.toLowerCase().includes(newsearch);
+            })
         }
     },
     created: function () {
@@ -451,6 +467,8 @@ Vue.createApp({
             this.getOrganizations();
             this.getOrganizationStates();
             this.getOrganizationCategories();
+        } else if (this.page == 'volunteerForm') {
+            this.getTrialOrganizations();
         }
     },
 }).mount("#app");
