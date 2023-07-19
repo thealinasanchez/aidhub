@@ -1,14 +1,17 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const dotenv = require('dotenv');
+const bcrypt = require("bcrypt");
 
 dotenv.config() // Import environmental variables
 
 mongoose.set('strictQuery', false);
-mongoose.connect(process.env.DB_LINK);
+mongoose.connect(process.env.DB_LINK)
+    .then(() => console.log("Connected to database"))
+    .catch(() => console.log("Failed to connect to database"));
 
 
-const VolunteerFormSchema = Schema ({
+const VolunteerFormSchema = Schema({
     user: {
         type: String,
         required: [true, "Must have a username."]
@@ -21,7 +24,7 @@ const VolunteerFormSchema = Schema ({
         type: String,
         required: [true, "Volunteer opportunity must be hosted by am organization."]
     },
-    city: {type: String},
+    city: { type: String },
     state: {
         type: String,
         required: [true, "Volunteer opportunity must be hosted in at least one state."],
@@ -32,26 +35,26 @@ const VolunteerFormSchema = Schema ({
         type: Date,
         required: [true, "Volunteer opportunity must have a start date."]
     },
-    dateEnd: {type: Date},
-    description: {type: String},
+    dateEnd: { type: Date },
+    description: { type: String },
     num_people: {
         type: Number,
         required: true
     },
-    website: {type: String}
+    website: { type: String }
 })
 
-const DonationFormSchema = Schema ({
+const DonationFormSchema = Schema({
     user: {
         type: String,
         required: [true, "Must have a username."]
     },
-    title: {type: String},
+    title: { type: String },
     orgname: {
         type: String,
         required: [true, "Donation opportunity must be hosted by am organization."]
     },
-    description: {type: String},
+    description: { type: String },
     website: {
         type: String,
         required: [true, "Donation opportunity must have a donation website."]
@@ -60,7 +63,7 @@ const DonationFormSchema = Schema ({
         type: Number,
         required: [true, "Donation opportunity must have a minimum donation amount."]
     },
-    goal: {type: Number}
+    goal: { type: Number }
 
 })
 
@@ -87,12 +90,69 @@ const JournalEntrySchema = Schema({
     }
 });
 
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        requred: [true, "Must have a name"]
+    },
+    email: {
+        type: String,
+        required: [true, "A email is required"],
+        unique: true
+    },
+    password: {
+        type: String,
+        required: [true, "A password is required"]
+    }
+});
+
+userSchema.methods.setPassword = function (plainTextpassword) {
+    var promise = new Promise((resolve, reject) => {
+        bcrypt.hash(plainTextpassword, 12).then(password => {
+            this.password = password;
+            resolve();
+        }).catch(() => {
+            reject();
+        });
+    });
+    return promise;
+}
+
+userSchema.methods.verifyPassword = function (plainTextPassword) {
+    var promise = new Promise((resolve, reject) => {
+        bcrypt.compare(plainTextPassword, this.password).then(result => {
+            resolve(result);
+        }).catch(() => {
+            reject();
+        });
+    })
+    return promise;
+}
+
+const User = mongoose.model("User", userSchema);
+const RedactedUser = mongoose.model("RedactedUser", userSchema);
+
+User.createCollection();
+RedactedUser.createCollection({
+    viewOn: "users",
+    pipeline: [{
+        $set: {
+            name: "$name",
+            email: "$email",
+            password: "***"
+        }
+    }]
+});
+
 const JournalEntry = mongoose.model("JournalEntry", JournalEntrySchema);
 const VolunteerForm = mongoose.model("VolunteerForm", VolunteerFormSchema);
 const DonationForm = mongoose.model("DonationForm", DonationFormSchema);
 
+
 module.exports = {
     JournalEntry: JournalEntry,
     VolunteerForm: VolunteerForm,
-    DonationForm: DonationForm
+    DonationForm: DonationForm,
+    User: User,
+    RedactedUser, RedactedUser
 }

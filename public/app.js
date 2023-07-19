@@ -1,9 +1,15 @@
+var URL = "http://localhost:6300/";
 Vue.createApp({
     data() {
         return {
             page: '',
             getStartedForm: {
                 open: false
+            },
+            user: {
+                name: "",
+                email: "",
+                password: ""
             },
             //index.html slideshow stuff
             slideShow: {
@@ -117,8 +123,7 @@ Vue.createApp({
             }
             this.organizationsPage.spinner = true;
             let codes = [];
-            /*
-            fetch(`http://localhost:6300/organizations?${newQuery}`)
+            fetch(URL + `organizations?${newQuery}`)
                 .then(response => response.json())
                 .then(data => {
                     this.organizationsPage.results = data.total_results;
@@ -143,7 +148,7 @@ Vue.createApp({
                         this.organizationsPage.spinner = false;
                     }
                     if (codes.length > 0) {
-                        fetch(`http://localhost:6300/ntee?code=${codes.join("&code=")}`).then(response => response.json()).then(data => {
+                        fetch(URL + `ntee?code=${codes.join("&code=")}`).then(response => response.json()).then(data => {
                             for (let i = 0; i < this.organizations.length; i++) {
                                 this.organizations[i]["category"] = data[this.organizations[i].ntee].category;
                                 this.organizations[i]["description"] = data[this.organizations[i].ntee].description;
@@ -152,16 +157,15 @@ Vue.createApp({
                         })
                     }
                 })
-                */
         },
         getOrganizationStates: function () {
-            fetch(`http://localhost:6300/states`).then(response => response.json()).then(data => {
+            fetch(URL + `states`).then(response => response.json()).then(data => {
                 this.organizationsStates = data;
                 this.organizationsFilteredStates = data;
             })
         },
         getOrganizationCategories: function () {
-            fetch(`http://localhost:6300/categories`).then(response => response.json()).then(data => {
+            fetch(URL + `categories`).then(response => response.json()).then(data => {
                 this.organizationsCategories = data;
                 this.organizationsFilteredCategories = data
             });
@@ -289,6 +293,73 @@ Vue.createApp({
         //             }
         //         })
         // }
+        loggedIn: function () {
+            let options = {
+                credentials: "include"
+            }
+            fetch(URL + "session", options)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.cookie && data.userId) {
+                        this.page = "";
+                    } else {
+                        this.page = "auth";
+                    }
+                })
+        },
+        signUp: function () {
+            let myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            let options = {
+                method: "POST",
+                headers: myHeaders,
+                body: JSON.stringify(this.user)
+            }
+            fetch(URL + "users", options).then(response => {
+                if (response.status == 201) {
+                    this.createSession();
+                } else {
+                    response.text().then(text => alert(text));
+                }
+            });
+        },
+        createSession: function () {
+            let myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            let options = {
+                method: "POST",
+                headers: myHeaders,
+                body: JSON.stringify(this.user),
+                credentials: "include"
+            }
+            fetch(URL + "session", options).then(response => {
+                if (response.status == 201) {
+                    response.text().then(data => {
+                        if (data) {
+                            data = JSON.parse(data);
+                            this.page = ""
+                            this.user.name = data.name;
+                        } else {
+                            alert("No session created");
+                        }
+                    })
+                } else {
+                    response.text().then(text => alert(text));
+                }
+            });
+        },
+        logout: function () {
+            let options = {
+                method: "DELETE",
+                credentials: "include"
+            }
+            fetch(URL + "session", options).then(response => {
+                this.page = "auth";
+                this.user.name = "";
+                this.user.email = "";
+                this.user.password = "";
+            });
+        },
     },
     watch: {
         'organizationsSearchFilterState.name'(newState, oldState) {
@@ -325,7 +396,7 @@ Vue.createApp({
             fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
-                    fetch('http://localhost:6300/location?ip=' + data.ip).then((response) => {
+                    fetch(URL + 'location?ip=' + data.ip).then((response) => {
                         if (response.status === 200) {
                             this.indexLocation.spinner = false;
                             return response.json();
@@ -362,12 +433,12 @@ Vue.createApp({
                             map.scrollWheelZoom.disable();
                             // map.boxZoom.disable();
                             // map.keyboard.disable();
-                            fetch(`http://localhost:6300/localOrganizations`)
+                            fetch(URL + `localOrganizations`)
                                 .then(response => response.json())
                                 .then(data => {
                                     data.forEach((organization) => {
                                         let marker = L.marker([organization.location.latitude, organization.location.longitude]).addTo(map);
-                                        marker.bindPopup(`<b>${organization.name}</b><br/><a href=${organization.link}>${organization.link}</a>`);
+                                        marker.bindPopup(`<b>${organization.name}</b><br/><a href=${organization.link} target="_blank">${organization.link}</a>`);
                                     })
                                 })
                         } else {
@@ -382,6 +453,7 @@ Vue.createApp({
         }
     },
     created: function () {
+        // this.loggedIn();
     },
     mounted: function () {
         if (this.page == 'index') {

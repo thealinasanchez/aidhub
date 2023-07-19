@@ -2,17 +2,130 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const model = require('./model');
+const session = require('express-session');
 
 const NTEEDATA = require('./ntee_codes.json')["codes"];
 const STATES = require('./states.json')["states"];
 const NTEENUMS = require('./ntee_num.json')["code_nums"];
 const LOCALORGANIZATIONS = require('./organizationLocations.json')["organizations"];
+
 const app = express();
 const port = 6300;
 
 app.use(express.json());
 app.use(express.static('public'));
-app.use(cors());
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    cookie: { secure: false, httpOnly: false, sameSite: "lax" },
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use(cors({
+    credentials: true,
+    origin: function (origin, callback) {
+        callback(null, origin);
+    }
+}));
+
+function AuthMiddleware(request, response, next) {
+    if (request.session && request.session.userId) {
+        model.User.findOne({ "_id": request.session.userId }).then(user => {
+            if (user) {
+                request.user = user;
+                next();
+            } else {
+                console.log("no user");
+                response.status(401).send("Unauthenticated");
+            }
+        })
+    } else {
+        response.status(401).send("Unauthenticated");
+    }
+}
+
+app.get("/users", AuthMiddleware, function (request, response) {
+    model.RedactedUser.find().then(user => {
+        console.log(user);
+        response.status(200).send(user);
+    })
+});
+
+app.get("/session", (request, response) => {
+    console.log(request.session);
+    response.status(200).send(request.session);
+});
+
+app.post("/users", function (request, response) {
+    const newUser = new model.User({
+        name: request.body.name,
+        email: request.body.email
+    });
+    if (!request.body.password || request.body.password === "") {
+        response.status(422).send(["Needs a password"])
+    } else {
+        newUser.setPassword(request.body.password).then(() => {
+            newUser.save().then(function () {
+                response.status(201).send("Created a user");
+            }).catch((errors) => {
+                if (errors.code === 11000) {
+                    response.status(422).send(["This email already has an account. Please sign in."]);
+                } else {
+                    let error_list = [];
+                    for (key in errors.errors) {
+                        error_list.push(errors.errors[key].properties.message)
+                    }
+                    response.status(422).send(error_list);
+                }
+            })
+        })
+    }
+})
+
+app.post("/session", (request, response) => {
+    // email
+    // password
+    model.User.findOne({ "email": request.body.email }).then(async (user) => {
+        if (user) {
+            if (!request.body.password) {
+                response.status(400).send("Must have password");
+            }
+            else if (await user.verifyPassword(request.body.password)
+                .then((result) => {
+                    return result;
+                }).catch(() => false)) {
+                request.session.name = user.name;
+                request.session.userId = user._id;
+                console.log(request.session);
+                response.status(201).send(request.session);
+            } else {
+                response.status(401).send("Username and/or Password are incorrect");
+            }
+        } else {
+            // 404 would expose user information
+            response.status(401).send("Username and/or Password are incorrect");
+        }
+    }).catch(error => {
+        console.log(error);
+        response.status(400).send("couldn't understand your request");
+    })
+});
+
+/*
+change user name, password and email ect..
+app.put("/users", AuthMiddleware, function (request, response) {
+});
+*/
+
+app.delete("/session", (request, response) => {
+    if (request.session.userId != undefined) {
+        request.session.userId = undefined;
+        request.session.name = undefined;
+        response.sendStatus(204);
+    } else {
+        response.status(404).send("No session started");
+    }
+})
 
 
 // GET
