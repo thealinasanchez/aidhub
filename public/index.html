@@ -26,9 +26,17 @@
 
 <body>
     <div id="app">
-        {{ page = 'index'}}
+        <div class="top-login-header-container">
+            <div class="top-login-header">
+                <button class="top-login-header-button" @click=""><img src="./icons/key.svg" alt="sign-up-icon" />Sign
+                    Up</button>
+                <button class="top-login-header-button" @click=""><img src="./icons/user.svg"
+                        alt="log-in-icon" />Login</button>
+            </div>
+        </div>
         <div class="header-background">
         </div>
+        {{ page = 'index' }}
         <header class="top-nav-bar">
             <div class="logo-brand-container">
                 <h2>AidHub</h2>

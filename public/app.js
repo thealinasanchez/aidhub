@@ -150,11 +150,6 @@ Vue.createApp({
                 newQuery += previous ? "&" : "";
                 newQuery += "page=" + this.organizationsPage.current;
             }
-            if (data.organizations.length !== 0) {
-                data.organizations.forEach((org) => {
-                    this.organizations.push(org);
-                })
-            }
             this.organizationsPage.spinner = true;
             let codes = [];
             fetch(URL + `organizations?${newQuery}`)

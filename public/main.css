@@ -76,14 +76,56 @@ img {
     }
 }
 
+.top-login-header-container {
+    display: grid;
+    grid-template-columns: minmax(0px, 1fr)repeat(6, minmax(0, 175px))minmax(0px, 1fr) minmax(0px, 0.5fr);
+    grid-column: 1 / 9;
+    height: 30px;
+}
+
+.top-login-header {
+    grid-column: 1 / 9;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    height: 32px;
+    gap: 25px;
+}
+
+.top-login-header-button {
+    display: inline-block;
+    color: black;
+    background-color: inherit;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row nowrap;
+    font-size: 14px;
+    border: none;
+}
+
+.top-login-header-button:hover {
+    color: var(--button-color);
+}
+
+.top-login-header-button>img {
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+}
+
 .header-background {
     background-color: var(--header-color);
     grid-column: 1 / 9;
     height: 70px;
     position: absolute;
-    top: 0px;
+    top: 32px;
     width: 100%;
-    box-shadow: 0px 15px 10px -15px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.5);
 }
 
 .top-nav-bar {
