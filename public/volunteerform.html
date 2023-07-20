@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidHub - Organizations</title>
     <link href="main.css" rel="stylesheet" type="text/css">
-    <link href="volunteer.css" rel="stylesheet" type="text/css">
-    <link href="volunteer.css" rel="stylesheet" type="text/css">
+    <link href="volunteerform.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,10 +30,10 @@
         </div>
         <div class="header-background">
         </div>
-        {{page = 'volunteer'}}
+        {{page = 'volunteerForm'}}
         <header class="top-nav-bar">
             <div class="logo-brand-container">
-                <h2>AidHubs</h2>
+                <h2>AidHub - Volunteer Form</h2>
             </div>
             <nav class="nav-links">
                 <ul>
@@ -50,19 +49,8 @@
             </div>
         </header>
         <main>
-            <!-- @click="toggleVolunteerPostModal(index)" 
-                v-show="!toggleModal" -->
-            <!-- <button id="volunteerformbutton"><a href="volunteerform.html">
-                Create Volunteer Opportunity
-            </a></button> -->
-            <button id="volunteerformbutton"
-            @click="toggleVolunteerPostModal(index)" 
-                v-show="!toggleModal" >
-                Create Volunteer Opportunity
-            </button>
-            <div class="volunteerPostModal" v-show="toggleModal">
+            <div class="volunteerPostModal">
                 <div class="content">
-                    <div id="close" @click="toggleVolunteerPostModal()">X</div>
                     <form id="volunteer-form">
                         <span>
                             <label for="user">User: </label>
@@ -130,12 +118,8 @@
                             <input type="text" id="website" name="website" v-model="newVolunteerPost.website">
                         </span>
                     </form>
-                    <button @click="addVolunteerOpportunities()" id="post">Post</button>
+                    <button @click="addVolunteerOpportunities()" id="post"><a href="volunteer.html"></a>Post</button>
                 </div>
-            </div>
-            <h1 id="find">Find volunteer opportunities here:</h1>
-            <div class="volunteerthings" v-for="(post, index) in volunteerOpportunities">
-                <div>{{post}}</div>
             </div>
     </div>
     <script src="script.js"></script>

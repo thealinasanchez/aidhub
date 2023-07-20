@@ -8,7 +8,6 @@
     <title>AidHub - Organizations</title>
     <link href="main.css" rel="stylesheet" type="text/css">
     <link href="volunteer.css" rel="stylesheet" type="text/css">
-    <link href="volunteer.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +33,7 @@
         {{page = 'volunteer'}}
         <header class="top-nav-bar">
             <div class="logo-brand-container">
-                <h2>AidHubs</h2>
+                <h2>AidHub - Volunteer Opportunities</h2>
             </div>
             <nav class="nav-links">
                 <ul>
@@ -50,12 +49,14 @@
             </div>
         </header>
         <main>
-            <button 
-                @click="toggleVolunteerPostModal(index)" 
-                v-show="!toggleModal"
-                id="volunteerformbutton"
-            >Create Volunteer
-                Opportunity</button>
+            <button id="volunteerformbutton"><a href="volunteerform.html">
+                Create Volunteer Opportunity
+            </a></button>
+            <!-- <button id="volunteerformbutton"
+            @click="toggleVolunteerPostModal(index)" 
+                v-show="!toggleModal" >
+                Create Volunteer Opportunity
+            </button> -->
             <div class="volunteerPostModal" v-show="toggleModal">
                 <div class="content">
                     <div id="close" @click="toggleVolunteerPostModal()">X</div>
@@ -85,7 +86,7 @@
                                 <input 
                                     type="text" v-model="volunteerorgsearch"
                                 >
-                                <div v-show="toggleVolunteerSearchModal.length < name || toggleVolunteerSearchModal !== name">
+                                <div>
                                     <div v-for="organization in filteredTrialOrganizations.slice(0, 5)" @click="volunteerSearchFill(organization)">{{organization}}</div>
                                 </div>
                             </div>
