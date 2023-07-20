@@ -8,6 +8,7 @@
     <title>AidHub - Organizations</title>
     <link href="main.css" rel="stylesheet" type="text/css">
     <link href="volunteer.css" rel="stylesheet" type="text/css">
+    <link href="volunteer.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,7 +81,8 @@
                                 <input type="text" v-model="volunteerorgsearch">
                                 <datalist id="orgNameList">
                                     <ul>
-                                        <li v-for="organization in filteredTrialOrganizations">{{organization}}</li>
+                                        <li v-for="organization in filteredTrialOrganizations">{{organization.name}}
+                                        </li>
                                     </ul>
                                 </datalist>
                             </div>
