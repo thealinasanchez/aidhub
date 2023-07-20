@@ -100,7 +100,11 @@ Vue.createApp({
             // TRIAL STUFF
             trialOrganizations: [],
             filteredTrialOrganizations: [],
-            volunteerorgsearch: ""
+            volunteerorgsearch: "",
+            volunteerformbutton: true,
+            volunteersearch: "",
+            watchedValue: "",
+            toggleVolunteerSearchModal: true
         }
     },
     methods: {
@@ -277,11 +281,10 @@ Vue.createApp({
         // },
         // VOLUNTEERFORM.HTML STUFF
         hideButton: function() {
-            var button = document.getElementById("volunteerformbutton");
             if (this.toggleModal == 'true') {
-                button.style.display = "none";
+                this.volunteerformbutton = false;
             } else if (this.toggleModal == 'false') {
-                button.style.display = "block";
+                this.volunteerformbutton = true;
             }
         },
         toggleVolunteerPostModal: function (index = null) {
@@ -300,7 +303,7 @@ Vue.createApp({
                 this.volunteerPostModal.num_people = modal.num_people;
                 this.volunteerPostModal.website = modal.website;
             }
-            hideButton();
+            this.hideButton();
         },
         // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
         getVolunteerOpportunities: function () {
@@ -370,6 +373,13 @@ Vue.createApp({
                     })
                 })
         },
+        volunteerSearchFill: function(name) {
+            this.volunteerorgsearch = name;
+            if (this.volunteerorgsearch == name) {
+                this.toggleVolunteerSearchModal = false;
+            }
+        },
+
     },
     watch: {
         'organizationsSearchFilterState.name'(newState, oldState) {
@@ -462,12 +472,9 @@ Vue.createApp({
                 );
         },
         volunteerorgsearch(newsearch, oldsearch) {
-            // this.filteredTrialOrganizations.push(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
+            this.filteredTrialOrganizations = this.trialOrganizations.filter(organization => {return organization.toLowerCase().includes(newsearch.toLowerCase())});
             // console.log(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
-            // console.log(this.filteredTrialOrganizations);
-            this.filteredTrialOrganizations = this.trialOrganizations.filter((org) => {
-                return org.name.toLowerCase().includes(newsearch.toLowerCase());
-            })
+            console.log(this.filteredTrialOrganizations);
         }
     },
     created: function () {

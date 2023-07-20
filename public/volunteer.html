@@ -31,7 +31,7 @@
         </div>
         <div class="header-background">
         </div>
-        {{page = 'volunteerForm'}}
+        {{page = 'volunteer'}}
         <header class="top-nav-bar">
             <div class="logo-brand-container">
                 <h2>AidHubs</h2>
@@ -50,7 +50,11 @@
             </div>
         </header>
         <main>
-            <button @click="toggleVolunteerPostModal(index)" id="volunteerformbutton">Create Volunteer
+            <button 
+                @click="toggleVolunteerPostModal(index)" 
+                v-show="!toggleModal"
+                id="volunteerformbutton"
+            >Create Volunteer
                 Opportunity</button>
             <div class="volunteerPostModal" v-show="toggleModal">
                 <div class="content">
@@ -78,13 +82,12 @@
                             </label>
                             <div v-show="newVolunteerPost.orgname === 'organization'">
                                 <!-- https://koenwoortman.com/vuejs-get-element-by-id-in-component/ -->
-                                <input type="text" v-model="volunteerorgsearch">
-                                <datalist id="orgNameList">
-                                    <ul>
-                                        <li v-for="organization in filteredTrialOrganizations">{{organization.name}}
-                                        </li>
-                                    </ul>
-                                </datalist>
+                                <input 
+                                    type="text" v-model="volunteerorgsearch"
+                                >
+                                <div v-show="toggleVolunteerSearchModal.length < name || toggleVolunteerSearchModal !== name">
+                                    <div v-for="organization in filteredTrialOrganizations.slice(0, 5)" @click="volunteerSearchFill(organization)">{{organization}}</div>
+                                </div>
                             </div>
                         </span>
                         <span>
