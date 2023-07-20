@@ -11,6 +11,8 @@ Vue.createApp({
                 email: "",
                 password: "",
             },
+            loggedInStatus: false,
+            previousPage: 'index',
             //index.html slideshow stuff
             slideShow: {
                 currentIndex: 0,
@@ -375,10 +377,13 @@ Vue.createApp({
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.cookie && data.userId) {
+                        this.loggedInStatus = true;
                         /* do something if logged in */
                     } else {
-                        /* don't do something if not logged in*/
+                        this.loggedInStatus = false;
+                        /* do something if not logged in*/
                     }
+                    console.log(this.loggedInStatus);
                 })
         },
         signUp: function () {
@@ -411,7 +416,10 @@ Vue.createApp({
                     response.text().then(data => {
                         if (data) {
                             data = JSON.parse(data);
+                            this.loggedInStatus = true;
                             // this.page = "" go to volunteer page with access to form
+                            this.getPreviousPage();
+                            window.location.href = this.previousPage + ".html";
                             this.user.name = data.name;
                         } else {
                             alert("No session created");
@@ -428,11 +436,25 @@ Vue.createApp({
                 credentials: "include"
             }
             fetch(URL + "session", options).then(response => {
+                if (response.status == 204) {
+                    this.loggedInStatus = false;
+                } else {
+                    console.log("Couldn't log out", response.status);
+                }
                 this.page = "auth";
                 this.user.name = "";
                 this.user.email = "";
                 this.user.password = "";
             });
+        },
+        setPage: function (page) {
+            localStorage.setItem("page", page);
+        },
+        getPreviousPage: function () {
+            let page = localStorage.getItem("page");
+            if (page) {
+                this.previousPage = page;
+            }
         }
     },
     watch: {
@@ -535,18 +557,20 @@ Vue.createApp({
         }
     },
     created: function () {
-        // this.loggedIn();
+        this.loggedIn();
     },
     mounted: function () {
+        this.loggedIn();
         if (this.page == 'index') {
-            console.log("index");
+            this.setPage('index');
         } else if (this.page == 'organizations') {
+            this.setPage('organizations');
             this.getOrganizations();
             this.getOrganizationStates();
             this.getOrganizationCategories();
-        } else if (this.page == 'volunteerForm') {
+        } else if (this.page == 'volunteer') {
+            this.setPage('volunteer');
             this.loggedIn();
-        } else if (this.page == 'volunteerForm') {
             this.getTrialOrganizations();
         }
     },

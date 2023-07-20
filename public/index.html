@@ -27,7 +27,11 @@
 <body>
     <div id="app">
         <div class="top-login-header-container">
-            <div class="top-login-header">
+            <div class="top-login-header" v-if="loggedInStatus">
+                <div class="top-login-header-button" @click="logout()"><img src="./icons/user.svg"
+                        alt="log-in-icon" />Logout</div>
+            </div>
+            <div class="top-login-header" v-else>
                 <a class="top-login-header-button" href="signup.html"><img src="./icons/key.svg"
                         alt="sign-up-icon" />Sign
                     Up</a>
@@ -37,7 +41,7 @@
         </div>
         <div class="header-background">
         </div>
-        {{ page = 'index' }}
+        <div style="display: none">{{ page = 'index' }}</div>
         <header class="top-nav-bar">
             <div class="logo-brand-container">
                 <h2>AidHub</h2>

@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    cookie: { secure: false, httpOnly: false, sameSite: "lax" },
+    cookie: { secure: false, httpOnly: false, sameSite: "none" },
     resave: false,
     saveUninitialized: true
 }));
