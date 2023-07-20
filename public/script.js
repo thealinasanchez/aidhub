@@ -490,6 +490,8 @@ Vue.createApp({
             this.getOrganizationCategories();
         } else if (this.page == 'volunteer') {
             this.getTrialOrganizations();
+        } else if (this.page == 'volunteerForm') {
+            this.getTrialOrganizations();
         }
     },
 }).mount("#app");

@@ -66,14 +66,11 @@
                                 <input type="radio" v-model="newVolunteerPost.orgname" value="personal" checked>
                                 Personal
                             </label>
-                            <!-- for some reason the webpage doesn't like another input here,
-                            even with the same v-model or id or both? -->
                             <label>
                                 <input type="radio" v-model="newVolunteerPost.orgname" value="organization">
                                 Organization
                             </label>
                             <div v-show="newVolunteerPost.orgname === 'organization'">
-                                <!-- https://koenwoortman.com/vuejs-get-element-by-id-in-component/ -->
                                 <input 
                                     type="text" v-model="volunteerorgsearch"
                                 >
@@ -118,7 +115,7 @@
                             <input type="text" id="website" name="website" v-model="newVolunteerPost.website">
                         </span>
                     </form>
-                    <button @click="addVolunteerOpportunities()" id="post"><a href="volunteer.html"></a>Post</button>
+                    <button @click="addVolunteerOpportunities()" id="post"><a href="volunteer.html">Post</a></button>
                 </div>
             </div>
     </div>
