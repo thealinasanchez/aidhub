@@ -272,9 +272,9 @@ Vue.createApp({
         indexAskLocationAccept: function () {
             this.indexLocation.askForLocation = false;
         },
-        dropdownOrgSelection: function (name) {
-            this.volunteerorgsearch = name;
-        },
+        // dropdownOrgSelection: function (name) {
+        //     this.volunteerorgsearch = name;
+        // },
         // VOLUNTEERFORM.HTML STUFF
         toggleVolunteerPostModal: function (index = null) {
             this.toggleModal = !this.toggleModal;
@@ -453,7 +453,12 @@ Vue.createApp({
                 );
         },
         volunteerorgsearch(newsearch, oldsearch) {
-            console.log(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
+            // this.filteredTrialOrganizations.push(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
+            // console.log(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
+            // console.log(this.filteredTrialOrganizations);
+            this.filteredTrialOrganizations = this.trialOrganizations.filter((org) => {
+                return org.name.toLowerCase().includes(newsearch.toLowerCase());
+            })
         }
     },
     created: function () {
