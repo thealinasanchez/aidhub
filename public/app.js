@@ -9,8 +9,9 @@ Vue.createApp({
             user: {
                 name: "",
                 email: "",
-                password: ""
+                password: "",
             },
+            userLogin: true,
             //index.html slideshow stuff
             slideShow: {
                 currentIndex: 0,
@@ -358,9 +359,9 @@ Vue.createApp({
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.cookie && data.userId) {
-                        this.page = "";
+                        /* do something if logged in */
                     } else {
-                        this.page = "auth";
+                        /* don't do something if not logged in*/
                     }
                 })
         },
@@ -394,73 +395,7 @@ Vue.createApp({
                     response.text().then(data => {
                         if (data) {
                             data = JSON.parse(data);
-                            this.page = ""
-                            this.user.name = data.name;
-                        } else {
-                            alert("No session created");
-                        }
-                    })
-                } else {
-                    response.text().then(text => alert(text));
-                }
-            });
-        },
-        logout: function () {
-            let options = {
-                method: "DELETE",
-                credentials: "include"
-            }
-            fetch(URL + "session", options).then(response => {
-                this.page = "auth";
-                this.user.name = "";
-                this.user.email = "";
-                this.user.password = "";
-            });
-        }, loggedIn: function () {
-            let options = {
-                credentials: "include"
-            }
-            fetch(URL + "session", options)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.cookie && data.userId) {
-                        this.page = "";
-                    } else {
-                        this.page = "auth";
-                    }
-                })
-        },
-        signUp: function () {
-            let myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            let options = {
-                method: "POST",
-                headers: myHeaders,
-                body: JSON.stringify(this.user)
-            }
-            fetch(URL + "users", options).then(response => {
-                if (response.status == 201) {
-                    this.createSession();
-                } else {
-                    response.text().then(text => alert(text));
-                }
-            });
-        },
-        createSession: function () {
-            let myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            let options = {
-                method: "POST",
-                headers: myHeaders,
-                body: JSON.stringify(this.user),
-                credentials: "include"
-            }
-            fetch(URL + "session", options).then(response => {
-                if (response.status == 201) {
-                    response.text().then(data => {
-                        if (data) {
-                            data = JSON.parse(data);
-                            this.page = ""
+                            // this.page = "" go to volunteer page with access to form
                             this.user.name = data.name;
                         } else {
                             alert("No session created");
@@ -483,6 +418,9 @@ Vue.createApp({
                 this.user.password = "";
             });
         },
+        toggleLogInSignUp: function () {
+            this.userLogin = !this.userLogin;
+        }
     },
     watch: {
         'organizationsSearchFilterState.name'(newState, oldState) {
@@ -516,63 +454,68 @@ Vue.createApp({
         },
         'indexLocation.askForLocation'(newAskForLocation, oldAskForLocation) {
             this.indexLocation.spinner = true;
+            /*
             fetch('https://api.ipify.org?format=json')
                 .then(response => response.json())
                 .then(data => {
-                    fetch(URL + 'location?ip=' + "144.38.184.33").then((response) => {
-                        if (response.status === 200) {
-                            this.indexLocation.spinner = false;
-                            return response.json();
-                        } else {
-                            console.log("Couldn't get location", response.status);
-                        }
-                    }).then((data) => {
-                        let loc = data.loc.split(",");
-                        let ipLocation = {
-                            city: data.city ? data.city : "",
-                            state: data.region ? data.region : "",
-                            country: data.country ? data.country : "",
-                            latitude: -91,
-                            longitude: -181,
-                        }
-                        ipLocation.latitude = Number(loc[0]);
-                        ipLocation.longitude = Number(loc[1]);
-                        if (ipLocation.latitude != -91 && ipLocation.longitude != -181) {
-                            var Stadia_AlidadeSmoothDark = new L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-                                maxZoom: 20,
-                                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OSM</a>'
-                            });
-                            let location = [ipLocation.latitude, ipLocation.longitude];
-                            var map = new L.Map("map", {
-                                center: location,
-                                zoom: 12,
-                                minZoom: 12,
-                                maxZoom: 15,
-                                // zoomControl: false
-                            })
-                                .addLayer(Stadia_AlidadeSmoothDark);
-                            // map.touchZoom.disable();
-                            // map.doubleClickZoom.disable();
-                            map.scrollWheelZoom.disable();
-                            // map.boxZoom.disable();
-                            // map.keyboard.disable();
-                            fetch(URL + `localOrganizations`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    data.forEach((organization) => {
-                                        let marker = L.marker([organization.location.latitude, organization.location.longitude]).addTo(map);
-                                        marker.bindPopup(`<b>${organization.name}</b><br/><a href=${organization.link} target="_blank">${organization.link}</a>`);
-                                    })
-                                })
-                        } else {
-                            console.log("No Map for you");
-                        }
-                    })
-                })
-                .catch(error => {
-                    console.log('Error:', error);
+            fetch(URL + 'location?ip=' + data.ip).then((response) => {
+                    */
+            fetch(URL + 'location?ip=' + "144.38.184.33").then((response) => {
+                if (response.status === 200) {
+                    this.indexLocation.spinner = false;
+                    return response.json();
+                } else {
+                    console.log("Couldn't get location", response.status);
                 }
-                );
+            }).then((data) => {
+                let loc = data.loc.split(",");
+                let ipLocation = {
+                    city: data.city ? data.city : "",
+                    state: data.region ? data.region : "",
+                    country: data.country ? data.country : "",
+                    latitude: -91,
+                    longitude: -181,
+                }
+                ipLocation.latitude = Number(loc[0]);
+                ipLocation.longitude = Number(loc[1]);
+                if (ipLocation.latitude != -91 && ipLocation.longitude != -181) {
+                    var Stadia_AlidadeSmoothDark = new L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+                        maxZoom: 20,
+                        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OSM</a>'
+                    });
+                    let location = [ipLocation.latitude, ipLocation.longitude];
+                    var map = new L.Map("map", {
+                        center: location,
+                        zoom: 12,
+                        minZoom: 12,
+                        maxZoom: 15,
+                        // zoomControl: false
+                    })
+                        .addLayer(Stadia_AlidadeSmoothDark);
+                    // map.touchZoom.disable();
+                    // map.doubleClickZoom.disable();
+                    map.scrollWheelZoom.disable();
+                    // map.boxZoom.disable();
+                    // map.keyboard.disable();
+                    fetch(URL + `localOrganizations`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach((organization) => {
+                                let marker = L.marker([organization.location.latitude, organization.location.longitude]).addTo(map);
+                                marker.bindPopup(`<b>${organization.name}</b><br/><a href=${organization.link} target="_blank">${organization.link}</a>`);
+                            })
+                        })
+                } else {
+                    console.log("No Map for you");
+                }
+            })
+            /*
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            }
+            );
+            */
         }
     },
     created: function () {
@@ -585,6 +528,8 @@ Vue.createApp({
             this.getOrganizations();
             this.getOrganizationStates();
             this.getOrganizationCategories();
+        } else if (this.page == 'volunteerForm') {
+            this.loggedIn();
         }
     },
 }).mount("#app");

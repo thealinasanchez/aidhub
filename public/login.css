@@ -1,0 +1,91 @@
+#app {
+    background-color: rgb(245, 245, 250);
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 50px;
+    width: 500px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.login-container>form {
+    width: 100%;
+    height: 100%;
+}
+
+.login-container>form>h1 {
+    font-size: 32px;
+    padding: 10px 0px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid rgb(0, 0, 0, 0.2);
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: rgb(245, 245, 250);
+    border: inset 1px solid rgb(0, 0, 0, 0.2);
+    margin-top: 8px;
+}
+
+.login-input-text {
+    font-size: 22px;
+}
+
+.login-input-forgot-pass {
+    padding-top: 10px;
+    float: right;
+    text-decoration: none;
+}
+
+.login-submit-button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid rgb(0, 0, 0, 0.2);
+    border-radius: 5px;
+    font-size: 20px;
+    background-color: var(--index-location-button);
+    cursor: pointer;
+    color: white;
+}
+
+.login-sign-up-text {
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.login-sign-up-text button {
+    color: #007bff;
+    text-decoration: none;
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.login-sign-up-text button:hover {
+    text-decoration: underline;
+}
+
+.login-submit-button:hover {
+    background-color: #4d4d4d;
+}

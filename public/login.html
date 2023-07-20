@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AidHub</title>
+    <link href="main.css" rel="stylesheet" type="text/css">
+    <link href="login.css" rel="stylesheet" type="text/css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <!-- vue stuff -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div style="display: none;">{{ page = 'login' }}</div>
+        <main>
+            <div>
+                <h1>AidHub</h1>
+                <div class="login-container" v-if="userLogin">
+                    <form @submit.prevent="createSession">
+                        <h1>Login</h1>
+                        <label>
+                            <span class="login-input-text">Email:</span><br />
+                            <input type="email" class="login-input" placeholder="example@gmail.com" v-model="user.email"
+                                required>
+                        </label>
+                        <!-- forgot password -->
+                        <br />
+                        <label>
+                            <span class="login-input-text">Password:</span>
+                            <a class="login-input-forgot-pass" href="forgotpassword.html">Forgot Password?</a>
+                            <br />
+                            <input type="password" class="login-input" placeholder="Password" v-model="user.password"
+                                required minlength="8">
+                        </label>
+                        <button type="submit" class="login-submit-button">Sign In</button>
+                        <p class="login-sign-up-text">Don't have an account? &nbsp;<button type="button"
+                                @click="toggleLogInSignUp()">Create Account</button></p>
+                    </form>
+                </div>
+                <div class="login-container" v-else>
+                    <form @submit.prevent="signUp">
+                        <h1>Sign Up</h1>
+                        <label>
+                            <span class="login-input-text">Username:</span><br />
+                            <input type="text" class="login-input" placeholder="example" v-model="user.name"
+                                minlength="5" required>
+                        </label>
+                        <label>
+                            <span class="login-input-text">Email:</span><br />
+                            <input type="email" class="login-input" placeholder="example@gmail.com" v-model="user.email"
+                                required>
+                        </label>
+                        <!-- forgot password -->
+                        <br />
+                        <label>
+                            <span class="login-input-text">Password:</span>
+                            <br />
+                            <input type="password" class="login-input" placeholder="Password" v-model="user.password"
+                                required minlength="8">
+                        </label>
+                        <button type="submit" class="login-submit-button">Create Account</button>
+                        <p class="login-sign-up-text">Already have an account? &nbsp;<button type="button"
+                                @click="toggleLogInSignUp()">Log
+                                In</button></p>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+    </main>
+    </div>
+    <!--
+    <script type="module">
+        import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+    </script>
+    -->
+    <script src="app.js"></script>
+</body>
+
+</html>

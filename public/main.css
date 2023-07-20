@@ -105,6 +105,7 @@ img {
     flex-flow: row nowrap;
     font-size: 14px;
     border: none;
+    text-decoration: none;
 }
 
 .top-login-header-button:hover {
