@@ -357,10 +357,10 @@ Vue.createApp({
                 .then(data => {
                     data.forEach((organization) => {
                         this.trialOrganizations.push(organization.name);
-                        console.log(this.trialOrganizations);
+                        // console.log(this.trialOrganizations);
                     })
                 })
-        }
+        },
     },
     watch: {
         'organizationsSearchFilterState.name'(newState, oldState) {
