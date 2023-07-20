@@ -8,7 +8,6 @@
     <title>AidHub - Organizations</title>
     <link href="main.css" rel="stylesheet" type="text/css">
     <link href="volunteer.css" rel="stylesheet" type="text/css">
-    <link href="volunteer.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,10 +30,10 @@
         </div>
         <div class="header-background">
         </div>
-        {{page = 'volunteerForm'}}
+        {{page = 'volunteer'}}
         <header class="top-nav-bar">
             <div class="logo-brand-container">
-                <h2>AidHubs</h2>
+                <h2>AidHub - Volunteer Opportunities</h2>
             </div>
             <nav class="nav-links">
                 <ul>
@@ -50,84 +49,11 @@
             </div>
         </header>
         <main>
-            <button @click="toggleVolunteerPostModal(index)" id="volunteerformbutton">Create Volunteer
-                Opportunity</button>
-            <div class="volunteerPostModal" v-show="toggleModal">
-                <div class="content">
-                    <div id="close" @click="toggleVolunteerPostModal()">X</div>
-                    <form id="volunteer-form">
-                        <span>
-                            <label for="user">User: </label>
-                            <input type="text" id="user" name="user" required v-model="newVolunteerPost.user">
-                        </span>
-                        <span>
-                            <label for="title">Title: </label>
-                            <input type="text" id="title" name="title" required v-model="newVolunteerPost.title">
-                        </span>
-                        <span>
-                            <label for="orgname">Organization Name (if personal, select "personal"): </label>
-                            <label>
-                                <input type="radio" v-model="newVolunteerPost.orgname" value="personal" checked>
-                                Personal
-                            </label>
-                            <!-- for some reason the webpage doesn't like another input here,
-                            even with the same v-model or id or both? -->
-                            <label>
-                                <input type="radio" v-model="newVolunteerPost.orgname" value="organization">
-                                Organization
-                            </label>
-                            <div v-show="newVolunteerPost.orgname === 'organization'">
-                                <!-- https://koenwoortman.com/vuejs-get-element-by-id-in-component/ -->
-                                <input type="text" v-model="volunteerorgsearch">
-                                <datalist id="orgNameList">
-                                    <ul>
-                                        <li v-for="organization in filteredTrialOrganizations">{{organization.name}}
-                                        </li>
-                                    </ul>
-                                </datalist>
-                            </div>
-                        </span>
-                        <span>
-                            <label for="city">City it is taking place in: </label>
-                            <input type="text" id="city" name="city" v-model="newVolunteerPost.city">
-                        </span>
-                        <span>
-                            <label for="state">State it is taking place in (limit 2 characters): </label>
-                            <input type="text" id="state" name="state" maxlength="2" minlength="2" required
-                                v-model="newVolunteerPost.state">
-                        </span>
-                        <span>
-                            <label for="dateStart">Start Date: </label>
-                            <input type="date" id="dateStart" name="dateStart" min="2023-07-14" required
-                                v-model="newVolunteerPost.dateStart">
-                        </span>
-                        <span>
-                            <label for="dateEnd">End Date: </label>
-                            <input type="date" id="dateEnd" name="dateEnd" min="2023-07-17"
-                                v-model="newVolunteerPost.dateEnd">
-                        </span>
-                        <span>
-                            <div id="desc-area">
-                                <label for="description">Description: </label>
-                                <textarea name="description" id="description" cols="30" rows="10"
-                                    v-model="newVolunteerPost.description"></textarea>
-                            </div>
-                        </span>
-                        <span>
-                            <label for="num_people">Amount of Volunteers Needed: </label>
-                            <input type="number" id="num_people" name="num_people" min="1" required
-                                v-model="newVolunteerPost.num_people">
-                        </span>
-                        <span>
-                            <label for="website">Website: </label>
-                            <input type="text" id="website" name="website" v-model="newVolunteerPost.website">
-                        </span>
-                    </form>
-                    <button @click="addVolunteerOpportunities()" id="post">Post</button>
-                </div>
-            </div>
+            <button id="volunteerformbutton"><a href="volunteerform.html">
+                Create Volunteer Opportunity
+            </a></button>
             <h1 id="find">Find volunteer opportunities here:</h1>
-            <div class="volunteerthings" v-for="(post, index) in volunteerOpportunities">
+            <div class="volunteerthings" v-for="post in volunteerOpportunities">
                 <div>{{post}}</div>
             </div>
     </div>
