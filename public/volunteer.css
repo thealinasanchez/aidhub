@@ -79,3 +79,9 @@ main button:hover {
 #post {
     margin-top: 12px;
 }
+
+#volunteerthings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

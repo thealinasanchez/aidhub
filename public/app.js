@@ -105,7 +105,11 @@ Vue.createApp({
             // TRIAL STUFF
             trialOrganizations: [],
             filteredTrialOrganizations: [],
-            volunteerorgsearch: ""
+            volunteerorgsearch: "",
+            volunteerformbutton: true,
+            volunteersearch: "",
+            watchedValue: "",
+            toggleVolunteerSearchModal: true
         }
     },
     methods: {
@@ -326,6 +330,7 @@ Vue.createApp({
                     if (response.status === 201) {
                         response.json().then((data) => {
                             this.volunteerOpportunities.push(data);
+                            this.getVolunteerOpportunities();
                             this.newVolunteerPost = {};
                         });
                     } else {
@@ -344,19 +349,9 @@ Vue.createApp({
                         console.log("success");
                         this.volunteerOpportunities.splice(index, 1);
                     } else {
-                        alert("Unable to delete expense");
+                        alert("Unable to delete volunteer post");
                     }
                 });
-        },
-        // getOrganizationName() {
-        //     if (this.newVolunteerPost.orgame === 'organization') {
-        //         return '';
-        //     } else {
-        //         return this.newVolunteerPost.orgname;
-        //     }
-        // },
-        dropdownOrgSelection: function (name) {
-            this.volunteerorgsearch = name;
         },
         getTrialOrganizations: function () {
             fetch(`http://localhost:6300/localOrganizations`)
@@ -364,10 +359,11 @@ Vue.createApp({
                 .then(data => {
                     data.forEach((organization) => {
                         this.trialOrganizations.push(organization.name);
-                        console.log(this.trialOrganizations);
+                        // console.log(this.trialOrganizations);
                     })
                 })
         },
+
         /* user stuff */
         loggedIn: function () {
             let options = {
@@ -552,7 +548,11 @@ Vue.createApp({
             */
         },
         volunteerorgsearch(newsearch, oldsearch) {
-            console.log(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
+            this.filteredTrialOrganizations = this.trialOrganizations.filter(organization => {return organization.toLowerCase().includes(newsearch.toLowerCase())});
+            // console.log(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
+            if (this.filteredTrialOrganizations.length == 1 && this.filteredTrialOrganizations[0] == newsearch) {
+                this.filteredTrialOrganizations = [];
+            }
         }
     },
     created: function () {
@@ -570,6 +570,9 @@ Vue.createApp({
         } else if (this.page == 'volunteer') {
             this.setPage('volunteer');
             this.loggedIn();
+            this.getTrialOrganizations();
+            this.getVolunteerOpportunities();
+        } else if (this.page == 'volunteerForm') {
             this.getTrialOrganizations();
         }
     },

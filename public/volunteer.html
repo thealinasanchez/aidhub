@@ -53,8 +53,49 @@
                 Create Volunteer Opportunity
             </a></button>
             <h1 id="find">Find volunteer opportunities here:</h1>
-            <div class="volunteerthings" v-for="post in volunteerOpportunities">
-                <div>{{post}}</div>
+            <div id="volunteerthings" v-for="post in volunteerOpportunities">
+                <div id="volunteerpost">
+                    <div id="post-user">
+                        <p>Created by: </p>
+                        {{post.user}}
+                    </div>
+                    <div id="post-title">
+                        <p>Title: </p>
+                        {{post.title}}
+                    </div>
+                    <div id="post-orgname">
+                        <p>Organization: </p>
+                        {{post.orgname}}
+                    </div>
+                    <div id="post-city">
+                        <p>City: </p>
+                        {{post.city}}
+                    </div>
+                    <div id="post-state">
+                        <p>State: </p>
+                        {{post.state}}
+                    </div>
+                    <div id="post-dateStart">
+                        <p>Start date: </p>
+                        {{post.dateStart}}
+                    </div>
+                    <div id="post-dateEnd">
+                        <p>End date: </p>
+                        {{post.dateEnd}}
+                    </div>
+                    <div id="post-description">
+                        <p>Description: </p>
+                        {{post.description}}
+                    </div>
+                    <div id="post-num_people">
+                        <p>Number of people needed: </p>
+                        {{post.num_people}}
+                    </div>
+                    <div id="post-website">
+                        <p>Website: </p>
+                        {{post.website}}
+                    </div>
+                </div>
             </div>
     </div>
     <script src="script.js"></script>
