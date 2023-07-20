@@ -454,6 +454,9 @@ Vue.createApp({
             if (page) {
                 this.previousPage = page;
             }
+        },
+        goBackToPreviousPage: function () {
+            window.location.href = this.previousPage + ".html";
         }
     },
     watch: {

@@ -22,9 +22,11 @@
         <div style="display: none;">{{ page = 'signup' }}</div>
         <main>
             <div>
-                <h1>AidHub</h1>
+                <h1 class="login-signup-title">AidHub</h1>
                 <div class="login-container">
                     <form @submit.prevent="signUp">
+                        <button type="button" class="login-container-back-button"
+                            @click="goBackToPreviousPage()">&larr;&nbsp;Back</button>
                         <h1>Sign Up</h1>
                         <label>
                             <span class="login-input-text">Username:</span><br />
