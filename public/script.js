@@ -341,6 +341,7 @@ Vue.createApp({
                     if (response.status === 201) {
                         response.json().then((data) => {
                             this.volunteerOpportunities.push(data);
+                            this.getVolunteerOpportunities();
                             this.newVolunteerPost = {};
                         });
                     } else {
@@ -490,6 +491,7 @@ Vue.createApp({
             this.getOrganizationCategories();
         } else if (this.page == 'volunteer') {
             this.getTrialOrganizations();
+            this.getVolunteerOpportunities();
         } else if (this.page == 'volunteerForm') {
             this.getTrialOrganizations();
         }
