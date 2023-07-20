@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidHub - Organizations</title>
     <link href="main.css" rel="stylesheet" type="text/css">
-    <link href="volunteerform.css" rel="stylesheet" type="text/css">
+    <link href="volunteer.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,6 +39,7 @@
                 <ul>
                     <li><a class="nav-link" href="index.html">HOME</a></li>
                     <li><a class="nav-link" href="organizations.html">ORGANIZATIONS</a></li>
+                    <li><a class="nav-link" href="volunteer.html">VOLUNTEERING</a></li>
                 </ul>
             </nav>
             <div class="nav-bar-button-container">
@@ -48,7 +49,8 @@
             </div>
         </header>
         <main>
-            <button @click="toggleVolunteerPostModal(index)" id="volunteerformbutton">Create Volunteer Opportunity</button>
+            <button @click="toggleVolunteerPostModal(index)" id="volunteerformbutton">Create Volunteer
+                Opportunity</button>
             <div class="volunteerPostModal" v-show="toggleModal">
                 <div class="content">
                     <div id="close" @click="toggleVolunteerPostModal()">X</div>
@@ -75,11 +77,10 @@
                             </label>
                             <div v-show="newVolunteerPost.orgname === 'organization'">
                                 <!-- https://koenwoortman.com/vuejs-get-element-by-id-in-component/ -->
-                                <input type="text" v-model="volunteerorgsearch" >
+                                <input type="text" v-model="volunteerorgsearch">
                                 <datalist id="orgNameList">
                                     <ul>
-                                        <li v-for="organization in filteredTrialOrganizations"
-                                        >{{organization}}</li>
+                                        <li v-for="organization in filteredTrialOrganizations">{{organization}}</li>
                                     </ul>
                                 </datalist>
                             </div>

@@ -72,7 +72,7 @@ main {
     text-decoration: none;
 }
 
-.login-sign-up-text button {
+.login-sign-up-text a {
     color: #007bff;
     text-decoration: none;
     background: none;
@@ -82,7 +82,7 @@ main {
     font-size: 18px;
 }
 
-.login-sign-up-text button:hover {
+.login-sign-up-text a:hover {
     text-decoration: underline;
 }
 

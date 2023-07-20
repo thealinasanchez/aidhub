@@ -19,37 +19,33 @@
 
 <body>
     <div id="app">
-        <div style="display: none;">{{ page = 'login' }}</div>
+        <div style="display: none;">{{ page = 'signup' }}</div>
         <main>
             <div>
                 <h1>AidHub</h1>
                 <div class="login-container">
-                    <form @submit.prevent="createSession">
-                        <h1>Login</h1>
+                    <form @submit.prevent="signUp">
+                        <h1>Sign Up</h1>
+                        <label>
+                            <span class="login-input-text">Username:</span><br />
+                            <input type="text" class="login-input" placeholder="example" v-model="user.name"
+                                minlength="5" required>
+                        </label>
                         <label>
                             <span class="login-input-text">Email:</span><br />
                             <input type="email" class="login-input" placeholder="example@gmail.com" v-model="user.email"
                                 required>
                         </label>
-                        <!-- forgot password -->
                         <br />
                         <label>
                             <span class="login-input-text">Password:</span>
-                            <a class="login-input-forgot-pass" href="forgotpassword.html">Forgot Password?</a>
                             <br />
                             <input type="password" class="login-input" placeholder="Password" v-model="user.password"
                                 required minlength="8">
                         </label>
-                        <button type="submit" class="login-submit-button">Sign In</button>
-                        <p class="login-sign-up-text">Don't have an account? &nbsp;<a href="signup.html">Create
-                                Account</a></p>
+                        <button type="submit" class="login-submit-button">Create Account</button>
+                        <p class="login-sign-up-text">Already have an account? &nbsp;<a href="login.html">Log
+                                In</a></p>
                     </form>
                 </div>
             </div>
-
-        </main>
-    </div>
-    <script src="app.js"></script>
-</body>
-
-</html>

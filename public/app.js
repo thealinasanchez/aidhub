@@ -11,7 +11,6 @@ Vue.createApp({
                 email: "",
                 password: "",
             },
-            userLogin: true,
             //index.html slideshow stuff
             slideShow: {
                 currentIndex: 0,
@@ -434,9 +433,6 @@ Vue.createApp({
                 this.user.email = "";
                 this.user.password = "";
             });
-        },
-        toggleLogInSignUp: function () {
-            this.userLogin = !this.userLogin;
         }
     },
     watch: {
