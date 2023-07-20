@@ -45,6 +45,11 @@ main button:hover {
     margin-top: 2%;
 }
 
+#volunteerformbutton a {
+    text-decoration: none;
+    color: var(--offwhite);
+}
+
 #volunteer-form {
     display: flex;
     flex-flow: column nowrap;

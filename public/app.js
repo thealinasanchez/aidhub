@@ -501,6 +501,7 @@ Vue.createApp({
                     console.log("Couldn't get location", response.status);
                 }
             }).then((data) => {
+                console.log(data);
                 let loc = data.loc.split(",");
                 let ipLocation = {
                     city: data.city ? data.city : "",
