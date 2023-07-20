@@ -276,17 +276,6 @@ Vue.createApp({
         indexAskLocationAccept: function () {
             this.indexLocation.askForLocation = false;
         },
-        // dropdownOrgSelection: function (name) {
-        //     this.volunteerorgsearch = name;
-        // },
-        // VOLUNTEERFORM.HTML STUFF
-        hideButton: function() {
-            if (this.toggleModal == 'true') {
-                this.volunteerformbutton = false;
-            } else if (this.toggleModal == 'false') {
-                this.volunteerformbutton = true;
-            }
-        },
         toggleVolunteerPostModal: function (index = null) {
             this.toggleModal = !this.toggleModal;
             if (index !== null) {
@@ -303,7 +292,6 @@ Vue.createApp({
                 this.volunteerPostModal.num_people = modal.num_people;
                 this.volunteerPostModal.website = modal.website;
             }
-            this.hideButton();
         },
         // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
         getVolunteerOpportunities: function () {
@@ -360,7 +348,7 @@ Vue.createApp({
                         console.log("success");
                         this.volunteerOpportunities.splice(index, 1);
                     } else {
-                        alert("Unable to delete expense");
+                        alert("Unable to delete volunteer post");
                     }
                 });
         },
@@ -374,13 +362,6 @@ Vue.createApp({
                     })
                 })
         },
-        volunteerSearchFill: function(name) {
-            this.volunteerorgsearch = name;
-            if (this.volunteerorgsearch == name) {
-                this.toggleVolunteerSearchModal = false;
-            }
-        },
-
     },
     watch: {
         'organizationsSearchFilterState.name'(newState, oldState) {
