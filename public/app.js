@@ -383,7 +383,6 @@ Vue.createApp({
                         this.loggedInStatus = false;
                         /* do something if not logged in*/
                     }
-                    console.log(this.loggedInStatus);
                 })
         },
         signUp: function () {
@@ -419,8 +418,8 @@ Vue.createApp({
                             this.loggedInStatus = true;
                             // this.page = "" go to volunteer page with access to form
                             this.getPreviousPage();
-                            window.location.href = this.previousPage + ".html";
                             this.user.name = data.name;
+                            window.location.href = this.previousPage + ".html";
                         } else {
                             alert("No session created");
                         }
