@@ -101,6 +101,10 @@ Vue.createApp({
                 num_people: 0,
                 website: ""
             },
+            // TRIAL STUFF
+            trialOrganizations: [],
+            filteredTrialOrganizations: [],
+            volunteerorgsearch: ""
         }
     },
     methods: {
@@ -343,12 +347,25 @@ Vue.createApp({
                     }
                 });
         },
-        getOrganizationName() {
-            if (this.newVolunteerPost.orgame === 'organization') {
-                return '';
-            } else {
-                return this.newVolunteerPost.orgname;
-            }
+        // getOrganizationName() {
+        //     if (this.newVolunteerPost.orgame === 'organization') {
+        //         return '';
+        //     } else {
+        //         return this.newVolunteerPost.orgname;
+        //     }
+        // },
+        dropdownOrgSelection: function (name) {
+            this.volunteerorgsearch = name;
+        },
+        getTrialOrganizations: function () {
+            fetch(`http://localhost:6300/localOrganizations`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach((organization) => {
+                        this.trialOrganizations.push(organization.name);
+                        console.log(this.trialOrganizations);
+                    })
+                })
         },
         /* user stuff */
         loggedIn: function () {
@@ -516,6 +533,9 @@ Vue.createApp({
             }
             );
             */
+        },
+        volunteerorgsearch(newsearch, oldsearch) {
+            console.log(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
         }
     },
     created: function () {
@@ -530,6 +550,8 @@ Vue.createApp({
             this.getOrganizationCategories();
         } else if (this.page == 'volunteerForm') {
             this.loggedIn();
+        } else if (this.page == 'volunteerForm') {
+            this.getTrialOrganizations();
         }
     },
 }).mount("#app");
