@@ -276,6 +276,14 @@ Vue.createApp({
         //     this.volunteerorgsearch = name;
         // },
         // VOLUNTEERFORM.HTML STUFF
+        hideButton: function() {
+            var button = document.getElementById("volunteerformbutton");
+            if (this.toggleModal == 'true') {
+                button.style.display = "none";
+            } else if (this.toggleModal == 'false') {
+                button.style.display = "block";
+            }
+        },
         toggleVolunteerPostModal: function (index = null) {
             this.toggleModal = !this.toggleModal;
             if (index !== null) {
@@ -292,6 +300,7 @@ Vue.createApp({
                 this.volunteerPostModal.num_people = modal.num_people;
                 this.volunteerPostModal.website = modal.website;
             }
+            hideButton();
         },
         // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
         getVolunteerOpportunities: function () {
