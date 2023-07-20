@@ -8,7 +8,7 @@ dotenv.config() // Import environmental variables
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.DB_LINK)
     .then(() => console.log("Connected to database"))
-    .catch(() => console.log("Failed to connect to database"));
+    .catch((error) => console.log("Failed to connect to database", error));
 
 
 const VolunteerFormSchema = Schema({
