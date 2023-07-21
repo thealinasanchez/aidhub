@@ -276,7 +276,7 @@ Vue.createApp({
         },
         // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
         getVolunteerOpportunities: function () {
-            fetch('http://localhost:6300/volunteerOpportunities')
+            fetch(URL + 'volunteerOpportunities')
                 .then(response => response.json()).then((data) => {
                     data.forEach((post) => {
                         var formattedDates = this.formatDate(post.dateStart, post.dateEnd);
@@ -312,7 +312,7 @@ Vue.createApp({
                 credentials: "include"
             };
 
-            fetch("http://localhost:6300/volunteerOpportunities", requestOptions)
+            fetch(URL + "volunteerOpportunities", requestOptions)
                 .then((response) => {
                     if (response.status === 201) {
                         response.json().then((data) => {
@@ -342,7 +342,7 @@ Vue.createApp({
                 method: "DELETE",
                 credentials: "include"
             };
-            fetch(`http://localhost:6300/volunteerOpportunities/${volpostId}`, requestOptions)
+            fetch(URRL + `volunteerOpportunities/${volpostId}`, requestOptions)
                 .then((response) => {
                     if (response.status === 204) {
                         console.log("success");
@@ -377,7 +377,7 @@ Vue.createApp({
 
         },
         getOrganizationsDropdown: function () {
-            fetch(`http://localhost:6300/localOrganizations`)
+            fetch(URL + `localOrganizations`)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach((organization) => {
