@@ -546,6 +546,12 @@ Vue.createApp({
                     return response.json();
                 } else {
                     console.log("Couldn't get location", response.status);
+                    return {
+                        city: "St. George",
+                        region: "UT",
+                        country: "US",
+                        loc: "37.1041,-113.5841"
+                    }
                 }
             }).then((data) => {
                 console.log(data);
