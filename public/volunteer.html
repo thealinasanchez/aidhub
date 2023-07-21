@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AidHub - Organizations</title>
+    <title>AidHub - Volunteer Opportunities</title>
     <link href="main.css" rel="stylesheet" type="text/css">
     <link href="volunteer.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
@@ -33,7 +33,7 @@
         {{page = 'volunteer'}}
         <header class="top-nav-bar">
             <div class="logo-brand-container">
-                <h2>AidHub - Volunteer Opportunities</h2>
+                <h2>AidHub</h2>
             </div>
             <nav class="nav-links">
                 <ul>
@@ -53,52 +53,69 @@
                 Create Volunteer Opportunity
             </a></button>
             <h1 id="find">Find volunteer opportunities here:</h1>
-            <div id="volunteerthings" v-for="post in volunteerOpportunities">
-                <div id="volunteerpost">
-                    <div id="post-user">
-                        <p>Created by: </p>
-                        {{post.user}}
-                    </div>
-                    <div id="post-title">
-                        <p>Title: </p>
-                        {{post.title}}
-                    </div>
-                    <div id="post-orgname">
-                        <p>Organization: </p>
-                        {{post.orgname}}
-                    </div>
-                    <div id="post-city">
-                        <p>City: </p>
-                        {{post.city}}
-                    </div>
-                    <div id="post-state">
-                        <p>State: </p>
-                        {{post.state}}
-                    </div>
-                    <div id="post-dateStart">
-                        <p>Start date: </p>
-                        {{post.dateStart}}
-                    </div>
-                    <div id="post-dateEnd">
-                        <p>End date: </p>
-                        {{post.dateEnd}}
-                    </div>
-                    <div id="post-description">
-                        <p>Description: </p>
-                        {{post.description}}
-                    </div>
-                    <div id="post-num_people">
-                        <p>Number of people needed: </p>
-                        {{post.num_people}}
-                    </div>
-                    <div id="post-website">
-                        <p>Website: </p>
-                        {{post.website}}
+            <div id="search-area">
+                <!--search box-->
+                <div class="search-box">
+                    <form action="" onsubmit="return false">
+                        <input type="text" id="search" placeholder="Search...">
+                    </form>
+                </div>
+                <div class="filler-box">
+                    <a href="#" class="activebutton"></a>
+                </div>
+            </div>
+            <div class="post-container">
+                <div 
+                    id="volunteerthings" 
+                    v-for="(post,index) in volunteerOpportunities"
+                    :class="index % 2 === 0? 'post even' : 'post odd'"
+                >
+                    <div id="volunteerpost">
+                        <div id="post-user">
+                            <p>Created By: </p>
+                            <div>{{post.user}}</div>
+                        </div>
+                        <div id="post-title">
+                            <p>Title: </p>
+                            <div>{{post.title}}</div>
+                        </div>
+                        <div id="post-orgname">
+                            <p>Organization: </p>
+                            <div>{{post.orgname}}</div>
+                        </div>
+                        <div id="post-city">
+                            <p>City: </p>
+                            <div>{{post.city}}</div>
+                        </div>
+                        <div id="post-state">
+                            <p>State: </p>
+                            <div>{{post.state}}</div>
+                        </div>
+                        <div id="post-dateStart">
+                            <p>Start Date: </p>
+                            <div>{{post.formattedStartDate}}</div>
+                        </div>
+                        <div id="post-dateEnd">
+                            <p>End Date: </p>
+                            <div>{{post.formattedEndDate}}</div>
+                        </div>
+                        <div id="post-description">
+                            <p>Description: </p>
+                            <div>{{post.description}}</div>
+                        </div>
+                        <div id="post-num_people">
+                            <p>Number Of People Needed: </p>
+                            <div>{{post.num_people}}</div>
+                        </div>
+                        <div id="post-website">
+                            <p>Website: </p>
+                            <div>{{post.website}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
     </div>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>

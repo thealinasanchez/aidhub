@@ -30,6 +30,11 @@
     padding: 8px 8px;
 }
 
+.volunteer-button a {
+    text-decoration: none;
+    color: var(--offwhite);
+}
+
 #donation-image {
     background-image: url("volunteering3.jpg");
     background-size: cover;
@@ -50,6 +55,11 @@
     margin-top: 10px;
     padding: 8px 8px;
     margin-bottom: 10px;
+}
+
+.donation-button a {
+    text-decoration: none;
+    color: var(--offwhite);
 }
 
 .volunteer-donate-form {
