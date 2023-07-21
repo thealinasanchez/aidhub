@@ -67,17 +67,17 @@
                 <div class="volunteer-post" v-for="(post,index) in volunteerOpportunities"
                     :class="index % 2 === 0? 'post even' : 'post odd'">
                     <p class="post-user">
-                        <div id="user-content">
-                            <p>Created by: </p>
-                            <div id="user">{{post.user}}</div>
-                        </div>
+                    <div id="user-content">
+                        <p>Created by: </p>
+                        <div id="user">{{post.user}}</div>
+                    </div>
                     </p>
                     <h1 class="post-title">
 
                         <div>{{post.title}}</div>
                     </h1>
                     <p class="post-description">
-                        <div>{{post.description}}</div>
+                    <div>{{post.description}}</div>
                     </p>
                     <div class="post-orgname">
                         <span>Organization: </span>
@@ -108,7 +108,7 @@
                         <span>Website: </span>
                         <div>{{post.website}}</div>
                     </div>
-                    <div class="post-button-container" v-else>
+                    <div class="post-button-container">
                         <div class="post-likes-container">
                             <p>10 Likes</p>
                             <img class="post-like-button" src="icons/like.svg" alt="like-icon" @click="likePost(post)"
