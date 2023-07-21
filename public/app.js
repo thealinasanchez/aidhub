@@ -1,5 +1,5 @@
-var URL = "http://localhost:6300/";
-// var URL = "https://aidhub-production.up.railway.app/";
+// var URL = "http://localhost:6300/";
+var URL = "https://aidhub-production.up.railway.app/";
 Vue.createApp({
     data() {
         return {
@@ -541,8 +541,8 @@ Vue.createApp({
             fetch(URL + 'location?ip=' + data.ip).then((response) => {
                     */
             fetch(URL + 'location?ip=' + "144.38.184.33").then((response) => {
+                this.indexLocation.spinner = false;
                 if (response.status === 200) {
-                    this.indexLocation.spinner = false;
                     return response.json();
                 } else {
                     console.log("Couldn't get location", response.status);
