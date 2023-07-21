@@ -48,10 +48,17 @@
                     <li><a class="nav-link" href="volunteer.html">VOLUNTEERING</a></li>
                 </ul>
             </nav>
+            <div class="nav-bar-button-container">
+                <a href="getstarted.html">
+                    <button class="common-green-button nav-bar-button">GET STARTED</button>
+                </a>
+            </div>
         </header>
         <main>
-            <h1 id="title">Volunteer Opportunities</h1>
-            <button id="volunteerformbutton" @click="goToVolunteerForm()">Add Volunteer Opportunity</button>
+            <div id="main-header">
+                <h1 id="title">Volunteer Opportunities</h1>
+                <button id="volunteerformbutton" @click="goToVolunteerForm()">Add Volunteer Opportunity</button>
+            </div>
             <div id="search-area">
                 <!--search box-->
                 <div class="search-box">
@@ -63,21 +70,88 @@
                     <a href="#" class="activebutton"></a>
                 </div>
             </div>
+            <div id="filtering-area"></div>
+            <div class="post-container">
+                <div 
+                    id="volunteerthings"
+                    v-for="(post,index) in volunteerOpportunities"
+                    :class="index % 2 === 0 ? 'post even' : 'post odd'"
+                >
+                    <div id="volunteerpost">
+                        <div id="post-user">
+                            <p>Created By: </p>
+                            <div>{{post.user}}</div>
+                        </div>
+                        <div id="post-title">
+                            <p>Title: </p>
+                            <div>{{post.title}}</div>
+                        </div>
+                        <div id="post-orgname">
+                            <p>Organization: </p>
+                            <div>{{post.orgname}}</div>
+                        </div>
+                        <div id="post-city" v-if="post.city">
+                            <p>City: </p>
+                            <div>{{post.city}}</div>
+                        </div>
+                        <div id="post-state">
+                            <p>State: </p>
+                            <div>{{post.state}}</div>
+                        </div>
+                        <div id="post-dateStart">
+                            <p>Start Date: </p>
+                            <div>{{post.formattedStartDate}}</div>
+                        </div>
+                        <div id="post-dateEnd" v-if="post.formattedEndDate">
+                            <p>End Date: </p>
+                            <div>{{post.formattedEndDate ? post.formattedEndDate : "No End Date"}}</div>
+                        </div>
+                        <div id="post-description" v-if="post.description">
+                            <p>Description: </p>
+                            <div>{{post.description}}</div>
+                        </div>
+                        <div id="post-num_people">
+                            <p>Number Of People Needed: </p>
+                            <div>{{post.num_people}}</div>
+                        </div>
+                        <div id="post-website" v-if="post.website">
+                            <p>Website: </p>
+                            <div>{{post.website}}</div>
+                        </div>
+                        <div class="post-button-container">
+                            <div id="likes">
+                                <p>10 Likes</p>
+                                <img id="like-button" src="icons/like.svg" alt="like-icon" @click="likePost(post)"
+                                    v-if="loggedInStatus" />
+                            </div>
+                            <div class="post-modification" v-if="loggedInStatus && post.user == user.name">
+                                <img 
+                                    src="./icons/edit.svg" 
+                                    alt="edit-icon" 
+                                    @click="editPost(post.id)"
+                                    id="post-edit-button"
+                                >
+                                <img 
+                                    src="./icons/delete.svg" 
+                                    alt="delete-icon" 
+                                    @click="deletePost(post.id)"
+                                    id="post-delete-button"
+                                >
+                            </div>
+                            <button id="post-apply-button" v-else-if="loggedInStatus">Apply</button>
+                            <a href="login.html" class="login-text" v-if="!loggedInStatus">Log In To Interact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="volunteer-post-container">
                 <div class="volunteer-post" v-for="(post,index) in volunteerOpportunities"
                     :class="index % 2 === 0? 'post even' : 'post odd'">
                     <p class="post-user">
-<<<<<<< HEAD
                         <div id="user-content">
                             <p>Created by:</p>
                             <div id="user">{{post.user}}</div>
                         </div>
-=======
-                    <div id="user-content">
-                        <p>Created by: </p>
-                        <div id="user">{{post.user}}</div>
-                    </div>
->>>>>>> c4f60bac880eee8a7bf19fd7dd6ee9ad57693825
                     </p>
                     <h1 class="post-title">
 
