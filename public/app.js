@@ -157,7 +157,6 @@ Vue.createApp({
             }
             this.organizationsPage.spinner = true;
             let codes = [];
-            /*
             fetch(URL + `organizations?${newQuery}`)
                 .then(response => response.json())
                 .then(data => {
@@ -192,7 +191,6 @@ Vue.createApp({
                         })
                     }
                 })
-                */
         },
         getStates: function () {
             fetch(URL + `states`).then(response => response.json()).then(data => {
