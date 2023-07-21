@@ -1,0 +1,122 @@
+.submit-volunteer-form-button {
+    cursor: pointer;
+    padding: 10px 20px;
+    background-color: var(--index-location-button);
+    border-radius: 5px;
+    font-size: 18px;
+    margin: auto;
+    margin-top: 15px;
+    color: white;
+}
+
+.submit-volunteer-form-button:hover {
+    background-color: rgba(36, 160, 237, 0.9);
+}
+
+#volunteer-form {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 800px;
+    margin-top: 10px;
+    padding: 20px 25px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.back-button {
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--index-location-button);
+    text-decoration: none;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.back-button:hover {
+    text-decoration: underline;
+}
+
+.volunteer-form-input {
+    margin: 8px 0;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.volunteer-form-input:focus {
+    outline: none;
+    border: 1px solid #55A14A;
+}
+
+#volunteer-form span {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+#desc-area {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+#description {
+    resize: none;
+}
+
+#organization {
+    width: 100%;
+}
+
+#state {
+    width: 100%;
+}
+
+.organization-container {
+    position: relative;
+    width: 100%;
+}
+
+.state-container {
+    position: relative;
+    width: 150px;
+}
+
+.state-select-container,
+.organization-select-container {
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+    overflow-y: auto;
+    max-height: 100px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.state-select-container {
+    top: 60px;
+}
+
+.organization-select-container {
+    top: 40px;
+}
+
+.state-select,
+.organization-select {
+    cursor: pointer;
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background-color: #fcfcfc;
+}
+
+#dateStart {
+    width: 150px;
+}
+
+#dateEnd {
+    width: 150px;
+}
+
+#num_people {
+    width: 70px;
+}

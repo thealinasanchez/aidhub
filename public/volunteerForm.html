@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AidHub - Organizations</title>
+    <link href="main.css" rel="stylesheet" type="text/css">
+    <link href="volunteerForm.css" rel="stylesheet" type="text/css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Content goes here -->
+        <div class="top-login-header-container">
+            <div class="top-login-header" v-if="loggedInStatus">
+                <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
+                        alt="log-in-icon" />Logout</div>
+                <div class="top-login-header-button" @click=""><img src="./icons/profile.svg" alt="log-in-icon" />Edit
+                    Profile</div>
+            </div>
+            <div class="top-login-header" v-else>
+                <a class="top-login-header-button" href="signup.html"><img src="./icons/key.svg"
+                        alt="sign-up-icon" />Sign
+                    Up</a>
+                <a class="top-login-header-button" href="login.html"><img src="./icons/user.svg"
+                        alt="log-in-icon" />Login</a>
+            </div>
+        </div>
+        <div class="header-background">
+        </div>
+        <div style="display: none;">{{page = 'volunteerForm'}}</div>
+        <header class="top-nav-bar">
+            <div class="logo-brand-container">
+                <h2>AidHub</h2>
+            </div>
+            <nav class="nav-links">
+                <ul>
+                    <li><a class="nav-link" href="index.html">HOME</a></li>
+                    <li><a class="nav-link" href="organizations.html">ORGANIZATIONS</a></li>
+                    <li><a class="nav-link" href="volunteer.html">VOLUNTEERING</a></li>
+                </ul>
+            </nav>
+            <div class="nav-bar-button-container">
+                <a href="getstarted.html">
+                    <button class="common-green-button nav-bar-button">GET STARTED</button>
+                </a>
+            </div>
+        </header>
+        <main>
+            <div class="volunteerPostModal">
+                <div class="volunteer-form-container">
+                    <form @submit.prevent="addVolunteerOpportunities()" id="volunteer-form">
+                        <a class="back-button" href="volunteer.html">
+                            &larr;&nbsp;Back To Opportunities</a>
+                        <span>
+                            <label for="title">Title: </label>
+                            <input type="text" id="title" name="title" class="volunteer-form-input" required
+                                v-model="newVolunteerPost.title" placeholder="Awesome Title Goes Here...">
+                        </span>
+                        <span>
+                            <div id="desc-area">
+                                <label for="description">Description: </label>
+                                <textarea name="description" id="description" cols="30" rows="8"
+                                    v-model="newVolunteerPost.description"></textarea>
+                            </div>
+                        </span>
+                        <span>
+                            <label for="orgname">Organization Name (if personal, select "personal"): </label>
+                            <label>
+                                <input type="radio" v-model="newVolunteerPost.type" class="volunteer-form-input"
+                                    value="personal" checked>
+                                Personal
+                            </label>
+                            <label>
+                                <input type="radio" v-model="newVolunteerPost.type" value="organization">
+                                Organization
+                            </label>
+                            <div class="organization-container">
+                                <div v-show="newVolunteerPost.type === 'organization'">
+                                    <input type="text" v-model="newVolunteerPost.orgname" id="organization"
+                                        class="volunteer-form-input" placeholder="Enter Organization Name..."
+                                        @blur="showOrganizationDropdown = false"
+                                        @focus="showOrganizationDropdown = true">
+                                    <div class="organization-select-container"
+                                        v-if="filteredOrganizations.length > 0 && showOrganizationDropdown">
+                                        <div class="organization-select" v-for="organization in filteredOrganizations"
+                                            @mousedown="selectOrganization(organization)">{{organization}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                        <span>
+                            <label for="city">City: </label>
+                            <input type="text" id="city" name="city" class="volunteer-form-input"
+                                v-model="newVolunteerPost.city" placeholder="City...">
+                        </span>
+                        <div class="state-container">
+                            <label for="state">State:</label>
+                            <br />
+                            <input type="text" id="state" name="state" class="volunteer-form-input" required
+                                v-model="state" placeholder="State.." autocomplete="off"
+                                @blur="showStateDropdown = false" @focus="showStateDropdown = true">
+                            <div class="state-select-container" v-show="filteredStates.length > 0 && showStateDropdown">
+                                <div class="state-select" v-for="state in filteredStates"
+                                    @mousedown="selectState(state)">
+                                    {{state.name}}
+                                </div>
+                            </div>
+                        </div>
+                        <span>
+                            <label for="dateStart">Start Date: </label>
+                            <input type="date" id="dateStart" class="volunteer-form-input" name="dateStart"
+                                min="2023-07-14" required v-model="newVolunteerPost.dateStart">
+                        </span>
+                        <span>
+                            <label for="dateEnd">End Date: </label>
+                            <input type="date" id="dateEnd" name="dateEnd" class="volunteer-form-input" min="2023-07-17"
+                                v-model="newVolunteerPost.dateEnd">
+                        </span>
+
+                        <span>
+                            <label for="num_people">Amount of Volunteers Needed: </label>
+                            <input type="number" id="num_people" name="num_people" class="volunteer-form-input" min="1"
+                                required v-model="newVolunteerPost.num_people">
+                        </span>
+                        <span>
+                            <label for="website">Website: </label>
+                            <input type="text" id="website" name="website" class="volunteer-form-input"
+                                v-model="newVolunteerPost.website">
+                        </span>
+                        <button type="submit" class="submit-volunteer-form-button" id="post">Post Volunteer
+                            Opportunity</button>
+                    </form>
+                </div>
+            </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

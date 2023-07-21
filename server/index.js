@@ -29,6 +29,7 @@ app.use(cors({
 }));
 
 function AuthMiddleware(request, response, next) {
+    console.log("Session: ", request.session);
     if (request.session && request.session.userId) {
         model.User.findOne({ "_id": request.session.userId }).then(user => {
             if (user) {
@@ -52,7 +53,6 @@ app.get("/users", AuthMiddleware, function (request, response) {
 });
 
 app.get("/session", (request, response) => {
-    console.log(request.session);
     response.status(200).send(request.session);
 });
 
@@ -69,13 +69,18 @@ app.post("/users", function (request, response) {
                 response.status(201).send("Created a user");
             }).catch((errors) => {
                 if (errors.code === 11000) {
-                    response.status(422).send(["This email already has an account. Please sign in."]);
+                    if (errors.keyPattern.hasOwnProperty("email")) {
+                        response.status(422).send("This email or username already has an account. Please sign in.");
+                    }
+                    if (errors.keyPattern.hasOwnProperty("name")) {
+                        response.status(422).send("This username is already taken. Please choose another.");
+                    }
                 } else {
                     let error_list = [];
                     for (key in errors.errors) {
                         error_list.push(errors.errors[key].properties.message)
                     }
-                    response.status(422).send(error_list);
+                    response.status(422).send(error_list.join(" "));
                 }
             })
         })
@@ -270,7 +275,7 @@ app.get("/volunteerOpportunities/volpostId", function (req, res) {
 });
 
 // POST FOR VOLUNTEERFORM SCHEMA
-app.post("/volunteerOpportunities", function (req, res) {
+app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
     const newEntry = new model.VolunteerForm({
         user: req.body.user,
         title: req.body.title,
@@ -298,7 +303,7 @@ app.post("/volunteerOpportunities", function (req, res) {
 })
 
 // PUT FOR VOLUNTEERFORM SCHEMA
-app.put("/volunteerOpportunities/:volpostId", function (req, res) {
+app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res) {
     // console.log(req.body.categories);
     const updatedVolunteerOpportunities = {
         user: req.body.user,
@@ -326,7 +331,7 @@ app.put("/volunteerOpportunities/:volpostId", function (req, res) {
 });
 
 // DELETE FOR VOLUNTEERFORM SCHEMA
-app.delete("/volunteerOpportunities/:volpostId", function (req, res) {
+app.delete("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res) {
     model.VolunteerForm.findOneAndDelete({ "_id": req.params.volpostId }).then(post => {
         if (post) {
             res.status(204).send("Volunteer post deleted.");

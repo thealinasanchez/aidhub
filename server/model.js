@@ -27,9 +27,7 @@ const VolunteerFormSchema = Schema({
     city: { type: String },
     state: {
         type: String,
-        required: [true, "Volunteer opportunity must be hosted in at least one state."],
-        maxLength: 2,
-        minLength: 2
+        required: [true, "Volunteer opportunity must be hosted in at least one state."]
     },
     dateStart: {
         type: Date,
@@ -93,7 +91,8 @@ const JournalEntrySchema = Schema({
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        requred: [true, "Must have a name"]
+        requred: [true, "Must have a name"],
+        unique: true
     },
     email: {
         type: String,

@@ -13,6 +13,14 @@ Vue.createApp({
             },
             loggedInStatus: false,
             previousPage: 'index',
+            gettingStatus: true,
+
+            state: "",
+            states: [],
+            showStateDropdown: false,
+            filteredStates: [],
+
+            showOrganizationDropdown: false,
             //index.html slideshow stuff
             slideShow: {
                 currentIndex: 0,
@@ -56,15 +64,12 @@ Vue.createApp({
 
             /* organizations.html search variables */
             organizationsSearchFilterShow: false,
-            organizationsStates: [],
             organizationsCategories: [],
 
-            organizationsShowStateDropdown: false,
             organizationsSearchFilterState: {
                 name: "",
                 abbreviation: ""
             },
-            organizationsFilteredStates: [],
 
             organizationsShowCategoryDropdown: false,
             organizationsSearchFilterCategory: {
@@ -74,9 +79,9 @@ Vue.createApp({
             organizationsFilteredCategories: [],
             /* organizations.html end */
 
-            /* Volunteer New Post Toggle Modal Form */
-            volunteerPostModal: {
-                index: -1,
+            volunteerOpportunities: [],
+            newVolunteerPost: {
+                type: "personal",
                 user: "",
                 title: "",
                 orgname: "",
@@ -88,23 +93,9 @@ Vue.createApp({
                 num_people: 0,
                 website: ""
             },
-            toggleModal: false,
-            volunteerOpportunities: [],
-            newVolunteerPost: {
-                user: "",
-                title: "",
-                orgname: "personal",
-                city: "",
-                state: "",
-                dateStart: "",
-                dateEnd: "",
-                description: "",
-                num_people: 0,
-                website: ""
-            },
             // TRIAL STUFF
-            trialOrganizations: [],
-            filteredTrialOrganizations: [],
+            organizations: [],
+            filteredOrganizations: [],
             volunteerorgsearch: "",
             volunteerformbutton: true,
             volunteersearch: "",
@@ -162,6 +153,7 @@ Vue.createApp({
             }
             this.organizationsPage.spinner = true;
             let codes = [];
+            /*
             fetch(URL + `organizations?${newQuery}`)
                 .then(response => response.json())
                 .then(data => {
@@ -196,11 +188,12 @@ Vue.createApp({
                         })
                     }
                 })
+                */
         },
-        getOrganizationStates: function () {
+        getStates: function () {
             fetch(URL + `states`).then(response => response.json()).then(data => {
-                this.organizationsStates = data;
-                this.organizationsFilteredStates = data;
+                this.states = data;
+                this.filteredStates = data;
             })
         },
         getOrganizationCategories: function () {
@@ -217,9 +210,12 @@ Vue.createApp({
         toggleOrganizationsSearchFilter: function () {
             this.organizationsSearchFilterShow = !this.organizationsSearchFilterShow;
         },
-        organizationsFilterSelectState: function (state) {
-            this.organizationsSearchFilterState = Object.assign({}, state);
-            this.organizationsFilteredStates = [];
+        selectState: function (state) {
+            if (this.page == 'organizations') {
+                this.organizationsSearchFilterState = Object.assign({}, state);
+            }
+            this.state = state.name;
+            this.filteredStates = [];
         },
         organizationsFilterSelectCategory: function (category) {
             this.organizationsSearchFilterCategory = Object.assign({}, category);
@@ -276,24 +272,6 @@ Vue.createApp({
         indexAskLocationAccept: function () {
             this.indexLocation.askForLocation = false;
         },
-        // VOLUNTEERFORM.HTML STUFF
-        toggleVolunteerPostModal: function (index = null) {
-            this.toggleModal = !this.toggleModal;
-            if (index !== null) {
-                let modal = this.volunteerOpportunities[index];
-                this.volunteerPostModal.index = index;
-                this.volunteerPostModal.user = modal.user;
-                this.volunteerPostModal.title = modal.title;
-                this.volunteerPostModal.orgname = modal.orgname;
-                this.volunteerPostModal.city = modal.city;
-                this.volunteerPostModal.state = modal.state;
-                this.volunteerPostModal.dateStart = modal.dateStart;
-                this.volunteerPostModal.dateEnd = modal.dateEnd;
-                this.volunteerPostModal.description = modal.description;
-                this.volunteerPostModal.num_people = modal.num_people;
-                this.volunteerPostModal.website = modal.website;
-            }
-        },
         // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
         getVolunteerOpportunities: function () {
             fetch('http://localhost:6300/volunteerOpportunities')
@@ -305,11 +283,11 @@ Vue.createApp({
             myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
             var encodedData = {
-                user: this.newVolunteerPost.user,
+                user: this.user.name,
                 title: this.newVolunteerPost.title,
                 orgname: this.newVolunteerPost.orgname,
                 city: this.newVolunteerPost.city,
-                state: this.newVolunteerPost.state,
+                state: this.state,
                 dateStart: this.newVolunteerPost.dateStart,
                 dateEnd: this.newVolunteerPost.dateEnd,
                 description: this.newVolunteerPost.description,
@@ -322,7 +300,8 @@ Vue.createApp({
                 body: JSON.stringify(encodedData),
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                credentials: "include"
             };
 
             fetch("http://localhost:6300/volunteerOpportunities", requestOptions)
@@ -331,7 +310,18 @@ Vue.createApp({
                         response.json().then((data) => {
                             this.volunteerOpportunities.push(data);
                             this.getVolunteerOpportunities();
-                            this.newVolunteerPost = {};
+                            this.newVolunteerPost = {
+                                title: "",
+                                description: "",
+                                orgname: "",
+                                city: "",
+                                state: "",
+                                dateStart: "",
+                                dateEnd: "",
+                                num_people: 0,
+                                website: ""
+                            };
+                            window.location.href = "volunteer.html";
                         });
                     } else {
                         alert("Not able to post volunteer opportunity");
@@ -341,7 +331,8 @@ Vue.createApp({
         deleteVolunteerOpportunities: function (index) {
             var volpostId = this.expenses[index]._id;
             var requestOptions = {
-                method: "DELETE"
+                method: "DELETE",
+                credentials: "include"
             };
             fetch(`http://localhost:6300/volunteerOpportunities/${volpostId}`, requestOptions)
                 .then((response) => {
@@ -353,17 +344,21 @@ Vue.createApp({
                     }
                 });
         },
-        getTrialOrganizations: function () {
+        getOrganizationsDropdown: function () {
             fetch(`http://localhost:6300/localOrganizations`)
                 .then(response => response.json())
                 .then(data => {
                     data.forEach((organization) => {
-                        this.trialOrganizations.push(organization.name);
+                        this.organizations.push(organization.name);
+                        this.filteredOrganizations.push(organization.name);
                         // console.log(this.trialOrganizations);
                     })
                 })
         },
-
+        selectOrganization: function (organization) {
+            this.newVolunteerPost.orgname = organization;
+            this.filteredOrganizations = [];
+        },
         /* user stuff */
         loggedIn: function () {
             let options = {
@@ -374,11 +369,18 @@ Vue.createApp({
                 .then(data => {
                     if (data && data.cookie && data.userId) {
                         this.loggedInStatus = true;
+                        this.user = data;
                         /* do something if logged in */
                     } else {
                         this.loggedInStatus = false;
-                        /* do something if not logged in*/
+                        if (this.page == 'volunteerForm') {
+                            window.location.href = "login.html";
+                        }
                     }
+                    this.gettingStatus = false;
+                }).catch(error => {
+                    this.loggedInStatus = false;
+                    console.log(error);
                 })
         },
         signUp: function () {
@@ -436,7 +438,7 @@ Vue.createApp({
                 } else {
                     console.log("Couldn't log out", response.status);
                 }
-                this.page = "auth";
+                this.page = "";
                 this.user.name = "";
                 this.user.email = "";
                 this.user.password = "";
@@ -452,18 +454,31 @@ Vue.createApp({
             }
         },
         goBackToPreviousPage: function () {
+            this.getPreviousPage();
+            if (this.previousPage == 'volunteerForm') {
+                this.previousPage = 'volunteer';
+            }
             window.location.href = this.previousPage + ".html";
+        },
+        goToVolunteerForm: function () {
+            this.setPage('volunteerForm');
+            if (this.loggedInStatus) {
+                window.location.href = "volunteerForm.html";
+            } else {
+                window.location.href = "login.html";
+            }
         }
     },
     watch: {
-        'organizationsSearchFilterState.name'(newState, oldState) {
-            if (!this.organizationsStates.find(state => {
+        state(newState, oldState) {
+            this.organizationsSearchFilterState.name = newState;
+            if (!this.states.find(state => {
                 return newState
                     .toLowerCase() == state.name.toLowerCase();
             })) {
                 this.organizationsSearchFilterState.abbreviation = '';
             };
-            this.organizationsFilteredStates = this.organizationsStates.filter((state) => {
+            this.filteredStates = this.states.filter((state) => {
                 return state.abbreviation
                     .toLowerCase()
                     .startsWith(newState.toLowerCase()) ||
@@ -551,33 +566,35 @@ Vue.createApp({
             );
             */
         },
-        volunteerorgsearch(newsearch, oldsearch) {
-            this.filteredTrialOrganizations = this.trialOrganizations.filter(organization => {return organization.toLowerCase().includes(newsearch.toLowerCase())});
-            // console.log(this.trialOrganizations.filter(organization => organization.toLowerCase().includes(newsearch.toLowerCase())));
-            if (this.filteredTrialOrganizations.length == 1 && this.filteredTrialOrganizations[0] == newsearch) {
-                this.filteredTrialOrganizations = [];
+        'newVolunteerPost.orgname'(newsearch, oldsearch) {
+            this.filteredOrganizations = this.organizations.filter(organization => { return organization.toLowerCase().includes(newsearch.toLowerCase()) });
+        },
+        loggedInStatus(newStatus, oldStatus) {
+            // needed to redirect to volunteer page after logging out
+            this.getPreviousPage();
+            if (newStatus === false && this.previousPage == 'volunteerForm') {
+                window.location.href = "volunteer.html";
             }
-        }
+        },
     },
     created: function () {
         this.loggedIn();
     },
     mounted: function () {
-        this.loggedIn();
         if (this.page == 'index') {
             this.setPage('index');
         } else if (this.page == 'organizations') {
             this.setPage('organizations');
             this.getOrganizations();
-            this.getOrganizationStates();
+            this.getStates();
             this.getOrganizationCategories();
         } else if (this.page == 'volunteer') {
             this.setPage('volunteer');
-            this.loggedIn();
-            this.getTrialOrganizations();
             this.getVolunteerOpportunities();
         } else if (this.page == 'volunteerForm') {
-            this.getTrialOrganizations();
+            this.setPage('volunteerForm');
+            this.getStates();
+            this.getOrganizationsDropdown();
         }
     },
 }).mount("#app");

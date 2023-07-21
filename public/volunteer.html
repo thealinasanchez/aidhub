@@ -19,8 +19,15 @@
 <body>
     <div id="app">
         <!-- Content goes here -->
+        <div style="display: none">{{page = 'volunteer'}}</div>
         <div class="top-login-header-container">
-            <div class="top-login-header">
+            <div class="top-login-header" v-if="loggedInStatus">
+                <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
+                        alt="log-in-icon" />Logout</div>
+                <div class="top-login-header-button" @click=""><img src="./icons/profile.svg" alt="log-in-icon" />Edit
+                    Profile</div>
+            </div>
+            <div class="top-login-header" v-else>
                 <a class="top-login-header-button" href="signup.html"><img src="./icons/key.svg"
                         alt="sign-up-icon" />Sign
                     Up</a>
@@ -30,11 +37,10 @@
         </div>
         <div class="header-background">
         </div>
-        {{page = 'volunteer'}}
         <header class="top-nav-bar">
-            <div class="logo-brand-container">
-                <h2>AidHub - Volunteer Opportunities</h2>
-            </div>
+            <a class="logo-brand-container" href="index.html">
+                <h2>AidHub</h2>
+            </a>
             <nav class="nav-links">
                 <ul>
                     <li><a class="nav-link" href="index.html">HOME</a></li>
@@ -42,63 +48,69 @@
                     <li><a class="nav-link" href="volunteer.html">VOLUNTEERING</a></li>
                 </ul>
             </nav>
-            <div class="nav-bar-button-container">
-                <a href="getstarted.html">
-                    <button class="common-green-button nav-bar-button">GET STARTED</button>
-                </a>
-            </div>
         </header>
         <main>
-            <button id="volunteerformbutton"><a href="volunteerform.html">
-                Create Volunteer Opportunity
-            </a></button>
-            <h1 id="find">Find volunteer opportunities here:</h1>
-            <div id="volunteerthings" v-for="post in volunteerOpportunities">
-                <div id="volunteerpost">
-                    <div id="post-user">
-                        <p>Created by: </p>
-                        {{post.user}}
-                    </div>
-                    <div id="post-title">
-                        <p>Title: </p>
+            <h1 id="title">Volunteer Opportunities</h1>
+            <button id="volunteerformbutton" @click="goToVolunteerForm()">Add Volunteer Opportunity</button>
+            <div class="volunteer-post-container">
+                <div class="volunteer-post" v-for="post in volunteerOpportunities">
+                    <h1 class="post-title">
                         {{post.title}}
-                    </div>
-                    <div id="post-orgname">
-                        <p>Organization: </p>
+                    </h1>
+                    <p class="post-user">
+                        {{post.user}}
+                    </p>
+                    <p class="post-description">
+                        {{post.description}}
+                    </p>
+                    <div class="post-orgname">
+                        <span>Organization: </span>
                         {{post.orgname}}
                     </div>
-                    <div id="post-city">
-                        <p>City: </p>
+                    <div class="post-city">
+                        <span>City: </span>
                         {{post.city}}
                     </div>
-                    <div id="post-state">
-                        <p>State: </p>
+                    <div class="post-state">
+                        <span>State: </span>
                         {{post.state}}
                     </div>
-                    <div id="post-dateStart">
-                        <p>Start date: </p>
-                        {{post.dateStart}}
+                    <div class="post-date-start">
+                        <span>Start date: </span>
+                        {{post.dateStart }}
                     </div>
-                    <div id="post-dateEnd">
-                        <p>End date: </p>
-                        {{post.dateEnd}}
+                    <div class="post-date-end">
+                        <span>End date: </span>
+                        {{post.dateEnd ? post.dateEnd : "No End Date"}}
                     </div>
-                    <div id="post-description">
-                        <p>Description: </p>
-                        {{post.description}}
-                    </div>
-                    <div id="post-num_people">
-                        <p>Number of people needed: </p>
+
+                    <div class="post-num_people">
+                        <span>Number of people needed: </span>
                         {{post.num_people}}
                     </div>
-                    <div id="post-website">
-                        <p>Website: </p>
+                    <div class="post-website" v-if="post.website">
+                        <span>Website: </span>
                         {{post.website}}
                     </div>
+                    <div class="post-button-container" v-else>
+                        <div class="post-likes-container">
+                            <p>10 Likes</p>
+                            <img class="post-like-button" src="icons/like.svg" alt="like-icon" @click="likePost(post)"
+                                v-if="loggedInStatus" />
+                        </div>
+                        <div class="post-modification-button-container" v-if="loggedInStatus && post.user == user.name">
+                            <img src="./icons/edit.svg" alt="edit-icon" @click="editPost(post.id)"
+                                class="post-edit-button">
+                            <img src="./icons/delete.svg" alt="delete-icon" @click="deletePost(post.id)"
+                                class="post-delete-button">
+                        </div>
+                        <button class="post-apply-button" v-else-if="loggedInStatus">Apply</button>
+                    </div>
+                    <a class="login-text" href="login.html" v-if="!loggedInStatus">Login To Interact</a>
                 </div>
             </div>
     </div>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>

@@ -19,7 +19,13 @@
 <body>
     <div id="app">
         <div class="top-login-header-container">
-            <div class="top-login-header">
+            <div class="top-login-header" v-if="loggedInStatus && !gettingStatus">
+                <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
+                        alt="log-in-icon" />Logout</div>
+                <div class="top-login-header-button" @click=""><img src="./icons/profile.svg" alt="log-in-icon" />Edit
+                    Profile</div>
+            </div>
+            <div class="top-login-header" v-else-if="!gettingStatus">
                 <a class="top-login-header-button" href="signup.html"><img src="./icons/key.svg"
                         alt="sign-up-icon" />Sign
                     Up</a>
@@ -27,14 +33,14 @@
                         alt="log-in-icon" />Login</a>
             </div>
         </div>
-        {{ page = 'organizations'}}
+        <div style="display: none;">{{ page = 'organizations'}}</div>
         <!-- Content goes here -->
         <div class="header-background">
         </div>
         <header class="top-nav-bar">
-            <div class="logo-brand-container">
+            <a class="logo-brand-container" href="index.html">
                 <h2>AidHub</h2>
-            </div>
+            </a>
             <nav class="nav-links">
                 <ul>
                     <li><a class="nav-link" href="index.html">HOME</a></li>
@@ -67,13 +73,11 @@
                             <label for="org-search-filter-state" class="org-search-filter-text">Filter By State:</label>
                             <div class="org-search-filter-input-container">
                                 <input type="text" placeholder="State.." class="org-search-filter-input"
-                                    id="org-search-filter-state" @focus="organizationsShowStateDropdown = true"
-                                    @blur="organizationsShowStateDropdown = false"
-                                    v-model="organizationsSearchFilterState.name">
+                                    id="org-search-filter-state" @focus="showStateDropdown = true"
+                                    @blur="showStateDropdown = false" v-model="state">
                                 <div class="org-search-filter-autocomplete-container"
-                                    v-show="organizationsFilteredStates.length > 0 && organizationsShowStateDropdown">
-                                    <div v-for="state in organizationsFilteredStates"
-                                        @mousedown="organizationsFilterSelectState(state)"
+                                    v-show="filteredStates.length > 0 && showStateDropdown">
+                                    <div v-for="state in filteredStates" @mousedown="selectState(state)"
                                         class="org-search-filter-autocomplete-item">
                                         {{ state.name }}
                                     </div>

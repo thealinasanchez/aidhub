@@ -27,11 +27,13 @@
 <body>
     <div id="app">
         <div class="top-login-header-container">
-            <div class="top-login-header" v-if="loggedInStatus">
-                <div class="top-login-header-button" @click="logout()"><img src="./icons/user.svg"
+            <div class="top-login-header" v-if="loggedInStatus && !gettingStatus">
+                <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
                         alt="log-in-icon" />Logout</div>
+                <div class="top-login-header-button" @click=""><img src="./icons/profile.svg" alt="log-in-icon" />Edit
+                    Profile</div>
             </div>
-            <div class="top-login-header" v-else>
+            <div class="top-login-header" v-else-if="!gettingStatus">
                 <a class="top-login-header-button" href="signup.html"><img src="./icons/key.svg"
                         alt="sign-up-icon" />Sign
                     Up</a>
@@ -43,9 +45,9 @@
         </div>
         <div style="display: none">{{ page = 'index' }}</div>
         <header class="top-nav-bar">
-            <div class="logo-brand-container">
+            <a class="logo-brand-container" href="index.html">
                 <h2>AidHub</h2>
-            </div>
+            </a>
             <nav class="nav-links">
                 <ul>
                     <li><a class="nav-link" href="index.html">HOME</a></li>
