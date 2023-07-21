@@ -10,7 +10,7 @@ const NTEENUMS = require('./ntee_num.json')["code_nums"];
 const LOCALORGANIZATIONS = require('./organizationLocations.json')["organizations"];
 
 const app = express();
-const port = 6300;
+const port = process.env.PORT || 6300;
 
 app.use(express.json());
 app.use(express.static('public'));

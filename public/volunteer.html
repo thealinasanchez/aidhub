@@ -77,32 +77,32 @@
                     </p>
                     <div class="post-orgname">
                         <span>Organization: </span>
-                        {{post.orgname}}
+                        <div>{{post.orgname}}</div>
                     </div>
                     <div class="post-city">
                         <span>City: </span>
-                        {{post.city}}
+                        <div>{{post.city}}</div>
                     </div>
                     <div class="post-state">
                         <span>State: </span>
-                        {{post.state}}
+                        <div>{{post.state}}</div>
                     </div>
                     <div class="post-date-start">
                         <span>Start date: </span>
-                        {{post.dateStart }}
+                        <div>{{post.dateStart }}</div>
                     </div>
-                    <div class="post-date-end">
+                    <div class="post-date-end" v-if="post.formattedEndDate">
                         <span>End date: </span>
-                        {{post.dateEnd ? post.dateEnd : "No End Date"}}
+                        <div>{{post.formattedEndDate ? post.formattedEndDate : "No End Date"}}</div>
                     </div>
 
                     <div class="post-num_people">
                         <span>Number of people needed: </span>
-                        {{post.num_people}}
+                        <div>{{post.num_people}}</div>
                     </div>
                     <div class="post-website" v-if="post.website">
                         <span>Website: </span>
-                        {{post.website}}
+                        <div>{{post.website}}</div>
                     </div>
                     <div class="post-button-container" v-else>
                         <div class="post-likes-container">
