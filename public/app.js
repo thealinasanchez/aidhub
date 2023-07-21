@@ -93,6 +93,9 @@ Vue.createApp({
                 num_people: 0,
                 website: ""
             },
+            toggleModal: false,
+            formattedStartDate: "",
+            formattedEndDate: "",
             // TRIAL STUFF
             organizations: [],
             filteredOrganizations: [],
@@ -100,7 +103,7 @@ Vue.createApp({
             volunteerformbutton: true,
             volunteersearch: "",
             watchedValue: "",
-            toggleVolunteerSearchModal: true
+            toggleVolunteerSearchModal: true,
         }
     },
     methods: {
@@ -276,6 +279,12 @@ Vue.createApp({
         getVolunteerOpportunities: function () {
             fetch('http://localhost:6300/volunteerOpportunities')
                 .then(response => response.json()).then((data) => {
+                    data.forEach((post) => {
+                        var formattedDates = this.formatDate(post.dateStart, post.dateEnd);
+                        post.formattedStartDate = formattedDates.formattedStartDate;
+                        post.formattedEndDate = formattedDates.formattedEndDate;
+                        this.volunteerOpportunities.push(post);
+                    })
                     this.volunteerOpportunities = data;
                 });
         },
@@ -343,6 +352,30 @@ Vue.createApp({
                         alert("Unable to delete volunteer post");
                     }
                 });
+        },
+        formatDate: function (dateStart, dateEnd) {
+            // Convert the date strings into Date objects
+            var startDate = new Date(dateStart);
+            var endDate = new Date(dateEnd);
+
+            // Get the year, month, and day from the Date objects
+            var startYear = startDate.getFullYear();
+            var startMonth = startDate.getMonth() + 1;
+            var startDay = startDate.getDate();
+
+            var endYear = endDate.getFullYear();
+            var endMonth = endDate.getMonth() + 1;
+            var endDay = endDate.getDate();
+
+            // Create formatted date strings
+            var formattedStartDate = `${startMonth.toString().padStart(2, '0')}-${startDay.toString().padStart(2, '0')}-${startYear}`;
+            var formattedEndDate = `${endMonth.toString().padStart(2, '0')}-${endDay.toString().padStart(2, '0')}-${endYear}`;
+
+            return {
+                formattedStartDate: formattedStartDate,
+                formattedEndDate: formattedEndDate
+            }
+
         },
         getOrganizationsDropdown: function () {
             fetch(`http://localhost:6300/localOrganizations`)

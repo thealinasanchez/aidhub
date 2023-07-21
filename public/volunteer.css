@@ -3,10 +3,8 @@
 }
 
 /* VOLUNTEER POST TOGGLE MODAL STUFF */
-.volunteerPostModal {
-    /* position: fixed; */
+/* .volunteerPostModal {
     top: 0;
-    /* left: 0; */
     width: 100%;
     height: 100%;
     backdrop-filter: blur(5px);
@@ -28,6 +26,17 @@
     font-size: 20px;
     cursor: pointer;
     margin-left: 92%;
+}
+*/
+#search-area {
+    grid-column: 1/3;
+    grid-row: 3/4;
+}
+
+#find {
+    grid-column: 1/3;
+    grid-row: 2/3;
+    width: 100%;
 }
 
 #title {
@@ -90,6 +99,26 @@
     flex-flow: row nowrap;
     justify-content: space-between;
     margin-top: 10px;
+}
+
+.post.even {
+    background-color: #83B848;
+    border-radius: 9px;
+}
+
+.post.odd {
+    background-color: #2D852A;
+    border: none;
+    color: white;
+    border-radius: 9px;
+}
+
+#volunteerpost div div {
+    width: max-content;
+    padding: 1px 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    color: black;
 }
 
 .post-likes-container {

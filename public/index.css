@@ -98,6 +98,7 @@
     height: 500px;
     background: url("./images/blurred-map.png");
     opacity: 0.9;
+    border-radius: 5px;
 }
 
 .index-ask-location-blur {
@@ -109,6 +110,7 @@
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    border-radius: 5px;
 }
 
 .index-ask-location-card {
