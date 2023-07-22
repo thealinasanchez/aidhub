@@ -1,5 +1,5 @@
-// var URL = "http://localhost:6300/";
-var URL = "https://aidhub-production.up.railway.app/";
+var URL = "http://localhost:6300/";
+// var URL = "https://aidhub-production.up.railway.app/";
 Vue.createApp({
     data() {
         return {
@@ -82,10 +82,9 @@ Vue.createApp({
 
             volunteerOpportunities: [],
             newVolunteerPost: {
-                type: "personal",
                 user: "",
                 title: "",
-                orgname: "",
+                orgname: "personal",
                 city: "",
                 state: "",
                 dateStart: "",
@@ -97,6 +96,7 @@ Vue.createApp({
             toggleModal: false,
             formattedStartDate: "",
             formattedEndDate: "",
+
             // TRIAL STUFF
             organizations: [],
             filteredOrganizations: [],
@@ -336,13 +336,49 @@ Vue.createApp({
                     }
                 });
         },
+        updateVolunteerOpportunities: function(index) {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var encodedData = {
+                user: this.user.name,
+                title: this.newVolunteerPost.title,
+                orgname: this.newVolunteerPost.orgname,
+                city: this.newVolunteerPost.city,
+                state: this.state,
+                dateStart: this.newVolunteerPost.dateStart,
+                dateEnd: this.newVolunteerPost.dateEnd,
+                description: this.newVolunteerPost.description,
+                num_people: this.newVolunteerPost.num_people,
+                website: this.newVolunteerPost.website
+            }
+
+            var requestOptions = {
+                method: "PUT",
+                body: JSON.stringify(encodedData),
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
+            };
+            var volpostId = this.volunteerOpportunities[index]._id;
+            console.log(volpostId);
+            fetch(URL + `volunteerOpportunities/${volpostId}`, requestOptions)
+            .then((response) => {
+                if (response.status === 204) {
+                    this.volunteerOpportunities[this.newVolunteerPost.index].type = this.newVolunteerPost.type;
+                    this.volunteerOpportunities[this.newVolunteerPost.index].title = this.newVolunteerPost.title;
+                    this.volunteerOpportunities[this.newVolunteerPost.index].orgname = this.newVolunteerPost.type;
+                }
+            })
+        },
         deleteVolunteerOpportunities: function (index) {
-            var volpostId = this.expenses[index]._id;
+            var volpostId = this.volunteerOpportunities[index]._id;
             var requestOptions = {
                 method: "DELETE",
                 credentials: "include"
             };
-            fetch(URRL + `volunteerOpportunities/${volpostId}`, requestOptions)
+            fetch(URL + `volunteerOpportunities/${volpostId}`, requestOptions)
                 .then((response) => {
                     if (response.status === 204) {
                         console.log("success");
@@ -374,7 +410,15 @@ Vue.createApp({
                 formattedStartDate: formattedStartDate,
                 formattedEndDate: formattedEndDate
             }
-
+        },
+        likePost: function() {
+            let numLikes = 0;
+            let postLikeButton = document.getElementById("postLikeButton");
+            let display = document.getElementById("display");
+            postLikeButton.onclick = function() {
+                numLikes++;
+                display.innerHTML = count;
+            }
         },
         getOrganizationsDropdown: function () {
             fetch(URL + `localOrganizations`)

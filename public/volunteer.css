@@ -123,43 +123,27 @@
     margin-top: 10px;
 }
 
-/* 
-
-.post-button-container {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.post.even {
-    background-color: #83B848;
-    border-radius: 9px;
-}
-
-
-
-.post.odd {
-    background-color: #2D852A;
-    border: none;
-    color: white;
-    border-radius: 9px;
-}
-
-.volunteer-post div div {
-    width: max-content;
-    padding: 1px 10px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 6px;
-    color: black;
-}
-
 .post-likes-container {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
 }
+
+.post-like-button {
+    display: inline-block;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-style: outset;
+    font-size: 18px;
+    border-radius: 5px;
+    color: #1e7ed1;
+    border: outset;
+}
+
+
+
+/* 
 
 .post-likes-container p {
     display: inline-block;
