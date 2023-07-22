@@ -366,9 +366,14 @@ Vue.createApp({
             fetch(URL + `volunteerOpportunities/${volpostId}`, requestOptions)
             .then((response) => {
                 if (response.status === 204) {
-                    this.volunteerOpportunities[this.newVolunteerPost.index].type = this.newVolunteerPost.type;
+                    this.volunteerOpportunities[this.newVolunteerPost.index].user = this.user.name;
                     this.volunteerOpportunities[this.newVolunteerPost.index].title = this.newVolunteerPost.title;
-                    this.volunteerOpportunities[this.newVolunteerPost.index].orgname = this.newVolunteerPost.type;
+                    this.volunteerOpportunities[this.newVolunteerPost.index].orgname = this.newVolunteerPost.orgname;
+                    this.volunteerOpportunities[this.newVolunteerPost.index].city = this.newVolunteerPost.city;
+                    this.volunteerOpportunities[this.newVolunteerPost.index].state = this.newVolunteerPost.state;
+                    this.volunteerOpportunities[this.newVolunteerPost.index].dateStart = this.newVolunteerPost.dateStart;
+                    this.volunteerOpportunities[this.newVolunteerPost.index].dateEnd = this.newVolunteerPost.dateEnd;
+                    this.volunteerOpportunities[this.newVolunteerPost.index].description = this.newVolunteerPost.type;
                 }
             })
         },
