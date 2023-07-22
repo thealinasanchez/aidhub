@@ -56,7 +56,7 @@
         </header>
         <main>
             <div id="main-header">
-                <h1 id="title">Volunteer Opportunities</h1>
+                <h1>Volunteer Opportunities</h1>
                 <button id="volunteerformbutton" @click="goToVolunteerForm()">Add Volunteer Opportunity</button>
             </div>
             <div id="search-area">
@@ -81,17 +81,17 @@
                         <div id="post-user">
                             <p>Created By: </p>
                             <div>{{post.user}}</div>
+                            <div id="profile">Profile</div>
                         </div>
                         <div id="post-title">
-                            <p>Title: </p>
-                            <div>{{post.title}}</div>
+                            {{post.title}}
                         </div>
                         <div id="post-orgname">
                             <p>Organization: </p>
                             <div>{{post.orgname}}</div>
                         </div>
                         <div id="post-city" v-if="post.city">
-                            <p>City: </p>
+                            <p id="city-p">City: </p>
                             <div>{{post.city}}</div>
                         </div>
                         <div id="post-state">
@@ -103,7 +103,7 @@
                             <div>{{post.formattedStartDate}}</div>
                         </div>
                         <div id="post-dateEnd" v-if="post.formattedEndDate">
-                            <p>End Date: </p>
+                            <p id="enddate-p">End Date: </p>
                             <div>{{post.formattedEndDate ? post.formattedEndDate : "No End Date"}}</div>
                         </div>
                         <div id="post-description" v-if="post.description">

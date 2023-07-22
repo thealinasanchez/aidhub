@@ -14,83 +14,116 @@
     --index-location-button: #24a0ed;
     --index-location-button-hover: rgb(36, 160, 237, 0.5);
 }
-/* #app {
-    background-color: rgb(248, 248, 252);
-}
-
-#search-area {
-    grid-column: 1/3;
-    grid-row: 3/4;
-}
-
-#find {
-    grid-column: 1/3;
-    grid-row: 2/3;
-    width: 100%;
-}
-
-#title {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-top: 20px;
-    display: inline-block;
+/* volunteer opportunities header & add volunteer opportunity button */
+#main-header {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    margin-top: 15px;
 }
 
 #volunteerformbutton {
-    cursor: pointer;
-    padding: 8px 12px;
+    height: 27px;
+    width: 180px;
+    background-color: #61C2F2;
+    border: 2px solid #5EBCEB;
     border-style: outset;
-    font-size: 18px;
-    border-radius: 3px;
-    background-color: #1e7ed1;
-    color: var(--offwhite);
-    margin-top: 22px;
-    float: right;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 #volunteerformbutton:hover {
-    background-color: #3f90d7;
-    border-radius: 3px;
+    background-color: #5EBCEB;
+    border: none;
 }
 
-.volunteer-post-container {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    width: 100%;
-    margin-top: 2%;
+/* post container */
+.post-container .post.even {
+    background-color: #a2ce5b;
+    border-radius: 9px;
 }
 
-.volunteer-post {
-    width: 100%;
-    margin-bottom: 2%;
-    padding: 2%;
-    border-radius: 3px;
-    background-color: var(--offwhite);
+.post-container .post.odd {
+    background-color: #78a036;
+    border: none;
+    color: white;
+    border-radius: 9px;
 }
 
-#user-content {
-    font-size: 13px;
-    font-weight: bold;
+/* volunteer posting area */
+#volunteerthings {
+    margin: 20px;
+}
+
+#volunteerpost div p {
+    margin-top: 5px;
+}
+
+#volunteerpost div {
+    margin: 5px;
     display: flex;
     flex-flow: row nowrap;
 }
 
-#user {
-    background-color: inherit;
-    color: var(--lightbrown);
-    text-shadow: 10px black;
-    font-size: 13px;
+#volunteerpost div div {
+    width: max-content;
+    padding: 1px 10px;
+    background-color: rgba(255,255,255,0.7);
+    border-radius: 6px;
+    color: black;
 }
 
-.post-title {
-    font-size: 1.75rem;
-    font-weight: bold;
+/* spacing on post */
+#city-p {
+    margin-right: 7px;
 }
 
-.post-description {
-    font-size: 1.25rem;
+#enddate-p {
+    margin-right: 8px;
 }
+
+#post-user {
+    font-size: 15px;
+}
+
+/* profile button */
+#post-user #profile {
+    cursor: pointer;
+    background-color: #61C2F2;
+    border: 2px solid #5EBCEB;
+    border-style: outset;
+    border-radius: 5px;
+    height: 23px;
+    width: 63px;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#post-user #profile:hover {
+    background-color: #5EBCEB;
+    border: none;
+    height: 23px;
+    width: 63px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* post title */
+#post-title {
+    font-size: 55px;
+}
+
+.post-button-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+/* 
 
 .post-button-container {
     display: flex;
@@ -231,14 +264,5 @@
     color: #3f90d7;
 } */
 
-#main-header {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    margin-top: 15px;
-}
 
-#main-header button {
-    margin-left: 15%;
-}
 
