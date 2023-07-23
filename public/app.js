@@ -81,6 +81,8 @@ Vue.createApp({
             /* organizations.html end */
 
             volunteerOpportunities: [],
+            allVolunteerOpportunities: [], // Keeps a copy of volunteerOpportunities
+            filteredVolunteerOpportunities: [], // Store the filtered and sorted volunteer opportunities
             newVolunteerPost: {
                 user: "",
                 title: "",
@@ -275,7 +277,7 @@ Vue.createApp({
         indexAskLocationAccept: function () {
             this.indexLocation.askForLocation = false;
         },
-        // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
+        // VOLUNTEER OPPORTUNITIES STUFF
         getVolunteerOpportunities: function () {
             fetch(URL + 'volunteerOpportunities')
                 .then(response => response.json()).then((data) => {
@@ -287,7 +289,8 @@ Vue.createApp({
                         post.numLikes = post.numLikes || 0;
                         this.volunteerOpportunities.push(post);
                     })
-                    this.volunteerOpportunities = data;
+
+                    this.allVolunteerOpportunities = [...this.volunteerOpportunities];
                 });
         },
         addVolunteerOpportunities: function () {
@@ -425,13 +428,27 @@ Vue.createApp({
                 this.volunteerOpportunities[index].numLikes++;
             }
             console.log("post.numLikes:", this.volunteerOpportunities[index].numLikes);
-            // let numLikes = 0;
-            // let postLikeButton = document.getElementById("postLikeButton");
-            // let display = document.getElementById("display");
-            // postLikeButton.onclick = function() {
-            //     numLikes++;
-            //     display.innerHTML = count;
-            // }
+        },
+        filterBy: function(filterType) {
+            // Show all volunteer opportunities
+            if (filterType === 'all') {
+                this.allVolunteerOpportunities = [...this.volunteerOpportunities];
+            // Show volunteer opportunities ending soon
+            } else if (filterType === 'oldest') {
+                let currentDate = new Date();
+                // Filter the opportunities that have a valid end date and the end date 
+                // is greater than or equal to the current date
+                let endingSoonOpportunities = this.volunteerOpportunities.filter((post) => {
+                    return (
+                        post.formattedEndDate && new Date(post.formattedEndDate) >= currentDate
+                    );
+                });
+                // Sort the filtered opportunities by their end dates in ascending order
+                endingSoonOpportunities.sort((a,b) => new Date(a.dateEnd) - new Date(b.dateEnd));
+
+                // Update the displayed opportunities with the sorted and filtered list
+                this.volunteerOpportunities = endingSoonOpportunities;
+            }
         },
         getOrganizationsDropdown: function () {
             fetch(URL + `localOrganizations`)
@@ -557,10 +574,6 @@ Vue.createApp({
                 window.location.href = "login.html";
             }
         },
-        filterPosts: function () {
-            const btns = document.querySelectorAll(".btn");
-            const posts = document.querySelectorAll("post");
-        }
     },
     watch: {
         state(newState, oldState) {
@@ -678,6 +691,10 @@ Vue.createApp({
     },
     created: function () {
         this.loggedIn();
+        // Set allVolunteerOpportunities initially when the component is created
+        this.allVolunteerOpportunities = [...this.volunteerOpportunities];
+        // Set filteredVolunteerOpportunities to allVolunteerOpportunities to display all posts initially
+        this.filteredVolunteerOpportunities = [...this.volunteerOpportunities];
     },
     mounted: function () {
         if (this.page == 'index') {

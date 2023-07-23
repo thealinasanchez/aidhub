@@ -67,8 +67,9 @@
                     </form>
                 </div>
                 <div class="filer-box">
-                    <a href="#" class="btn all" data-filter="all" @click="filterPosts()">All</a>
-                    <a href="#" class="btn oldest" data-filter="oldest">Ending Soon</a>
+                    <button class="btn all" @click="filterBy('all')">All</button>
+                    <button class="btn oldest" @click="filterBy('oldest')">Ending Soon</button>
+                    <!-- <a href="#" class="btn oldest" data-filter="oldest" @click="filterBy('oldest')">Ending Soon</a> -->
                 </div>
             </div>
             
