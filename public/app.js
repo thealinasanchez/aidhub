@@ -556,6 +556,10 @@ Vue.createApp({
             } else {
                 window.location.href = "login.html";
             }
+        },
+        filterPosts: function () {
+            const btns = document.querySelectorAll(".btn");
+            const posts = document.querySelectorAll("post");
         }
     },
     watch: {

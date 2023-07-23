@@ -166,6 +166,32 @@
     height: 32px;
 }
 
+.search-box input {
+    height: 25px;
+    font-size: 17px;
+    width: 150px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.filer-box .btn {
+    cursor: pointer;
+    margin-right: 17px;
+    background-color: #61C2F2;
+    border: 2px solid #5EBCEB;
+    border-style: outset;
+    border-radius: 5px;
+    padding: 4px 8px;
+    text-decoration: none;
+    color: black;
+
+}
+
+.filer-box .btn:hover {
+    background-color: #5EBCEB;
+    border: 2px solid #5EBCEB;
+
+}
 
 
 /* 

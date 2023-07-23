@@ -59,23 +59,19 @@
                 <h1>Volunteer Opportunities</h1>
                 <button id="volunteerformbutton" @click="goToVolunteerForm()">Add Volunteer Opportunity</button>
             </div>
-            <div id="search-area">
+            <div class="container">
                 <!--search box-->
                 <div class="search-box">
-                    <form action="" onsubmit="return false">
+                    <form onsubmit="return false">
                         <input type="text" id="search" placeholder="Search...">
                     </form>
                 </div>
-                <div class="filler-box">
-                    <a href="#" class="activebutton">Newest</a>
-                    <a href="#" class="activebutton">Oldest</a>
-                    <a href="#" class="activebutton">Most People Needed</a>
-                    <a href="#" class="activebutton">Least People Needed</a>
-                    <a href="#" class="activebutton">Most Likes</a>
-                    <a href="#" class="activebutton">Least Likes</a>
+                <div class="filer-box">
+                    <a href="#" class="btn all" data-filter="all" @click="filterPosts()">All</a>
+                    <a href="#" class="btn oldest" data-filter="oldest">Ending Soon</a>
                 </div>
             </div>
-            <div id="filtering-area"></div>
+            
             <div class="post-container">
                 <div 
                     id="volunteerthings"
@@ -107,7 +103,7 @@
                             <p>Start Date: </p>
                             <div>{{post.formattedStartDate}}</div>
                         </div>
-                        <div id="post-dateEnd" v-if="post.formattedEndDate">
+                        <div id="post-dateEnd" class="oldest" v-if="post.formattedEndDate">
                             <p id="enddate-p">End Date: </p>
                             <div>{{post.formattedEndDate ? post.formattedEndDate : "No End Date"}}</div>
                         </div>
