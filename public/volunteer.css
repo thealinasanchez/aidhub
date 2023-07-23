@@ -123,6 +123,16 @@
     margin-top: 10px;
 }
 
+.post-button-container #like-button {
+    background-image: url("icons/like.svg");
+    background-size: cover;
+    background-position: center;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255,255,255,0);
+    cursor: pointer;
+}
+
 .post-likes-container {
     display: flex;
     flex-flow: row nowrap;
@@ -130,15 +140,30 @@
     align-items: center;
 }
 
-.post-like-button {
-    display: inline-block;
+#login-button {
     cursor: pointer;
-    padding: 5px 10px;
+    background-color: #61C2F2;
+    border: 2px solid #5EBCEB;
     border-style: outset;
-    font-size: 18px;
     border-radius: 5px;
-    color: #1e7ed1;
-    border: outset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 117px;
+    height: 32px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+#login-button:hover {
+    background-color: #5EBCEB;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 117px;
+    height: 32px;
 }
 
 

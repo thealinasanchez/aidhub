@@ -91,7 +91,8 @@ Vue.createApp({
                 dateEnd: "",
                 description: "",
                 num_people: 0,
-                website: ""
+                website: "",
+                numLikes: 0,
             },
             toggleModal: false,
             formattedStartDate: "",
@@ -282,6 +283,8 @@ Vue.createApp({
                         var formattedDates = this.formatDate(post.dateStart, post.dateEnd);
                         post.formattedStartDate = formattedDates.formattedStartDate;
                         post.formattedEndDate = formattedDates.formattedEndDate;
+                        // Initialize numLikes to 0 if it doesn't exist in the data
+                        post.numLikes = post.numLikes || 0;
                         this.volunteerOpportunities.push(post);
                     })
                     this.volunteerOpportunities = data;
@@ -416,14 +419,19 @@ Vue.createApp({
                 formattedEndDate: formattedEndDate
             }
         },
-        likePost: function() {
-            let numLikes = 0;
-            let postLikeButton = document.getElementById("postLikeButton");
-            let display = document.getElementById("display");
-            postLikeButton.onclick = function() {
-                numLikes++;
-                display.innerHTML = count;
+        likePost: function(index) {
+            console.log("likePost called with index:", index);
+            if (index >= 0 && index < this.volunteerOpportunities.length) {
+                this.volunteerOpportunities[index].numLikes++;
             }
+            console.log("post.numLikes:", this.volunteerOpportunities[index].numLikes);
+            // let numLikes = 0;
+            // let postLikeButton = document.getElementById("postLikeButton");
+            // let display = document.getElementById("display");
+            // postLikeButton.onclick = function() {
+            //     numLikes++;
+            //     display.innerHTML = count;
+            // }
         },
         getOrganizationsDropdown: function () {
             fetch(URL + `localOrganizations`)
