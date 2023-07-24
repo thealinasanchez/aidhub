@@ -1,3 +1,6 @@
+// const { model } = require("mongoose");
+const { Likes } = require("./model");
+
 var URL = "http://localhost:6300/";
 // var URL = "https://aidhub-production.up.railway.app/";
 Vue.createApp({
@@ -95,6 +98,7 @@ Vue.createApp({
                 num_people: 0,
                 website: "",
                 numLikes: 0,
+                liked: false
             },
             toggleModal: false,
             formattedStartDate: "",
@@ -422,12 +426,67 @@ Vue.createApp({
                 formattedEndDate: formattedEndDate
             }
         },
-        likePost: function(index) {
-            console.log("likePost called with index:", index);
-            if (index >= 0 && index < this.volunteerOpportunities.length) {
-                this.volunteerOpportunities[index].numLikes++;
+        likePost: async function(index, postId) {
+            var post = this.volunteerOpportunities[index];
+
+            // Get the user ID from the user object in your data (assuming user is logged in)
+            var userId = this.user._id;
+
+            try {
+                // Check if the user has already liked the post
+                var existingLike = await Likes.findOne({postId, userId});
+                if (!existingLike) {
+                        // If the user has not liked the post, create a new like entry
+                        var newLikes = new Likes({
+                            postId,
+                            userId
+                        });
+
+                        // Save the new like entry to the database
+                        await newLikes.save();
+
+                        // Update the post's liked status and numLikes
+                        post.likedPost = true;
+                        post.numLikes += 1;
+                    } else {
+                        // If the user has already liked the post, remove the like entry from the database
+                        await Likes.deleteOne({postId, userId});
+                        
+                        // Update the post's liked status and numLikes
+                        post.likedPost = false;
+                        post.numLikes -= 1;
+                    }
+
+                    // Send a request to the backend API to like or unlike the post
+                    var requestOptions = {
+                        method: "POST", // You can use "PUT", or "DELETE" depending on your backend API
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify ({
+                            postId: postId,
+                            userId: userId
+                        })
+                    };
+                    var response = await fetch(URL + '/like', requestOptions);
+
+                    if (response.ok) {
+                        var responseData = await response.json();
+                        if (responseData.success) {
+                            // The like or unlike operation was successful, update the UI accordingly
+                            // You may not need to do anything here since we've already updated the post's liked status and numLikes
+                        } else {
+                            // The server indication there was an issue with the like or unlike operation
+                            console.error("Failed to like or unlike post: ", responseData.message);
+                        }
+                    } else {
+                        // The HTTP request itself failed (ex: server not reachable or other network-related issues)
+                        console.error("Failed to send like or unlike request:", response.status, response.statusText);
+                    }
+                } catch (error) {
+                    console.error("Error liking/unliking post:", error);
+                }
             }
-            console.log("post.numLikes:", this.volunteerOpportunities[index].numLikes);
         },
         filterBy: function(filterType) {
             // Show all volunteer opportunities

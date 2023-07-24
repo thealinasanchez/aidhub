@@ -302,6 +302,30 @@ app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
     })
 })
 
+app.post('/like', async(req,res) => {
+    let {postId, userId} = req.body;
+
+    try {
+        // Check if the user has already liked the post
+        let existingLike = await model.Likes.findOne({postId, userId});
+
+        if (existingLike) {
+            return res.status(409).json({message: 'Post already liked by the user.'});
+        }
+
+        // If the user hasn't liked the post, create a new like
+        let newLike = new model.Likes({postId, userId});
+        await newLike.save();
+
+        res.status(201).json({message: "Post liked successfully."});
+    } catch (error) {
+        console.error("Error liking post:", error);
+        res.status(500).json({message: "Error liking post."});
+    }
+})
+
+
+
 // PUT FOR VOLUNTEERFORM SCHEMA
 app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res) {
     // console.log(req.body.categories);

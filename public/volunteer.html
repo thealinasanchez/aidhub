@@ -123,7 +123,7 @@
                         <div class="post-button-container">
                             <div id="likes">
                                 <p><span id="display">{{post.numLikes}}</span> Likes</p>
-                                <div id="like-button" @click="likePost(index)"></div>
+                                <div id="like-button" @click="likePost(index, post.id)"></div>
                             </div>
                             <div class="post-modification" v-if="loggedInStatus && post.user == user.name">
                                 <img 

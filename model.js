@@ -39,7 +39,30 @@ const VolunteerFormSchema = Schema({
         type: Number,
         required: true
     },
-    website: { type: String }
+    website: { type: String },
+    numLikes: {
+        type: Number,
+        default: 0
+    },
+    likedPost: {
+        type: Boolean,
+        default: false
+    }
+})
+
+const likesSchema = Schema ({
+    postId: {
+        type: Schema.Types.ObjectId, 
+        ref: 'VolunteerForm', 
+        required: true
+    }, // Reference to the VolunteerForm model
+    userId: {
+        type: Schema.Types.ObjectId, 
+        ref: 'User',
+        required: true
+    }, // Reference to User model
+    numLikes: {type: Number, default: 0}, // Number of likes for the post
+    likedPost: {type: Boolean, default: false}, // Indicates if the post is liked by the user
 })
 
 const DonationFormSchema = Schema({
@@ -91,7 +114,7 @@ const JournalEntrySchema = Schema({
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        requred: [true, "Must have a name"],
+        required: [true, "Must have a name"],
         unique: true
     },
     email: {
@@ -146,12 +169,14 @@ RedactedUser.createCollection({
 const JournalEntry = mongoose.model("JournalEntry", JournalEntrySchema);
 const VolunteerForm = mongoose.model("VolunteerForm", VolunteerFormSchema);
 const DonationForm = mongoose.model("DonationForm", DonationFormSchema);
+const Likes = mongoose.model("Likes", likesSchema)
 
 
 module.exports = {
     JournalEntry: JournalEntry,
     VolunteerForm: VolunteerForm,
     DonationForm: DonationForm,
+    Likes: Likes,
     User: User,
     RedactedUser, RedactedUser
 }
