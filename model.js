@@ -45,10 +45,10 @@ const VolunteerFormSchema = Schema({
         type: Number,
         default: 0
     },
-    // likedPost: {
-    //     type: Boolean,
-    //     default: false
-    // }
+    likedPost: {
+        type: Boolean,
+        default: false
+    }
 })
 
 // const likesSchema = Schema({

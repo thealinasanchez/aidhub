@@ -154,6 +154,7 @@ app.post('/userProfile/:userId', AuthMiddleware, (req, res) => {
 });
 
 app.get("/session", (request, response) => {
+    console.log(request.session);
     response.status(200).send(request.session);
 });
 
