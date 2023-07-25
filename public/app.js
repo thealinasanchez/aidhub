@@ -493,6 +493,21 @@ Vue.createApp({
                         }
                     }).catch((error) => {
                         console.error("Failed to like the post", error);
+                    });
+                } else {
+                    // If the post is liked, send a DELETE request to unlike the post
+                    fetch(URL + `/users/:userId/liked/${postId}`, {
+                        method: 'DELETE',
+                        credentials: 'include', // Include cookies for authentication
+                    }).then((response) => {
+                        if(response.ok) {
+                            // If the request is successful, update the frontend
+                            // For example, decrease the number of likes on the post
+                            // and let likedPost to false
+                            post.numLikes--;
+                            
+
+                        }
                     })
                 }
             }
