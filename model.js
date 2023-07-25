@@ -56,14 +56,14 @@ const likesSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'VolunteerForm',
         required: true
-    }, // Reference to the VolunteerForm model
+    }, 
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    }, // Reference to User model
-    numLikes: { type: Number, default: 0 }, // Number of likes for the post
-    likedPost: { type: Boolean, default: false }, // Indicates if the post is liked by the user
+    }, 
+    numLikes: { type: Number, default: 0 }, 
+    likedPost: { type: Boolean, default: false }, 
 })
 
 const DonationFormSchema = Schema({
@@ -129,7 +129,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "A password is required"]
-    }
+    },
+    // liked: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'User'
+    // }
 });
 
 userSchema.methods.setPassword = function (plainTextpassword) {
