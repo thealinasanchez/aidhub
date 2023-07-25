@@ -1,0 +1,125 @@
+:root {
+    --white: #fff;
+    --black: #1c2b2d;
+    --blue: #31326f;
+    --light-blue: #005490;
+    --color-primary: #9d0191;
+    --color-sec: #db6400;
+    --color-grey: #eee;
+    --color-dark-grey: #222831;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+p {
+    font-size: 1.6rem;
+    line-height: 1.5;
+}
+
+img {
+    width: 100%;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    background-color: var(--color-grey);
+    padding: 1rem;
+}
+
+header h1 {
+    font-size: 3.5rem;
+    line-height: 2;
+    color: var(--color-primary);
+}
+
+form input {
+    width: 20rem;
+    padding: 1rem;
+    border: none;
+    outline: none;
+    font-size: 1.6rem;
+    border-radius: 5px;
+    border-bottom: 2px solid var(--color-sec);
+    margin-bottom: 2rem;
+}
+
+.btn {
+    font-size: 1.4rem;
+    text-decoration: none;
+    color: var(--white);
+    background-color: var(--color-sec);
+    padding: 5px;
+    border-radius: 3px;
+    margin-right: 1rem;
+}
+
+.active {
+    background-color: var(--color-primary);
+}
+
+#store-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    column-gap: 3rem;
+    row-gap: 3rem;
+}
+
+.store-product {
+    border: 1px solid var(--color-grey);
+    border-radius: 3px;
+    max-width: 25rem;
+}
+
+.product-details {
+    text-align: center;
+    padding-bottom: 1rem;
+    background-color: var(--color-grey);
+}
+
+.product-details h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+
+.product-details p {
+    font-size: 1rem;
+    padding-bottom: 1rem;
+    color: green;
+    font-weight: 700;
+}
+
+.product-details p span {
+    text-decoration: line-through;
+    color: red;
+    font-weight: normal;
+}
+
+.product-details a {
+    font-size: 1rem;
+    text-decoration: none;
+    background-color: var(--color-sec);
+    color: var(--white);
+    padding: .5rem 1rem;
+}
+
+.product-details a:hover {
+    background-color: var(--color-primary);
+}

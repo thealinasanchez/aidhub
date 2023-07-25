@@ -123,35 +123,14 @@
     margin-top: 10px;
 }
 
-/* 
-
-.post-button-container {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.post.even {
-    background-color: #83B848;
-    border-radius: 9px;
-}
-
-
-
-.post.odd {
-    background-color: #2D852A;
-    border: none;
-    color: white;
-    border-radius: 9px;
-}
-
-.volunteer-post div div {
-    width: max-content;
-    padding: 1px 10px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 6px;
-    color: black;
+.post-button-container #like-button {
+    background-image: url("icons/like.svg");
+    background-size: cover;
+    background-position: center;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255,255,255,0);
+    cursor: pointer;
 }
 
 .post-likes-container {
@@ -160,6 +139,62 @@
     justify-content: center;
     align-items: center;
 }
+
+#login-button {
+    cursor: pointer;
+    background-color: #61C2F2;
+    border: 2px solid #5EBCEB;
+    border-style: outset;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 117px;
+    height: 32px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+#login-button:hover {
+    background-color: #5EBCEB;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 117px;
+    height: 32px;
+}
+
+.search-box input {
+    height: 25px;
+    font-size: 17px;
+    width: 150px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.filer-box .btn {
+    cursor: pointer;
+    margin-right: 17px;
+    background-color: #61C2F2;
+    border: 2px solid #5EBCEB;
+    border-style: outset;
+    border-radius: 5px;
+    padding: 4px 8px;
+    text-decoration: none;
+    color: black;
+
+}
+
+.filer-box .btn:hover {
+    background-color: #5EBCEB;
+    border: 2px solid #5EBCEB;
+
+}
+
+
+/* 
 
 .post-likes-container p {
     display: inline-block;

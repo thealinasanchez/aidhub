@@ -1,5 +1,5 @@
-var URL = "http://localhost:6300/";
-// var URL = "https://aidhub-production.up.railway.app/";
+// var URL = "http://localhost:6300/";
+var URL = "https://aidhub-production.up.railway.app/";
 Vue.createApp({
     data() {
         return {
@@ -83,11 +83,12 @@ Vue.createApp({
             /* organizations.html end */
 
             volunteerOpportunities: [],
+            allVolunteerOpportunities: [], // Keeps a copy of volunteerOpportunities
+            filteredVolunteerOpportunities: [], // Store the filtered and sorted volunteer opportunities
             newVolunteerPost: {
-                type: "personal",
                 user: "",
                 title: "",
-                orgname: "",
+                orgname: "personal",
                 city: "",
                 state: "",
                 dateStart: "",
@@ -95,11 +96,13 @@ Vue.createApp({
                 description: "",
                 num_people: 0,
                 website: "",
-                likes: 0
+                numLikes: 0,
+                liked: false
             },
             toggleModal: false,
             formattedStartDate: "",
             formattedEndDate: "",
+
             // TRIAL STUFF
             organizations: [],
             filteredOrganizations: [],
@@ -299,7 +302,7 @@ Vue.createApp({
         indexAskLocationAccept: function () {
             this.indexLocation.askForLocation = false;
         },
-        // GET, POST, DELETE VOLUNTEER OPPORTUNITIES STUFF
+        // VOLUNTEER OPPORTUNITIES STUFF
         getVolunteerOpportunities: function () {
             fetch(URL + 'volunteerOpportunities')
                 .then(response => response.json()).then((data) => {
@@ -308,10 +311,15 @@ Vue.createApp({
                         post.formattedStartDate = formattedDates.formattedStartDate;
                         post.formattedEndDate = formattedDates.formattedEndDate;
                         post.user = post.postedBy.name ? post.postedBy.name : "Anonymous";
+                        // Initialize numLikes to 0 if it doesn't exist in the data
+                        post.numLikes = post.numLikes || 0;
                         this.volunteerOpportunities.push(post);
                     })
-                    this.volunteerOpportunities = data;
-                });
+
+                    this.allVolunteerOpportunities = [...this.volunteerOpportunities];
+                }).catch((error) => {
+                    console.error("Error fetching volunteer opportunities:", error);
+                })
         },
         getVolunteerOpportunitiesByUser: function () {
             this.volunteerOpportunities = [];
@@ -377,6 +385,47 @@ Vue.createApp({
                     }
                 });
         },
+        updateVolunteerOpportunities: function (index) {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var encodedData = {
+                user: this.user.name,
+                title: this.newVolunteerPost.title,
+                orgname: this.newVolunteerPost.orgname,
+                city: this.newVolunteerPost.city,
+                state: this.state,
+                dateStart: this.newVolunteerPost.dateStart,
+                dateEnd: this.newVolunteerPost.dateEnd,
+                description: this.newVolunteerPost.description,
+                num_people: this.newVolunteerPost.num_people,
+                website: this.newVolunteerPost.website
+            }
+
+            var requestOptions = {
+                method: "PUT",
+                body: JSON.stringify(encodedData),
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
+            };
+            var volpostId = this.volunteerOpportunities[index]._id;
+            console.log(volpostId);
+            fetch(URL + `volunteerOpportunities/${volpostId}`, requestOptions)
+                .then((response) => {
+                    if (response.status === 204) {
+                        this.volunteerOpportunities[this.newVolunteerPost.index].user = this.user.name;
+                        this.volunteerOpportunities[this.newVolunteerPost.index].title = this.newVolunteerPost.title;
+                        this.volunteerOpportunities[this.newVolunteerPost.index].orgname = this.newVolunteerPost.orgname;
+                        this.volunteerOpportunities[this.newVolunteerPost.index].city = this.newVolunteerPost.city;
+                        this.volunteerOpportunities[this.newVolunteerPost.index].state = this.newVolunteerPost.state;
+                        this.volunteerOpportunities[this.newVolunteerPost.index].dateStart = this.newVolunteerPost.dateStart;
+                        this.volunteerOpportunities[this.newVolunteerPost.index].dateEnd = this.newVolunteerPost.dateEnd;
+                        this.volunteerOpportunities[this.newVolunteerPost.index].description = this.newVolunteerPost.type;
+                    }
+                })
+        },
         deleteVolunteerOpportunities: function (index) {
             var volpostId = this.volunteerOpportunities[index]._id;
             var requestOptions = {
@@ -420,6 +469,63 @@ Vue.createApp({
                 }
             }
 
+        },
+        likePost: async function (index, postId) {
+            const post = this.volunteerOpportunities[index];
+            // Get the user ID from the user object in your data (assuming user is logged in)
+            const userId = this.user._id;
+
+            try {
+                let existingLikeResponse = await fetch(URL + `/like/${postId}/${userId}`);
+                let existingLike = await existingLikeResponse.json();
+
+                if (!existingLike) {
+                    // If the user has not liked the post, create a new like entry
+                    let newLikeResponse = await fetch('/like', {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ postId, userId })
+                    });
+                    // Update the post's liked status and numLikes
+                    post.likedPost = true;
+                    post.numLiked += 1;
+                } else {
+                    // If the user has already liked the post, remove the 
+                    // like entry from the database
+                    await fetch(`/like/${postId}/${userId}`, {
+                        method: "DELETE",
+                    });
+
+                    // Update the post's liked status and numLikes
+                    post.likedPost = false;
+                    post.numLikes -= 1;
+                }
+            } catch (error) {
+                console.error("Error liking/unliking post:", error);
+            }
+        },
+        filterBy: function (filterType) {
+            // Show all volunteer opportunities
+            if (filterType === 'all') {
+                this.allVolunteerOpportunities = [...this.volunteerOpportunities];
+                // Show volunteer opportunities ending soon
+            } else if (filterType === 'oldest') {
+                let currentDate = new Date();
+                // Filter the opportunities that have a valid end date and the end date 
+                // is greater than or equal to the current date
+                let endingSoonOpportunities = this.volunteerOpportunities.filter((post) => {
+                    return (
+                        post.formattedEndDate && new Date(post.formattedEndDate) >= currentDate
+                    );
+                });
+                // Sort the filtered opportunities by their end dates in ascending order
+                endingSoonOpportunities.sort((a, b) => new Date(a.dateEnd) - new Date(b.dateEnd));
+
+                // Update the displayed opportunities with the sorted and filtered list
+                this.volunteerOpportunities = endingSoonOpportunities;
+            }
         },
         getOrganizationsDropdown: function () {
             fetch(URL + `localOrganizations`)
@@ -845,6 +951,10 @@ Vue.createApp({
     },
     created: function () {
         this.loggedIn();
+        // Set allVolunteerOpportunities initially when the component is created
+        this.allVolunteerOpportunities = [...this.volunteerOpportunities];
+        // Set filteredVolunteerOpportunities to allVolunteerOpportunities to display all posts initially
+        this.filteredVolunteerOpportunities = [...this.volunteerOpportunities];
     },
     mounted: function () {
         if (this.page == 'index') {
