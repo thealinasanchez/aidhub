@@ -468,43 +468,9 @@ Vue.createApp({
                     formattedStartDate: formattedStartDate
                 }
             }
-
         },
-        likePost: async function (index, postId) {
-            const post = this.volunteerOpportunities[index];
-            // Get the user ID from the user object in your data (assuming user is logged in)
-            const userId = this.user._id;
-
-            try {
-                let existingLikeResponse = await fetch(URL + `/like/${postId}/${userId}`);
-                let existingLike = await existingLikeResponse.json();
-
-                if (!existingLike) {
-                    // If the user has not liked the post, create a new like entry
-                    let newLikeResponse = await fetch('/like', {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ postId, userId })
-                    });
-                    // Update the post's liked status and numLikes
-                    post.likedPost = true;
-                    post.numLiked += 1;
-                } else {
-                    // If the user has already liked the post, remove the 
-                    // like entry from the database
-                    await fetch(`/like/${postId}/${userId}`, {
-                        method: "DELETE",
-                    });
-
-                    // Update the post's liked status and numLikes
-                    post.likedPost = false;
-                    post.numLikes -= 1;
-                }
-            } catch (error) {
-                console.error("Error liking/unliking post:", error);
-            }
+        likePost: function(postId) {
+            
         },
         filterBy: function (filterType) {
             // Show all volunteer opportunities
