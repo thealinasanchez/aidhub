@@ -19,10 +19,12 @@ const app = express();
 const port = process.env.PORT || 6300;
 
 app.use(express.json());
+
 app.use(express.static('public'));
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    cookie: { secure: false, httpOnly: false, sameSite: "none" },
+    // cookie: { secure: false, httpOnly: false, sameSite: "none" },
     resave: false,
     saveUninitialized: true
 }));
