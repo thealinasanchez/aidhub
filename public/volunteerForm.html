@@ -77,12 +77,13 @@
                         <span>
                             <label for="orgname">Organization Name (if personal, select "personal"): </label>
                             <label>
-                                <input type="radio" v-model="newVolunteerPost.orgname" class="volunteer-form-input"
-                                    value="personal" checked>
+                                <input type="radio" name="checkBox" v-model="newVolunteerPost.type"
+                                    class="volunteer-form-input" value="personal" checked>
                                 Personal
                             </label>
                             <label>
-                                <input type="radio" v-model="newVolunteerPost.type" value="organization">
+                                <input type="radio" v-model="newVolunteerPost.type" name="checkBox"
+                                    value="organization">
                                 Organization
                             </label>
                             <div class="organization-container">

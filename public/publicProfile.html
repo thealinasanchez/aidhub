@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AidHub</title>
+    <link href="main.css" rel="stylesheet" type="text/css">
+    <link href="publicProfile.css" rel="stylesheet" type="text/css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <!-- vue stuff -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div style="display: none;">{{ page = 'publicProfile' }}</div>
+        <div class="top-login-header-container">
+            <div class="top-login-header" v-if="loggedInStatus && !gettingStatus">
+                <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
+                        alt="log-in-icon" />Logout</div>
+                <div class="top-login-header-button" @click="checkLoginAndGoToEditProfile()">
+                    <img class="profile-image" :src="[userProfileImage || './images/default-user.png']" alt="" />
+                    Edit Profile
+                </div>
+            </div>
+            <div class="top-login-header" v-else-if="!gettingStatus">
+                <a class="top-login-header-button" href="signup.html"><img src="./icons/key.svg"
+                        alt="sign-up-icon" />Sign
+                    Up</a>
+                <a class="top-login-header-button" href="login.html"><img src="./icons/user.svg"
+                        alt="log-in-icon" />Login</a>
+            </div>
+        </div>
+        <div class="header-background"></div>
+        <header class="top-nav-bar">
+            <a class="logo-brand-container" href="index.html">
+                <h2>AidHub</h2>
+            </a>
+            <nav class="nav-links">
+                <ul>
+                    <li><a class="nav-link" href="index.html">HOME</a></li>
+                    <li><a class="nav-link" href="organizations.html">ORGANIZATIONS</a></li>
+                    <li><a class="nav-link" href="volunteer.html">VOLUNTEERING</a></li>
+                </ul>
+            </nav>
+            <div class="nav-bar-button-container">
+                <a href="getstarted.html">
+                    <button class="common-green-button nav-bar-button">GET STARTED</button>
+                </a>
+            </div>
+        </header>
+        <main>
+            <div>
+                <div class="profile-photo-container">
+                    <img class="profile-photo" :src="userProfileImageURL" />
+                </div>
+            </div>
+            <div class="info-container">
+                <div class="username-container">
+                    <span class="username-text">{{ user.name }}
+                    </span>
+                </div>
+                <div class="about-container">
+                    <div class="about-me-title-container">
+                        <span class="about-title">About Me:</span>
+                    </div>
+                    <p class="about-text">
+                        {{ user.about }}
+                    </p>
+                </div>
+            </div>
+            <hr class="divider" />
+            <div class="applications-section-container">
+                <div class="posted-opportunities-section">
+                    <h1>Posted Opportunities:</h1>
+                    <div class="opportunities-container">
+                        <div class="opportunity" v-for="(opportuninity, index) in volunteerOpportunities">
+                            <p class="opportunity-user">{{ opportuninity.user }}</p>
+                            <h1 class="opportunity-title">{{ opportuninity.title }}</h1>
+                            <p class="opportunity-description">{{ opportuninity.description }}</p>
+                            <div class="opportunities-info-container">
+                                <p class="opportunity-organization">Organization:&nbsp; {{ opportuninity.orgname }}</p>
+                                <p class="opportunity-city">City:&nbsp; {{ opportuninity.city }}</p>
+                                <p class="opportunity-state">State:&nbsp; {{ opportuninity.state }}</p>
+                                <p class="opportunities-start-date">Start Date:&nbsp; {{
+                                    opportuninity.formattedStartDate
+                                    }}
+                                </p>
+                                <p class="opportunities-end-date" v-if="opportuninity.formattedEndDate">End
+                                    Date:&nbsp;{{ opportuninity.formattedEndDate }}
+                                </p>
+                                <p class="opportunities-num-people">Number of People Needed:&nbsp; {{
+                                    opportuninity.num_people }}
+                                </p>
+                                <p class="opportunities-website" v-if="opportuninity.website">Website:&nbsp; <a
+                                        :href="opportuninity.website" target="_blank">{{
+                                        opportuninity.website }}</a>
+                                </p>
+                                <div class="opportunities-interaction-container">
+                                    <p class="opportunities-likes-container"><span class="opportunity-likes">12</span>
+                                        Likes
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

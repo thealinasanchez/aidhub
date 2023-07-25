@@ -24,8 +24,9 @@
             <div class="top-login-header">
                 <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
                         alt="log-in-icon" />Logout</div>
-                <div class="top-login-header-button" @click="goToPublicProfile()"><img class="profile-image"
-                        :src="editProfile.profileImageUrl" alt="log-in-icon" />View Public Profile</div>
+                <div class="top-login-header-button" @click="goToPublicProfile(editProfile.userId)"><img
+                        class="profile-image" :src="editProfile.profileImageUrl" alt="log-in-icon" />View Public Profile
+                </div>
             </div>
         </div>
         <div class="header-background"></div>

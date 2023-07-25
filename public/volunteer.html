@@ -81,8 +81,8 @@
                     <div id="volunteerpost">
                         <div id="post-user">
                             <p>Created By: </p>
-                            <div>{{post.user}}</div>
-                            <div id="profile">Profile</div>
+                            <div>{{post.postedBy.name}}</div>
+                            <div id="profile" @click="goToPublicProfile(post.postedBy._id)">Profile</div>
                         </div>
                         <div id="post-title">
                             {{post.title}}

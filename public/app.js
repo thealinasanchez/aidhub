@@ -14,6 +14,7 @@ Vue.createApp({
                 password: "",
             },
             userProfileImage: "",
+            userProfileImageURL: "",
             loggedInStatus: false,
             previousPage: 'index',
             gettingStatus: true,
@@ -88,7 +89,8 @@ Vue.createApp({
             newVolunteerPost: {
                 user: "",
                 title: "",
-                orgname: "personal",
+                type: "",
+                orgname: "",
                 city: "",
                 state: "",
                 dateStart: "",
@@ -114,6 +116,7 @@ Vue.createApp({
 
 
             editProfile: {
+                userId: "",
                 profileImage: null,
                 profileImageUrl: "",
                 profileImageError: false,
@@ -321,9 +324,9 @@ Vue.createApp({
                     console.error("Error fetching volunteer opportunities:", error);
                 })
         },
-        getVolunteerOpportunitiesByUser: function () {
+        getVolunteerOpportunitiesByUser: function (userId) {
             this.volunteerOpportunities = [];
-            fetch(URL + `volunteerOpportunities/user/${localStorage.getItem('userId') ? localStorage.getItem('userId') : ''}`)
+            fetch(URL + `volunteerOpportunities/user/${userId}`)
                 .then(response => response.json()).then((data) => {
                     data.forEach((post) => {
                         var formattedDates = this.formatDate(post.dateStart, post.dateEnd);
@@ -343,7 +346,7 @@ Vue.createApp({
             myHeaders.append("Content-Type", "application/json");
             var encodedData = {
                 title: this.newVolunteerPost.title,
-                orgname: this.newVolunteerPost.type == "personal" ? "personal" : this.newVolunteerPost.orgname,
+                orgname: this.newVolunteerPost.orgname == "" ? "personal" : this.newVolunteerPost.orgname,
                 city: this.newVolunteerPost.city,
                 state: this.state,
                 dateStart: this.newVolunteerPost.dateStart,
@@ -369,6 +372,7 @@ Vue.createApp({
                             console.log(data);
                             this.newVolunteerPost = {
                                 title: "",
+                                type: "",
                                 description: "",
                                 orgname: "",
                                 city: "",
@@ -551,7 +555,7 @@ Vue.createApp({
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.cookie && data.userId) {
-                        this.userProfileImage = `https://my-profile-photos-bucket.s3.us-west-1.amazonaws.com/${data.userId}-profile-picture.jpg?`;
+                        this.userProfileImage = `https://my-profile-photos-bucket.s3.us-west-1.amazonaws.com/${data.userId}-profile-picture.jpg?v=${Date.now()}`;
                         this.user = data;
                         this.loggedInStatus = true;
                         /* do something if logged in */
@@ -695,6 +699,7 @@ Vue.createApp({
                 })
                 .then(data => {
                     this.user = data;
+                    this.editProfile.userId = data._id;
                     this.getUserProfileImage(data._id);
                 }).catch(
                     (error) => {
@@ -829,6 +834,26 @@ Vue.createApp({
         },
         getUserProfileImage: function (userId) {
             this.editProfile.profileImageUrl = `https://my-profile-photos-bucket.s3.us-west-1.amazonaws.com/${userId}-profile-picture.jpg?v=${Math.random()}`;
+        },
+        goToPublicProfile: function (userId) {
+            localStorage.setItem("publicProfileId", userId);
+            window.location.href = `publicProfile.html`;
+        },
+        getPublicProfile: function () {
+            let userId = localStorage.getItem("publicProfileId");
+            if (!userId) {
+                window.location.href = "index.html";
+            }
+            fetch(URL + `users/profile/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    this.user = data;
+                    this.userProfileImageURL = `https://my-profile-photos-bucket.s3.us-west-1.amazonaws.com/${userId}-profile-picture.jpg?v=${Math.random()}`;
+                    this.getVolunteerOpportunitiesByUser(data._id);
+                }).catch(error => {
+                    console.log(error);
+                    window.location.href = "index.html";
+                })
         }
     },
     /*                                                     WATCHERS                                                     */
@@ -973,7 +998,9 @@ Vue.createApp({
             this.getOrganizationsDropdown();
         } else if (this.page == 'privateProfile') {
             this.getUserInformation();
-            this.getVolunteerOpportunitiesByUser();
+            this.getVolunteerOpportunitiesByUser(localStorage.getItem("userId") ? localStorage.getItem("userId") : "");
+        } else if (this.page == 'publicProfile') {
+            this.getPublicProfile();
         }
     },
 }).mount("#app");

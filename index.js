@@ -56,6 +56,18 @@ app.get("/users", AuthMiddleware, function (request, response) {
     })
 });
 
+app.get("/users/profile/:userId", function (request, response) {
+    model.RedactedUser.findOne({ "_id": request.params.userId }).then(user => {
+        if (user) {
+            delete user.password;
+            delete user.email;
+            response.status(200).send(user);
+        } else {
+            response.status(404).send("User not found");
+        }
+    })
+});
+
 app.get("/users/:userId", AuthMiddleware, function (request, response) {
     model.RedactedUser.findOne({ "_id": request.params.userId }).then(user => {
         if (user) {
@@ -416,14 +428,14 @@ app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
     })
 })
 
-app.get("/like", function(req,res) {
+app.get("/like", function (req, res) {
     model.Likes.find().then(entries => {
         res.json(entries);
     });
 });
 
-app.get("/like/:likeId", function(req, res) {
-    model.Likes.fineOne({"_id": req.params.likeId}).then(like => {
+app.get("/like/:likeId", function (req, res) {
+    model.Likes.fineOne({ "_id": req.params.likeId }).then(like => {
         if (like) {
             res.json(like);
         }
@@ -437,25 +449,25 @@ app.get("/like/:likeId", function(req, res) {
     })
 });
 
-app.post('/like', async(req,res) => {
-    let {postId, userId} = req.body;
+app.post('/like', async (req, res) => {
+    let { postId, userId } = req.body;
 
     try {
         // Check if the user has already liked the post
-        let existingLike = await model.Likes.findOne({postId, userId});
+        let existingLike = await model.Likes.findOne({ postId, userId });
 
         if (existingLike) {
-            return res.status(409).json({message: 'Post already liked by the user.'});
+            return res.status(409).json({ message: 'Post already liked by the user.' });
         }
 
         // If the user hasn't liked the post, create a new like
-        let newLike = new model.Likes({postId, userId});
+        let newLike = new model.Likes({ postId, userId });
         await newLike.save();
 
-        res.status(201).json({message: "Post liked successfully."});
+        res.status(201).json({ message: "Post liked successfully." });
     } catch (error) {
         console.error("Error liking post:", error);
-        res.status(500).json({message: "Error liking post."});
+        res.status(500).json({ message: "Error liking post." });
     }
 })
 
