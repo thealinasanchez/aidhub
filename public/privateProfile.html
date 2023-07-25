@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AidHub</title>
+    <link href="main.css" rel="stylesheet" type="text/css">
+    <link href="privateProfile.css" rel="stylesheet" type="text/css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <!-- vue stuff -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div style="display: none;">{{ page = 'privateProfile' }}</div>
+        <div class="top-login-header-container">
+            <div class="top-login-header">
+                <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
+                        alt="log-in-icon" />Logout</div>
+                <div class="top-login-header-button" @click="goToPublicProfile()"><img class="profile-image"
+                        :src="editProfile.profileImageUrl" alt="log-in-icon" />View Public Profile</div>
+            </div>
+        </div>
+        <div class="header-background"></div>
+        <header class="top-nav-bar">
+            <a class="logo-brand-container" href="index.html">
+                <h2>AidHub</h2>
+            </a>
+            <nav class="nav-links">
+                <ul>
+                    <li><a class="nav-link" href="index.html">HOME</a></li>
+                    <li><a class="nav-link" href="organizations.html">ORGANIZATIONS</a></li>
+                    <li><a class="nav-link" href="volunteer.html">VOLUNTEERING</a></li>
+                </ul>
+            </nav>
+            <div class="nav-bar-button-container">
+                <a href="getstarted.html">
+                    <button class="common-green-button nav-bar-button">GET STARTED</button>
+                </a>
+            </div>
+        </header>
+        <main>
+            <div>
+                <div class="profile-photo-container">
+                    <img class="profile-photo" :src="editProfile.profileImageUrl" />
+                    <!-- if default profile photo or hover-->
+                    <label for="file" class="profile-photo-blur">
+                        <input class="file-upload" id="file" type="file" @change="uploadUserProfileImage" name="file"
+                            accept="image/jpeg" />
+                        <h3>Change Profile photo</h3>
+                        <img class="profile-photo-edit-icon" src="./icons/light-edit.svg" alt="edit-icon" />
+                    </label>
+                </div>
+                <p class="edit-error-text" v-if="editProfile.profileImageError">Wrong Filetime or Another Issue
+                </p>
+            </div>
+            <div class="info-container">
+                <div class="username-container">
+                    <span class="username-text" v-if="!editProfile.nameEditToggle">{{ user.name }}
+                    </span>
+                    <form class="username-edit-form" @submit.prevent="editProfileNameSubmit" autocomplete="off" v-else>
+                        <label>
+                            <input autocomplete="off" type="text" class="username-text-edit" v-model="editProfile.name"
+                                minlength="4" />
+                        </label>
+                        <img @click="editProfileNameSubmit()" class="username-icon accept-icon"
+                            src="./icons/check.svg" />
+                        <img @click="editProfileNameToggle()" class="username-icon cancel-icon" src="./icons/x.svg" />
+                        <span class="edit-error-text" v-if="editProfile.nameError">Username is already in use or isn't
+                            allowed</span>
+                    </form>
+                    <img @click="editProfileNameToggle()" class="username-edit-icon" src="./icons/pencil.svg"
+                        alt="edit-icon" v-if="!editProfile.nameEditToggle" />
+                </div>
+                <div class="about-container">
+                    <div class="about-me-title-container">
+                        <span class="about-title">About Me:</span>
+                        <button @click="editProfileAboutToggle()" class="edit-about-me-button"
+                            v-if="!editProfile.aboutEditToggle">Edit About Me
+                            <img class="edit-about-me-icon" src="./icons/pencil.svg" alt="edit-icon" />
+                        </button>
+                        <div class="edit-about-button-container" v-else>
+                            <button @click="editProfileAboutSubmit()" class="edit-about-button edit-about-save">
+                                <span>Save</span>
+                                <img class="edit-about-icon" src="./icons/check.svg" />
+                            </button>
+                            <button @click="editProfileAboutToggle()"
+                                class="edit-about-button edit-about-cancel"><span>Cancel</span>
+                                <img class="edit-about-icon" src="./icons/x.svg" />
+                            </button>
+                        </div>
+                    </div>
+                    <p class="about-text" v-if="!editProfile.aboutEditToggle">
+                        {{ user.about }}
+                    </p>
+                    <textarea class="about-text about-text-area" v-else v-model="editProfile.about"></textarea>
+                </div>
+            </div>
+            <hr class="divider" />
+            <div class="account-settings-section-container">
+                <h1>Account Settings:</h1>
+                <div class="account-settings-section">
+                    <h4>Email:</h4>
+                    <div class="account-settings-info">
+                        <span class="account-settings-info-text" v-if="!editProfile.emailEditToggle">
+                            {{ user.email }}</span>
+                        <form class="email-edit-form" @submit.prevent="editProfileEmailSubmit" v-else>
+                            <input autocomplete="off" type="email" class="account-settings-info-text edit-email-input"
+                                v-model="editProfile.email" />
+                            <img @click="editProfileEmailSubmit()" class="email-icon accept-icon"
+                                src="./icons/check.svg" />
+                            <img @click="editProfileEmailToggle()" class="email-icon cancel-icon" src="./icons/x.svg" />
+                        </form>
+                        <img @click="editProfileEmailToggle()" class="edit-email-icon" src="./icons/pencil.svg"
+                            alt="edit-icon" v-if="!editProfile.emailEditToggle" />
+                    </div>
+                    <p class="edit-error-text" v-if="editProfile.emailError">Email isn't in the correct format or
+                        is already in use</p>
+                </div>
+                <div class="account-settings-section">
+                    <h4 v-if="editProfile.passwordEditToggle">Current Password:</h4>
+                    <h4 v-else>Password:</h4>
+                    <div class="account-settings-info">
+                        <span class="account-settings-info-text" v-if="!editProfile.passwordEditToggle">********</span>
+                        <img @click="editProfilePasswordToggle()" class="edit-password-icon" src="./icons/pencil.svg"
+                            alt="edit-icon" v-if="!editProfile.passwordEditToggle" />
+                        <form autocomplete="off" class="password-edit-form" @submit.prevent="editProfilePasswordSubmit"
+                            v-else>
+                            <input autocomplete="off" type="password"
+                                class="account-settings-info-text edit-password-input" placeholder="********"
+                                disabled />
+                            <h3 class="confirm-password-text">New Password:</h3>
+                            <input minlength="8" autocomplete="off" type="password"
+                                class="account-settings-info-text edit-password-input" v-model="editProfile.password"
+                                required />
+                            <h3 class="confirm-password-text">Confirm Password:</h3>
+                            <input minlength="8" autocomplete="off" type="password"
+                                class="account-settings-info-text edit-password-input"
+                                v-model="editProfile.confirmPassword" required />
+                            <br />
+                            <p class="edit-error-text">{{ editProfile.passwordMessage }}</p>
+                            <button type="submit" class="change-password-button">Change Password</button>
+                            <button type="button" class="cancel-password-button"
+                                @click="editProfilePasswordToggle()">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="account-settings-section delete-account-container">
+                    <button @click="editProfileDeleteAccountToggle()" class="delete-account-button"
+                        v-if="!editProfile.deleteAccountToggle">Delete Account</button>
+                    <div class="delete-account-confirm" v-else>
+                        <h5 class="delete-account-text">This will Permanently Delete Your Account along with any Posted
+                            Content</h5>
+                        <button @click="deleteAccount()" class="delete-account-button">Continue</button>
+                        <button @click="editProfileDeleteAccountToggle()"
+                            class="cancel-delete-account-button">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div class="applications-section-container">
+                <div class="current-applications-section">
+                    <h1>Current Applications:</h1>
+                </div>
+                <div class="posted-opportunities-section">
+                    <h1>Posted Opportunities:</h1>
+                    <div class="opportunities-container">
+                        <div class="opportunity" v-for="(opportuninity, index) in volunteerOpportunities">
+                            <p class="opportunity-user">{{ opportuninity.user }}</p>
+                            <h1 class="opportunity-title">{{ opportuninity.title }}</h1>
+                            <p class="opportunity-description">{{ opportuninity.description }}</p>
+                            <div class="opportunities-info-container">
+                                <p class="opportunity-organization">Organization:&nbsp; {{ opportuninity.orgname }}</p>
+                                <p class="opportunity-city">City:&nbsp; {{ opportuninity.city }}</p>
+                                <p class="opportunity-state">State:&nbsp; {{ opportuninity.state }}</p>
+                                <p class="opportunities-start-date">Start Date:&nbsp; {{
+                                    opportuninity.formattedStartDate
+                                    }}
+                                </p>
+                                <p class="opportunities-end-date" v-if="opportuninity.formattedEndDate">End
+                                    Date:&nbsp;{{ opportuninity.formattedEndDate }}
+                                </p>
+                                <p class="opportunities-num-people">Number of People Needed:&nbsp; {{
+                                    opportuninity.num_people }}
+                                </p>
+                                <p class="opportunities-website" v-if="opportuninity.website">Website:&nbsp; <a
+                                        :href="opportuninity.website" target="_blank">{{
+                                        opportuninity.website }}</a>
+                                </p>
+                                <div class="opportunities-interaction-container">
+                                    <p class="opportunities-likes-container"><span class="opportunity-likes">12</span>
+                                        Likes
+                                    </p>
+                                    <div class="edit-delete-opportunity-container">
+                                        <img @click="editVolunteerOpportunities(index)" class="edit-opportunity-icon"
+                                            src="./icons/pencil.svg" alt="edit-icon" />
+                                        <img @click="deleteVolunteerOpportunities(index)"
+                                            class="delete-opportunity-icon" src="./icons/trash.svg" alt="delete-icon" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

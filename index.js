@@ -4,6 +4,12 @@ const axios = require('axios');
 const model = require('./model');
 const session = require('express-session');
 
+const fs = require('fs');
+const { Upload } = require("@aws-sdk/lib-storage");
+const { S3Client } = require("@aws-sdk/client-s3");
+
+const fileparser = require('./fileParser');
+
 const NTEEDATA = require('./ntee_codes.json')["codes"];
 const STATES = require('./states.json')["states"];
 const NTEENUMS = require('./ntee_num.json')["code_nums"];
@@ -29,7 +35,6 @@ app.use(cors({
 }));
 
 function AuthMiddleware(request, response, next) {
-    console.log("Session: ", request.session);
     if (request.session && request.session.userId) {
         model.User.findOne({ "_id": request.session.userId }).then(user => {
             if (user) {
@@ -47,9 +52,79 @@ function AuthMiddleware(request, response, next) {
 
 app.get("/users", AuthMiddleware, function (request, response) {
     model.RedactedUser.find().then(user => {
-        console.log(user);
         response.status(200).send(user);
     })
+});
+
+app.get("/users/:userId", AuthMiddleware, function (request, response) {
+    model.RedactedUser.findOne({ "_id": request.params.userId }).then(user => {
+        if (user) {
+            if (user.password != "***") {
+                user.password = "***";
+            }
+            console.log(user);
+            response.status(200).send(user);
+        } else {
+            response.status(404).send("User not found");
+        }
+    })
+});
+
+app.put("/users/:userId", AuthMiddleware, function (request, response) {
+    model.User.findOne({ "_id": request.params.userId }).then(user => {
+        if (user) {
+            if (request.body.hasOwnProperty("name")) {
+                user.name = request.body.name;
+                user.markModified("name");
+            }
+            if (request.body.hasOwnProperty("about")) {
+                user.about = request.body.about;
+                user.markModified("about");
+            }
+            if (request.body.hasOwnProperty("email")) {
+                user.email = request.body.email;
+                user.markModified("email");
+            }
+            if (request.body.hasOwnProperty("password")) {
+                user.setPassword(request.body.password);
+                user.markModified("password");
+            }
+            user.save().then(() => {
+                response.status(200).json(user);
+            }).catch((errors) => {
+                if (errors.code === 11000) {
+                    if (errors.keyPattern.hasOwnProperty("email")) {
+                        response.status(422).send("This email or username already has an account. Please sign in.");
+                    }
+                    if (errors.keyPattern.hasOwnProperty("name")) {
+                        response.status(422).send("This username is already taken. Please choose another.");
+                    }
+                } else {
+                    let error_list = [];
+                    for (key in errors.errors) {
+                        error_list.push(errors.errors[key].properties.message)
+                    }
+                    response.status(422).send(error_list.join(" "));
+                }
+            })
+        } else {
+            response.status(404).send("User not found");
+        }
+    })
+});
+
+app.post('/userProfile/:userId', AuthMiddleware, (req, res) => {
+    fileparser(req, req.params.userId)
+        .then(data => {
+            res.sendStatus(201)
+        })
+        .catch(error => {
+            console.log("ERROR: ", error);
+            res.status(400).json({
+                message: "An error occurred.",
+                error
+            })
+        })
 });
 
 app.get("/session", (request, response) => {
@@ -59,6 +134,7 @@ app.get("/session", (request, response) => {
 app.post("/users", function (request, response) {
     const newUser = new model.User({
         name: request.body.name,
+        about: request.body.about,
         email: request.body.email
     });
     if (!request.body.password || request.body.password === "") {
@@ -66,8 +142,32 @@ app.post("/users", function (request, response) {
     } else {
         newUser.setPassword(request.body.password).then(() => {
             newUser.save().then(function () {
-                response.status(201).send("Created a user");
+                new Upload({
+                    client: new S3Client({
+                        credentials: {
+                            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+                        },
+                        region: process.env.S3_REGION
+                    }),
+                    params: {
+                        ACL: 'public-read',
+                        Bucket: process.env.S3_BUCKET,
+                        Key: `${newUser._id}-profile-picture.jpg`,
+                        Body: fs.readFileSync(`./public/images/default.jpg`),
+                        ContentType: 'image/jpeg'
+                    }
+                }).done()
+                    .then(() => {
+                        console.log("New user added.");
+                        response.status(201).send("Created a user");
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        response.status(500).send("AWS error");
+                    });
             }).catch((errors) => {
+                console.log(errors)
                 if (errors.code === 11000) {
                     if (errors.keyPattern.hasOwnProperty("email")) {
                         response.status(422).send("This email or username already has an account. Please sign in.");
@@ -101,7 +201,6 @@ app.post("/session", (request, response) => {
                 }).catch(() => false)) {
                 request.session.name = user.name;
                 request.session.userId = user._id;
-                console.log(request.session);
                 response.status(201).send(request.session);
             } else {
                 response.status(401).send("Username and/or Password are incorrect");
@@ -116,12 +215,6 @@ app.post("/session", (request, response) => {
     })
 });
 
-/*
-change user name, password and email ect..
-app.put("/users", AuthMiddleware, function (request, response) {
-});
-*/
-
 app.delete("/session", (request, response) => {
     if (request.session.userId != undefined) {
         request.session.userId = undefined;
@@ -132,6 +225,22 @@ app.delete("/session", (request, response) => {
     }
 })
 
+app.delete("/users/:userId", AuthMiddleware, function (request, response) {
+    model.VolunteerForm.deleteMany({ "postedBy": request.params.userId }).then(() => {
+    }).catch(() => {
+        response.status(422).send("Volunteer posts not deleted.");
+    });
+    model.User.findOneAndDelete({ "_id": request.params.userId }).then(user => {
+        if (user) {
+            response.status(204).send("User deleted.");
+        }
+        else {
+            response.status(404).send("User not found.");
+        }
+    }).catch(() => {
+        response.status(422).send("Unable to delete.");
+    });
+});
 
 // GET
 app.get("/organizations", async function (req, res) {
@@ -254,12 +363,18 @@ app.get("/localOrganizations", function (req, res) {
 
 // GET FOR VOLUNTEERFORM SCHEMA
 app.get("/volunteerOpportunities", function (req, res) {
-    model.VolunteerForm.find().then(entries => {
+    model.VolunteerForm.find().populate("postedBy").then(entries => {
         res.json(entries);
     });
 });
 
-app.get("/volunteerOpportunities/volpostId", function (req, res) {
+app.get("/volunteerOpportunities/user/:userId", function (req, res) {
+    model.VolunteerForm.find({ "postedBy": req.params.userId }).populate("postedBy").then(entries => {
+        res.json(entries);
+    });
+});
+
+app.get("/volunteerOpportunities/:volpostId", function (req, res) {
     model.VolunteerForm.findOne({ "_id": req.params.volpostId }).then(post => {
         if (post) {
             res.json(post);
@@ -277,7 +392,7 @@ app.get("/volunteerOpportunities/volpostId", function (req, res) {
 // POST FOR VOLUNTEERFORM SCHEMA
 app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
     const newEntry = new model.VolunteerForm({
-        user: req.body.user,
+        postedBy: req.user._id,
         title: req.body.title,
         orgname: req.body.orgname,
         city: req.body.city,
@@ -288,10 +403,9 @@ app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
         num_people: req.body.num_people,
         website: req.body.website
     });
-
     newEntry.save().then(() => {
         console.log("New post/volunteer form entry added.");
-        res.status(201).send(newEntry);
+        res.status(201).send(newEntry.populate("postedBy"));
     }).catch((errors) => {
         console.log(errors);
         let error_list = [];

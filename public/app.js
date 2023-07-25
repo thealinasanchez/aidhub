@@ -1,5 +1,5 @@
-// var URL = "http://localhost:6300/";
-var URL = "https://aidhub-production.up.railway.app/";
+var URL = "http://localhost:6300/";
+// var URL = "https://aidhub-production.up.railway.app/";
 Vue.createApp({
     data() {
         return {
@@ -9,9 +9,11 @@ Vue.createApp({
             },
             user: {
                 name: "",
+                about: "I have a passion for helping others and I want to make a difference in my community.",
                 email: "",
                 password: "",
             },
+            userProfileImage: "",
             loggedInStatus: false,
             previousPage: 'index',
             gettingStatus: true,
@@ -92,7 +94,8 @@ Vue.createApp({
                 dateEnd: "",
                 description: "",
                 num_people: 0,
-                website: ""
+                website: "",
+                likes: 0
             },
             toggleModal: false,
             formattedStartDate: "",
@@ -105,6 +108,28 @@ Vue.createApp({
             volunteersearch: "",
             watchedValue: "",
             toggleVolunteerSearchModal: true,
+
+
+            editProfile: {
+                profileImage: null,
+                profileImageUrl: "",
+                profileImageError: false,
+                nameEditToggle: false,
+                nameError: false,
+                name: "",
+                aboutEditToggle: false,
+                aboutError: false,
+                about: "",
+                emailEditToggle: false,
+                emailError: false,
+                email: "",
+                // currentPassword: "",
+                password: "",
+                passwordEditToggle: false,
+                confirmPassword: "",
+                passwordMessage: "",
+                deleteAccountToggle: false
+            }
         }
     },
     methods: {
@@ -282,18 +307,35 @@ Vue.createApp({
                         var formattedDates = this.formatDate(post.dateStart, post.dateEnd);
                         post.formattedStartDate = formattedDates.formattedStartDate;
                         post.formattedEndDate = formattedDates.formattedEndDate;
+                        post.user = post.postedBy.name ? post.postedBy.name : "Anonymous";
                         this.volunteerOpportunities.push(post);
                     })
                     this.volunteerOpportunities = data;
                 });
         },
+        getVolunteerOpportunitiesByUser: function () {
+            this.volunteerOpportunities = [];
+            fetch(URL + `volunteerOpportunities/user/${localStorage.getItem('userId') ? localStorage.getItem('userId') : ''}`)
+                .then(response => response.json()).then((data) => {
+                    data.forEach((post) => {
+                        var formattedDates = this.formatDate(post.dateStart, post.dateEnd);
+                        post.formattedStartDate = formattedDates.formattedStartDate;
+                        post.formattedEndDate = formattedDates.formattedEndDate;
+                        post.user = post.postedBy.name ? post.postedBy.name : "Anonymous";
+                        this.volunteerOpportunities.push(post);
+                    })
+                });
+        },
         addVolunteerOpportunities: function () {
+            if (!localStorage.getItem('userId')) {
+                console.log("couldn't Post Volunteer opportunities because local storage wasn't used")
+                return
+            }
             myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
             var encodedData = {
-                user: this.user.name,
                 title: this.newVolunteerPost.title,
-                orgname: this.newVolunteerPost.orgname,
+                orgname: this.newVolunteerPost.type == "personal" ? "personal" : this.newVolunteerPost.orgname,
                 city: this.newVolunteerPost.city,
                 state: this.state,
                 dateStart: this.newVolunteerPost.dateStart,
@@ -316,8 +358,7 @@ Vue.createApp({
                 .then((response) => {
                     if (response.status === 201) {
                         response.json().then((data) => {
-                            this.volunteerOpportunities.push(data);
-                            this.getVolunteerOpportunities();
+                            console.log(data);
                             this.newVolunteerPost = {
                                 title: "",
                                 description: "",
@@ -337,12 +378,12 @@ Vue.createApp({
                 });
         },
         deleteVolunteerOpportunities: function (index) {
-            var volpostId = this.expenses[index]._id;
+            var volpostId = this.volunteerOpportunities[index]._id;
             var requestOptions = {
                 method: "DELETE",
                 credentials: "include"
             };
-            fetch(URRL + `volunteerOpportunities/${volpostId}`, requestOptions)
+            fetch(URL + `volunteerOpportunities/${volpostId}`, requestOptions)
                 .then((response) => {
                     if (response.status === 204) {
                         console.log("success");
@@ -355,24 +396,28 @@ Vue.createApp({
         formatDate: function (dateStart, dateEnd) {
             // Convert the date strings into Date objects
             var startDate = new Date(dateStart);
-            var endDate = new Date(dateEnd);
 
             // Get the year, month, and day from the Date objects
             var startYear = startDate.getFullYear();
             var startMonth = startDate.getMonth() + 1;
             var startDay = startDate.getDate();
 
-            var endYear = endDate.getFullYear();
-            var endMonth = endDate.getMonth() + 1;
-            var endDay = endDate.getDate();
-
             // Create formatted date strings
             var formattedStartDate = `${startMonth.toString().padStart(2, '0')}-${startDay.toString().padStart(2, '0')}-${startYear}`;
-            var formattedEndDate = `${endMonth.toString().padStart(2, '0')}-${endDay.toString().padStart(2, '0')}-${endYear}`;
-
-            return {
-                formattedStartDate: formattedStartDate,
-                formattedEndDate: formattedEndDate
+            if (dateEnd) {
+                var endDate = new Date(dateEnd);
+                var endYear = endDate.getFullYear();
+                var endMonth = endDate.getMonth() + 1;
+                var endDay = endDate.getDate();
+                var formattedEndDate = `${endMonth.toString().padStart(2, '0')}-${endDay.toString().padStart(2, '0')}-${endYear}`;
+                return {
+                    formattedStartDate: formattedStartDate,
+                    formattedEndDate: formattedEndDate
+                }
+            } else {
+                return {
+                    formattedStartDate: formattedStartDate
+                }
             }
 
         },
@@ -400,8 +445,9 @@ Vue.createApp({
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.cookie && data.userId) {
-                        this.loggedInStatus = true;
+                        this.userProfileImage = `https://my-profile-photos-bucket.s3.us-west-1.amazonaws.com/${data.userId}-profile-picture.jpg?`;
                         this.user = data;
+                        this.loggedInStatus = true;
                         /* do something if logged in */
                     } else {
                         this.loggedInStatus = false;
@@ -445,10 +491,11 @@ Vue.createApp({
                     response.text().then(data => {
                         if (data) {
                             data = JSON.parse(data);
+                            console.log(data);
                             this.loggedInStatus = true;
-                            // this.page = "" go to volunteer page with access to form
                             this.getPreviousPage();
                             this.user.name = data.name;
+                            localStorage.setItem("userId", data.userId);
                             window.location.href = this.previousPage + ".html";
                         } else {
                             alert("No session created");
@@ -467,6 +514,9 @@ Vue.createApp({
             fetch(URL + "session", options).then(response => {
                 if (response.status == 204) {
                     this.loggedInStatus = false;
+                    if (localStorage.getItem("userId")) {
+                        localStorage.removeItem("userId");
+                    }
                 } else {
                     console.log("Couldn't log out", response.status);
                 }
@@ -474,6 +524,21 @@ Vue.createApp({
                 this.user.name = "";
                 this.user.email = "";
                 this.user.password = "";
+            });
+        },
+        deleteAccount: function () {
+            let options = {
+                method: "DELETE",
+                credentials: "include"
+            }
+            fetch(URL + `users/${localStorage.getItem("userId")}`, options).then(response => {
+                this.logout();
+                this.loggedInStatus = false;
+                if (response.status == 204) {
+                } else {
+                    alert("Couldn't delete account", response.status);
+                }
+                this.user.name = "";
             });
         },
         setPage: function (page) {
@@ -499,8 +564,168 @@ Vue.createApp({
             } else {
                 window.location.href = "login.html";
             }
+        },
+        checkLoginAndGoToEditProfile: function () {
+            if (this.loggedInStatus) {
+                window.location.href = "privateProfile.html";
+            } else {
+                window.location.href = "login.html";
+            }
+        },
+        getUserInformation: function () {
+            let options = {
+                credentials: "include"
+            }
+            if (!localStorage.getItem("userId")) {
+                window.location.href = "login.html";
+            }
+            fetch(URL + `users/${localStorage.getItem("userId")}`, options)
+                .then((response) => {
+                    if (response.status == 401) {
+                        window.location.href = "login.html";
+                    } else {
+                        return response.json()
+                    }
+                })
+                .then(data => {
+                    this.user = data;
+                    this.getUserProfileImage(data._id);
+                }).catch(
+                    (error) => {
+                        console.log("Failed to fetch user information", error);
+                    }
+                )
+        },
+        editProfileSubmit: function (input) {
+            if (!localStorage.getItem('userId')) {
+                console.log("User data Not saved on local storage")
+                return
+            }
+            let myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            let options = {
+                method: "PUT",
+                credentials: "include",
+                headers: myHeaders,
+                body: JSON.stringify(input)
+            }
+            fetch(URL + `users/${localStorage.getItem('userId')}`, options)
+                .then((response) => {
+                    if (response.status == 200) {
+                        this.getVolunteerOpportunitiesByUser();
+                        this.editProfile.nameEditToggle = false;
+                        this.editProfile.aboutEditToggle = false;
+                        this.editProfile.emailEditToggle = false;
+                        this.editProfile.passwordEditToggle = false;
+                        response.json().then(data => {
+                            this.user.name = data.name;
+                            this.user.about = data.about;
+                            this.user.email = data.email;
+                            this.editProfile.name = data.name;
+                            this.editProfile.about = data.about;
+                            this.editProfile.email = data.email;
+                        });
+                        this.user.password = "";
+                    } else if (response.status == 401) {
+                        window.location.href = "login.html";
+                    } else if (response.status == 422) {
+                        if (input.hasOwnProperty("name")) {
+                            this.editProfile.nameError = true;
+                        } else if (input.hasOwnProperty("email")) {
+                            this.editProfile.emailError = true;
+                        }
+                    }
+                })
+        },
+        editProfileNameToggle: function () {
+            this.editProfile.nameError = false;
+            this.editProfile.nameEditToggle = !this.editProfile.nameEditToggle;
+            this.editProfile.name = this.user.name;
+        },
+        editProfileNameSubmit: function () {
+            this.editProfile.nameError = false;
+            this.editProfileSubmit({ name: this.editProfile.name });
+        },
+        editProfileAboutToggle: function () {
+            this.editProfile.aboutEditToggle = !this.editProfile.aboutEditToggle;
+            this.editProfile.about = this.user.about;
+        },
+        editProfileAboutSubmit: function () {
+            this.editProfileSubmit({ about: this.editProfile.about });
+        },
+        editProfileEmailToggle: function () {
+            this.editProfile.emailError = false;
+            this.editProfile.emailEditToggle = !this.editProfile.emailEditToggle;
+            this.editProfile.email = this.user.email;
+        },
+        editProfileEmailSubmit: function () {
+            this.editProfile.emailError = false;
+            this.editProfileSubmit({ email: this.editProfile.email });
+        },
+        editProfilePasswordToggle: function () {
+            this.editProfile.passwordEditToggle = !this.editProfile.passwordEditToggle;
+            this.editProfile.password = "";
+            this.editProfile.confirmPassword = "";
+            this.editProfile.passwordMessage = "";
+        },
+        editProfilePasswordSubmit: function () {
+            if (this.editProfile.password != this.editProfile.confirmPassword) {
+                this.editProfile.passwordMessage = "Passwords do not match";
+                return;
+            }
+            this.editProfileSubmit({ password: this.editProfile.password });
+        },
+        editProfileDeleteAccountToggle: function () {
+            this.editProfile.deleteAccountToggle = !this.editProfile.deleteAccountToggle;
+        },
+        editProfileDeleteAccount: function () {
+            this.deleteAccount();
+            window.location.href = "index.html";
+            this.loggedInStatus = false;
+        },
+        uploadUserProfileImage: function (event) {
+            this.editProfile.profileImage = event.target.files[0];
+            this.postUserProfileImage();
+        },
+        postUserProfileImage: function () {
+            this.editProfile.profileImageError = false;
+            if (this.editProfile.profileImage == null) {
+                console.log("No file selected");
+                return;
+            } else if (!localStorage.getItem('userId')) {
+                console.log("User data Not saved on local storage")
+                return;
+            } else if (!/^[^.]+\.(jpg|jpeg)$/ig.test(this.editProfile.profileImage.name)) {
+                this.editProfile.profileImageError = true;
+                console.log("Invalid file type");
+                return;
+            }
+            const formData = new FormData();
+            formData.append("file", this.editProfile.profileImage);
+
+            let myHeaders = new Headers();
+            let options = {
+                method: "POST",
+                credentials: "include",
+                headers: myHeaders,
+                body: formData
+            }
+            fetch(URL + `userProfile/${localStorage.getItem("userId")}`, options)
+                .then((response) => {
+                    console.log(response)
+                    if (response.status == 201) {
+                        this.editProfile.profileImageUrl = '';
+                        this.getUserProfileImage(localStorage.getItem("userId"));
+                    } else if (response.status == 401) {
+                        window.location.href = "login.html";
+                    }
+                })
+        },
+        getUserProfileImage: function (userId) {
+            this.editProfile.profileImageUrl = `https://my-profile-photos-bucket.s3.us-west-1.amazonaws.com/${userId}-profile-picture.jpg?v=${Math.random()}`;
         }
     },
+    /*                                                     WATCHERS                                                     */
     watch: {
         state(newState, oldState) {
             this.organizationsSearchFilterState.name = newState;
@@ -612,8 +837,11 @@ Vue.createApp({
             this.getPreviousPage();
             if (newStatus === false && this.previousPage == 'volunteerForm') {
                 window.location.href = "volunteer.html";
+            } else if (newStatus === false && this.page == 'privateProfile') {
+                window.location.href = "index.html";
             }
         },
+
     },
     created: function () {
         this.loggedIn();
@@ -633,6 +861,9 @@ Vue.createApp({
             this.setPage('volunteerForm');
             this.getStates();
             this.getOrganizationsDropdown();
+        } else if (this.page == 'privateProfile') {
+            this.getUserInformation();
+            this.getVolunteerOpportunitiesByUser();
         }
     },
 }).mount("#app");

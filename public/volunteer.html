@@ -24,8 +24,10 @@
             <div class="top-login-header" v-if="loggedInStatus">
                 <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
                         alt="log-in-icon" />Logout</div>
-                <div class="top-login-header-button" @click=""><img src="./icons/profile.svg" alt="log-in-icon" />Edit
-                    Profile</div>
+                <div class="top-login-header-button" @click="checkLoginAndGoToEditProfile">
+                    <img class="profile-image" :src="[userProfileImage || './images/default-user.png']" alt="" />
+                    Edit Profile
+                </div>
             </div>
             <div class="top-login-header" v-else>
                 <a class="top-login-header-button" href="signup.html"><img src="./icons/key.svg"
@@ -72,11 +74,8 @@
             </div>
             <div id="filtering-area"></div>
             <div class="post-container">
-                <div 
-                    id="volunteerthings"
-                    v-for="(post,index) in volunteerOpportunities"
-                    :class="index % 2 === 0 ? 'post even' : 'post odd'"
-                >
+                <div id="volunteerthings" v-for="(post,index) in volunteerOpportunities"
+                    :class="index % 2 === 0 ? 'post even' : 'post odd'">
                     <div id="volunteerpost">
                         <div id="post-user">
                             <p>Created By: </p>
@@ -125,18 +124,10 @@
                                     v-if="loggedInStatus" />
                             </div>
                             <div class="post-modification" v-if="loggedInStatus && post.user == user.name">
-                                <img 
-                                    src="./icons/edit.svg" 
-                                    alt="edit-icon" 
-                                    @click="editPost(post.id)"
-                                    id="post-edit-button"
-                                >
-                                <img 
-                                    src="./icons/delete.svg" 
-                                    alt="delete-icon" 
-                                    @click="deletePost(post.id)"
-                                    id="post-delete-button"
-                                >
+                                <img src="./icons/edit.svg" alt="edit-icon" @click="editPost(post.id)"
+                                    id="post-edit-button">
+                                <img src="./icons/delete.svg" alt="delete-icon" @click="deletePost(post.id)"
+                                    id="post-delete-button">
                             </div>
                             <button id="post-apply-button" v-else-if="loggedInStatus">Apply</button>
                             <a href="login.html" class="login-text" v-if="!loggedInStatus">Log In To Interact</a>
@@ -148,10 +139,10 @@
                 <div class="volunteer-post" v-for="(post,index) in volunteerOpportunities"
                     :class="index % 2 === 0? 'post even' : 'post odd'">
                     <p class="post-user">
-                        <div id="user-content">
-                            <p>Created by:</p>
-                            <div id="user">{{post.user}}</div>
-                        </div>
+                    <div id="user-content">
+                        <p>Created by:</p>
+                        <div id="user">{{post.user}}</div>
+                    </div>
                     </p>
                     <h1 class="post-title">
 

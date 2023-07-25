@@ -12,9 +12,10 @@ mongoose.connect(process.env.DB_LINK)
 
 
 const VolunteerFormSchema = Schema({
-    user: {
-        type: String,
-        required: [true, "Must have a username."]
+    postedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RedactedUser",
+        required: [true, "Must have a user"]
     },
     title: {
         type: String,
@@ -39,7 +40,11 @@ const VolunteerFormSchema = Schema({
         type: Number,
         required: true
     },
-    website: { type: String }
+    website: { type: String },
+    likes: {
+        type: Number,
+        default: 0
+    }
 })
 
 const DonationFormSchema = Schema({
@@ -94,6 +99,9 @@ const userSchema = new mongoose.Schema({
         requred: [true, "Must have a name"],
         unique: true
     },
+    about: {
+        type: String
+    },
     email: {
         type: String,
         required: [true, "A email is required"],
@@ -137,6 +145,7 @@ RedactedUser.createCollection({
     pipeline: [{
         $set: {
             name: "$name",
+            about: "$about",
             email: "$email",
             password: "***"
         }

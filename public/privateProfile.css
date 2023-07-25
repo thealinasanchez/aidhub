@@ -1,0 +1,581 @@
+main {
+    background-color: rgb(235, 235, 240);
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 2.5fr;
+    grid-template-rows: auto;
+}
+
+.profile-photo-container {
+    grid-column: 1 / 2;
+    width: 285px;
+    height: 285px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-photo-blur {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: white;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    object-fit: cover;
+    /* cursor: url(https://img.icons8.com/ios/50/ffffff/camera.png), auto; */
+    cursor: pointer;
+    user-select: none;
+}
+
+.profile-photo-edit-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.file-upload {
+    display: none;
+}
+
+.info-container {
+    grid-column: 2/3;
+    width: 100%;
+    height: 100%;
+    padding-left: 20px;
+    user-select: none;
+}
+
+.username-container {
+    width: 100%;
+    height: fit-content;
+    font-size: 22px;
+    font-family: sans-serif;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.username-text {
+    font-size: 30px;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+.username-text-edit {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    font-weight: bold;
+    font-size: 30px;
+    height: 36px;
+    background-color: #fafafa;
+    padding: 0px;
+    padding-left: 2px;
+}
+
+.username-edit-form {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.username-edit-icon {
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    margin-left: 5px;
+}
+
+.username-icon {
+    width: 35px;
+    height: 35px;
+    padding: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.username-icon:active {
+    border-style: inset;
+}
+
+.accept-icon {
+    border: 3px outset rgb(63, 255, 162);
+}
+
+.cancel-icon {
+    border: 3px outset rgb(255, 106, 106);
+}
+
+.edit-error-text {
+    color: rgb(255, 106, 106);
+    font-size: 14px;
+    font-style: italic;
+    margin-left: 5px;
+}
+
+.about-container {
+    width: 100%;
+    height: 100%;
+    max-height: 220px;
+    font-size: 16px;
+    font-family: sans-serif;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.about-me-title-container {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.about-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.edit-about-me-button {
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    padding: 5px 10px;
+    font-style: italic;
+    border-radius: 5px;
+    border: 5px outset cadetblue;
+    background-color: #fcfcfc;
+    font-size: 15px;
+}
+
+.edit-about-me-button:hover {
+    border: 5px outset rgb(74, 182, 186);
+}
+
+.edit-about-me-button:active {
+    border: 5px inset cadetblue;
+}
+
+.edit-about-me-icon {
+    width: 15px;
+    height: 15px;
+}
+
+.edit-about-button-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    align-items: center;
+    width: 80%;
+}
+
+.edit-about-button {
+    font-size: 15px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-about-icon {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.edit-about-save {
+    cursor: pointer;
+    outline: none;
+    padding: 5px 10px;
+    font-style: italic;
+    border-radius: 5px;
+    border: 5px outset rgb(63, 255, 162);
+    background-color: #fcfcfc;
+    margin-left: 5px;
+}
+
+.edit-about-save:hover {
+    border: 5px outset rgb(34, 249, 56);
+}
+
+.edit-about-save:active {
+    border: 5px inset rgb(63, 255, 82);
+}
+
+.edit-about-cancel {
+    cursor: pointer;
+    outline: none;
+    padding: 5px 10px;
+    font-style: italic;
+    border-radius: 5px;
+    border: 5px outset rgb(255, 106, 106);
+    background-color: #fcfcfc;
+    font-size: 15px;
+    margin-left: 5px;
+}
+
+.edit-about-cancel:hover {
+    border: 5px outset rgb(255, 69, 69);
+}
+
+.edit-about-cancel:active {
+    border: 5px inset rgb(255, 69, 69);
+}
+
+.about-text {
+    width: 100%;
+    height: 100%;
+    max-height: 150px;
+    font-size: 16px;
+    font-family: sans-serif;
+    margin-top: 10px;
+    overflow-y: auto;
+    font-style: italic;
+}
+
+.about-text-area {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    max-height: 150px;
+    font-size: 16px;
+    font-family: sans-serif;
+    margin-top: 10px;
+    overflow-y: auto;
+    font-style: italic;
+    background-color: #fafafa;
+}
+
+.divider {
+    grid-column: 1/3;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.account-settings-section-container {
+    grid-column: 1/2;
+    max-width: 300px;
+    height: 100%;
+    min-height: 53vh;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.account-settings-section-container h1 {
+    padding: 10px;
+}
+
+.account-settings-section {
+    font-size: 22px;
+    max-width: 100%;
+    font-family: sans-serif;
+    padding: 10px;
+    padding-right: 0px;
+    margin-right: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.account-settings-info {
+    overflow-x: auto;
+    max-width: 100%;
+    font-size: 18px;
+    padding: 8px 0px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.account-settings-info-text {
+    margin-right: 10px;
+}
+
+.edit-email-icon,
+.edit-password-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.email-edit-form {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
+}
+
+.edit-email-input {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    font-size: 18px;
+    height: 24px;
+    background-color: #fafafa;
+    width: 198px;
+    padding-left: 2px;
+}
+
+.email-icon {
+    width: 25px;
+    height: 25px;
+    padding: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.confirm-password-text {
+    margin-top: 10px;
+}
+
+.edit-password-input {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    font-size: 18px;
+    height: 24px;
+    background-color: #fafafa;
+    width: 250px;
+    padding-left: 2px;
+}
+
+.change-password-button {
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 5px outset rgb(63, 255, 162);
+    background-color: #fcfcfc;
+    font-size: 16px;
+    font-weight: bolder;
+    margin-top: 10px;
+}
+
+.change-password-button:hover {
+    border: 5px outset rgb(34, 249, 56);
+}
+
+.change-password-button:active {
+    border: 5px inset rgb(63, 255, 82);
+}
+
+.cancel-password-button {
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 5px outset rgb(255, 106, 106);
+    background-color: #fcfcfc;
+    font-size: 16px;
+    font-weight: bolder;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.cancel-password-button:hover {
+    border: 5px outset rgb(255, 69, 69);
+}
+
+.cancel-password-button:active {
+    border: 5px inset rgb(255, 69, 69);
+}
+
+.delete-account-container {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    margin: 10px 0px;
+}
+
+
+.delete-account-button {
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 5px outset rgb(255, 4, 4);
+    background-color: #fcfcfc;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.delete-account-button:hover {
+    background-color: rgb(255, 4, 4);
+    color: white;
+}
+
+.delete-account-button:active {
+    border: 5px inset rgb(255, 4, 4);
+}
+
+.cancel-delete-account-button {
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 5px outset rgba(34, 255, 0, 0.557);
+    background-color: #fcfcfc;
+    font-size: 18px;
+    font-weight: bolder;
+    margin-left: 10px;
+}
+
+.cancel-delete-account-button:hover {
+    background-color: rgba(34, 255, 0, 0.557);
+    color: white;
+}
+
+.cancel-delete-account-button:active {
+    border: 5px inset rgba(34, 255, 0, 0.557);
+}
+
+.delete-account-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: red;
+    margin-bottom: 10px;
+}
+
+.applications-section-container {
+    grid-column: 2/3;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    min-height: 53vh;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.current-applications-section {
+    width: 100%;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.posted-opportunities-section {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.opportunities-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.opportunity {
+    width: 98%;
+    height: 100%;
+    padding: 10px;
+    margin: 10px 0px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.45);
+    background: linear-gradient(270deg, rgba(127, 241, 109, 0.12) 0%, rgba(118, 230, 234, 0.16) 100%);
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.opportunity-user {
+    color: rgb(85, 0, 255);
+    font-size: 14px;
+}
+
+.opportunities-info-container {
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.opportunities-interaction-container {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.opportunities-likes-container {
+    padding: 5px 10px;
+    height: 35px;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-color: #fcfcfc;
+    box-shadow: 0px 0px 5px 0px rgba(21, 253, 33, 0.45);
+}
+
+.edit-delete-opportunity-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-delete-opportunity-container img {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.edit-opportunity-icon {
+    border: 3px outset rgb(84, 249, 101);
+    box-shadow: 0px 0px 5px 0px rgba(21, 253, 33, 0.45);
+}
+
+.edit-opportunity-icon:hover {
+    border: 3px outset rgb(34, 249, 56);
+}
+
+.edit-opportunity-icon:active {
+    border: 3px inset rgb(63, 255, 82);
+}
+
+.delete-opportunity-icon {
+    border: 3px outset rgb(255, 106, 106);
+    box-shadow: 0px 0px 5px 0px rgba(255, 4, 4, 0.45);
+}
+
+.delete-opportunity-icon:hover {
+    border: 3px outset rgb(255, 69, 69);
+}
+
+.delete-opportunity-icon:active {
+    border: 3px inset rgb(255, 69, 69);
+}

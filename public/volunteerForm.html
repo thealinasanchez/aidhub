@@ -23,8 +23,10 @@
             <div class="top-login-header" v-if="loggedInStatus">
                 <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
                         alt="log-in-icon" />Logout</div>
-                <div class="top-login-header-button" @click=""><img src="./icons/profile.svg" alt="log-in-icon" />Edit
-                    Profile</div>
+                <div class="top-login-header-button" @click="checkLoginAndGoToEditProfile()">
+                    <img class="profile-image" :src="[userProfileImage || './images/default-user.png']" alt="" />
+                    Edit Profile
+                </div>
             </div>
             <div class="top-login-header" v-else>
                 <a class="top-login-header-button" href="signup.html"><img src="./icons/key.svg"
