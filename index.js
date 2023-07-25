@@ -50,7 +50,7 @@ function AuthMiddleware(request, response, next) {
     }
 }
 
-app.get("/users", AuthMiddleware, function (request, response) {
+app.get("/users", function (request, response) { // AuthMiddleware
     model.RedactedUser.find().then(user => {
         response.status(200).send(user);
     })
@@ -68,7 +68,19 @@ app.get("/users/profile/:userId", function (request, response) {
     })
 });
 
-app.get("/users/:userId", AuthMiddleware, function (request, response) {
+app.get("/users/profile/:userId", function (request, response) {
+    model.RedactedUser.findOne({ "_id": request.params.userId }).then(user => {
+        if (user) {
+            delete user.password;
+            delete user.email;
+            response.status(200).send(user);
+        } else {
+            response.status(404).send("User not found");
+        }
+    })
+});
+
+app.get("/users/:userId", function (request, response) { //AuthMiddleware
     model.RedactedUser.findOne({ "_id": request.params.userId }).then(user => {
         if (user) {
             if (user.password != "***") {
@@ -428,49 +440,86 @@ app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
     })
 })
 
-app.get("/like", function (req, res) {
-    model.Likes.find().then(entries => {
-        res.json(entries);
-    });
-});
-
-app.get("/like/:likeId", function (req, res) {
-    model.Likes.fineOne({ "_id": req.params.likeId }).then(like => {
-        if (like) {
-            res.json(like);
+app.get("/users/:userId/liked", function (req, res) {
+    model.User.findOne({ "_id": req.params.userId }).then(user => {
+        if (user) {
+            console.log(user);
+            console.log(user.liked);
+            res.send(user.liked);
         }
-        else {
-            console.log("like not found.");
-            res.status(404).send("like not found.");
+    })
+})
+
+app.get("/users/:userId/liked/:postId", function (req, res) {
+    model.User.findOne({ "_id": req.params.postId }).then(like => {
+        if (like) {
+            res.status(200).send(like);
+        } else {
+            console.log("Like not found.");
+            res.status(404).send("Like not found.");
         }
     }).catch(() => {
         console.log("Bad request (GET by ID).");
-        res.status(400).send("like not found.");
+        res.status(400).send("Like not found.");
     })
-});
-
-app.post('/like', async (req, res) => {
-    let { postId, userId } = req.body;
-
-    try {
-        // Check if the user has already liked the post
-        let existingLike = await model.Likes.findOne({ postId, userId });
-
-        if (existingLike) {
-            return res.status(409).json({ message: 'Post already liked by the user.' });
-        }
-
-        // If the user hasn't liked the post, create a new like
-        let newLike = new model.Likes({ postId, userId });
-        await newLike.save();
-
-        res.status(201).json({ message: "Post liked successfully." });
-    } catch (error) {
-        console.error("Error liking post:", error);
-        res.status(500).json({ message: "Error liking post." });
-    }
 })
 
+app.post("/users/:userId/liked/:postId", AuthMiddleware, function (req, res) {
+    const postId = request.params.postId;
+    const userId = request.session.userId;
+
+    model.User.findOne({ "_id": userId }).then(user => {
+        if (user) {
+            // Check if the post ID is not already in the liked array
+            if (!user.liked.includes(postId)) {
+                // Add the post ID to the liked array
+                user.liked.push(postId);
+
+                // Save the updated user document
+                user.save().then(() => {
+                    response.status(200).send("Post liked successfully.");
+                }).catch(() => {
+                    response.status(500).send("Failed to like the post.");
+                });
+            } else {
+                response.status(409).send("Post already liked by the user.");
+            }
+        } else {
+            response.status(404).send("User not found.");
+        }
+    }).catch(() => {
+        response.status(500).send("Failed to like the post.");
+    })
+})
+
+app.delete("/users/:userId/liked/:postId", AuthMiddleware, function (req, res) {
+    const postId = request.params.postId;
+    const userId = request.params.userId;
+
+    model.User.findOne({ "_id": userId }).then(user => {
+        if (user) {
+            // Check if the post ID is in the liked array
+            const postIndex = user.liked.indexOf(postId);
+            if (postIndex !== -1) {
+                // Remove the post ID from the liked array
+                user.liked.splice(postIndex, 1);
+
+                // Save the updated user document
+                user.save().then(() => {
+                    response.status(200).send("Post un-liked successfully.");
+                }).catch(() => {
+                    response.status(500).send("Failed to un-like the post.");
+                });
+            } else {
+                response.status(404).send("Post not liked by the user.");
+            }
+        } else {
+            response.status(404).send("User not found.");
+        }
+    }).catch(() => {
+        response.status(500).send("Failed to unlike the post.");
+    })
+})
 
 
 // PUT FOR VOLUNTEERFORM SCHEMA

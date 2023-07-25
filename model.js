@@ -45,26 +45,26 @@ const VolunteerFormSchema = Schema({
         type: Number,
         default: 0
     },
-    likedPost: {
-        type: Boolean,
-        default: false
-    }
+    // likedPost: {
+    //     type: Boolean,
+    //     default: false
+    // }
 })
 
-const likesSchema = Schema({
-    postId: {
-        type: Schema.Types.ObjectId,
-        ref: 'VolunteerForm',
-        required: true
-    }, 
-    userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    }, 
-    numLikes: { type: Number, default: 0 }, 
-    likedPost: { type: Boolean, default: false }, 
-})
+// const likesSchema = Schema({
+//     postId: {
+//         type: Schema.Types.ObjectId,
+//         ref: 'VolunteerForm',
+//         required: true
+//     }, 
+//     userId: {
+//         type: Schema.Types.ObjectId,
+//         ref: 'User',
+//         required: true
+//     }, 
+//     numLikes: { type: Number, default: 0 }, 
+//     likedPost: { type: Boolean, default: false }, 
+// })
 
 const DonationFormSchema = Schema({
     user: {
@@ -130,10 +130,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "A password is required"]
     },
-    // liked: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'User'
-    // }
+    liked: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "VolunteerForm"
+        }
+    ]
 });
 
 userSchema.methods.setPassword = function (plainTextpassword) {
@@ -178,14 +180,12 @@ RedactedUser.createCollection({
 const JournalEntry = mongoose.model("JournalEntry", JournalEntrySchema);
 const VolunteerForm = mongoose.model("VolunteerForm", VolunteerFormSchema);
 const DonationForm = mongoose.model("DonationForm", DonationFormSchema);
-const Likes = mongoose.model("Likes", likesSchema)
 
 
 module.exports = {
     JournalEntry: JournalEntry,
     VolunteerForm: VolunteerForm,
     DonationForm: DonationForm,
-    Likes: Likes,
     User: User,
     RedactedUser, RedactedUser
 }
