@@ -117,6 +117,7 @@ Vue.createApp({
 
             editProfile: {
                 userId: "",
+                profileImageToggle: false,
                 profileImage: null,
                 profileImageUrl: "",
                 profileImageError: false,
@@ -473,8 +474,8 @@ Vue.createApp({
                 }
             }
         },
-        likePost: function(postId) {
-            
+        likePost: function (postId) {
+
         },
         filterBy: function (filterType) {
             // Show all volunteer opportunities
@@ -689,7 +690,7 @@ Vue.createApp({
             fetch(URL + `users/${localStorage.getItem('userId')}`, options)
                 .then((response) => {
                     if (response.status == 200) {
-                        this.getVolunteerOpportunitiesByUser();
+                        this.getVolunteerOpportunitiesByUser(localStorage.getItem('userId'));
                         this.editProfile.nameEditToggle = false;
                         this.editProfile.aboutEditToggle = false;
                         this.editProfile.emailEditToggle = false;

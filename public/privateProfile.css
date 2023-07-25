@@ -32,12 +32,15 @@ main {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.4);
     border-radius: 50%;
     object-fit: cover;
     /* cursor: url(https://img.icons8.com/ios/50/ffffff/camera.png), auto; */
     cursor: pointer;
     user-select: none;
+}
+
+.profile-photo-blur-hover {
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .profile-photo-edit-icon {

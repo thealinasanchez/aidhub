@@ -52,11 +52,15 @@
                 <div class="profile-photo-container">
                     <img class="profile-photo" :src="editProfile.profileImageUrl" />
                     <!-- if default profile photo or hover-->
-                    <label for="file" class="profile-photo-blur">
+                    <label for="file" class="profile-photo-blur"
+                        :class="{'profile-photo-blur-hover' : editProfile.profileImageToggle}"
+                        @mouseover="editProfile.profileImageToggle = true"
+                        @mouseleave="editProfile.profileImageToggle = false">
                         <input class="file-upload" id="file" type="file" @change="uploadUserProfileImage" name="file"
                             accept="image/jpeg" />
-                        <h3>Change Profile photo</h3>
-                        <img class="profile-photo-edit-icon" src="./icons/light-edit.svg" alt="edit-icon" />
+                        <h3 v-if="editProfile.profileImageToggle">Change Profile photo</h3>
+                        <img class="profile-photo-edit-icon" src="./icons/light-edit.svg" alt="edit-icon"
+                            v-if="editProfile.profileImageToggle" />
                     </label>
                 </div>
                 <p class="edit-error-text" v-if="editProfile.profileImageError">Wrong Filetime or Another Issue
