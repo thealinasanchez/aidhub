@@ -302,6 +302,27 @@ app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
     })
 })
 
+app.get("/like", function(req,res) {
+    model.Likes.find().then(entries => {
+        res.json(entries);
+    });
+});
+
+app.get("/like/:likeId", function(req, res) {
+    model.Likes.fineOne({"_id": req.params.likeId}).then(like => {
+        if (like) {
+            res.json(like);
+        }
+        else {
+            console.log("like not found.");
+            res.status(404).send("like not found.");
+        }
+    }).catch(() => {
+        console.log("Bad request (GET by ID).");
+        res.status(400).send("like not found.");
+    })
+});
+
 app.post('/like', async(req,res) => {
     let {postId, userId} = req.body;
 

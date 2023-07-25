@@ -1,5 +1,4 @@
-// const { model } = require("mongoose");
-const { Likes } = require("./model");
+// const { Likes } = require("./model");
 
 var URL = "http://localhost:6300/";
 // var URL = "https://aidhub-production.up.railway.app/";
@@ -295,7 +294,9 @@ Vue.createApp({
                     })
 
                     this.allVolunteerOpportunities = [...this.volunteerOpportunities];
-                });
+                }).catch((error) => {
+                    console.error("Error fetching volunteer opportunities:", error);
+                })
         },
         addVolunteerOpportunities: function () {
             myHeaders = new Headers();
@@ -427,213 +428,187 @@ Vue.createApp({
             }
         },
         likePost: async function(index, postId) {
-            var post = this.volunteerOpportunities[index];
-
+            const post = this.volunteerOpportunities[index];
             // Get the user ID from the user object in your data (assuming user is logged in)
-            var userId = this.user._id;
-
+            const userId = this.user._id;
+            
             try {
-                // Check if the user has already liked the post
-                var existingLike = await Likes.findOne({postId, userId});
-                if (!existingLike) {
-                        // If the user has not liked the post, create a new like entry
-                        var newLikes = new Likes({
-                            postId,
-                            userId
-                        });
+                let existingLikeResponse = await fetch(URL + `/like/${postId}/${userId}`);
+                let existingLike = await existingLikeResponse.json();
 
-                        // Save the new like entry to the database
-                        await newLikes.save();
-
-                        // Update the post's liked status and numLikes
-                        post.likedPost = true;
-                        post.numLikes += 1;
-                    } else {
-                        // If the user has already liked the post, remove the like entry from the database
-                        await Likes.deleteOne({postId, userId});
-                        
-                        // Update the post's liked status and numLikes
-                        post.likedPost = false;
-                        post.numLikes -= 1;
-                    }
-
-                    // Send a request to the backend API to like or unlike the post
-                    var requestOptions = {
-                        method: "POST", // You can use "PUT", or "DELETE" depending on your backend API
+                if(!existingLike) {
+                    // If the user has not liked the post, create a new like entry
+                    let newLikeResponse = await fetch('/like', {
+                        method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify ({
-                            postId: postId,
-                            userId: userId
+                        body: JSON.stringify({postId, userId})
+                    });
+                    // Update the post's liked status and numLikes
+                    post.likedPost = true;
+                    post.numLiked += 1;
+                } else {
+                    // If the user has already liked the post, remove the 
+                    // like entry from the database
+                    await fetch(`/like/${postId}/${userId}`, {
+                        method: "DELETE",
+                    });
+
+                    // Update the post's liked status and numLikes
+                    post.likedPost = false;
+                    post.numLikes -= 1;
+                }
+            } catch (error) {
+                console.error("Error liking/unliking post:", error);
+            }
+        },
+            filterBy: function(filterType) {
+                // Show all volunteer opportunities
+                if (filterType === 'all') {
+                    this.allVolunteerOpportunities = [...this.volunteerOpportunities];
+                // Show volunteer opportunities ending soon
+                } else if (filterType === 'oldest') {
+                    let currentDate = new Date();
+                    // Filter the opportunities that have a valid end date and the end date 
+                    // is greater than or equal to the current date
+                    let endingSoonOpportunities = this.volunteerOpportunities.filter((post) => {
+                        return (
+                            post.formattedEndDate && new Date(post.formattedEndDate) >= currentDate
+                        );
+                    });
+                    // Sort the filtered opportunities by their end dates in ascending order
+                    endingSoonOpportunities.sort((a,b) => new Date(a.dateEnd) - new Date(b.dateEnd));
+    
+                    // Update the displayed opportunities with the sorted and filtered list
+                    this.volunteerOpportunities = endingSoonOpportunities;
+                }
+            },
+            getOrganizationsDropdown: function () {
+                fetch(URL + `localOrganizations`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach((organization) => {
+                            this.organizations.push(organization.name);
+                            this.filteredOrganizations.push(organization.name);
+                            // console.log(this.trialOrganizations);
                         })
-                    };
-                    var response = await fetch(URL + '/like', requestOptions);
-
-                    if (response.ok) {
-                        var responseData = await response.json();
-                        if (responseData.success) {
-                            // The like or unlike operation was successful, update the UI accordingly
-                            // You may not need to do anything here since we've already updated the post's liked status and numLikes
-                        } else {
-                            // The server indication there was an issue with the like or unlike operation
-                            console.error("Failed to like or unlike post: ", responseData.message);
-                        }
-                    } else {
-                        // The HTTP request itself failed (ex: server not reachable or other network-related issues)
-                        console.error("Failed to send like or unlike request:", response.status, response.statusText);
-                    }
-                } catch (error) {
-                    console.error("Error liking/unliking post:", error);
-                }
-            }
-        },
-        filterBy: function(filterType) {
-            // Show all volunteer opportunities
-            if (filterType === 'all') {
-                this.allVolunteerOpportunities = [...this.volunteerOpportunities];
-            // Show volunteer opportunities ending soon
-            } else if (filterType === 'oldest') {
-                let currentDate = new Date();
-                // Filter the opportunities that have a valid end date and the end date 
-                // is greater than or equal to the current date
-                let endingSoonOpportunities = this.volunteerOpportunities.filter((post) => {
-                    return (
-                        post.formattedEndDate && new Date(post.formattedEndDate) >= currentDate
-                    );
-                });
-                // Sort the filtered opportunities by their end dates in ascending order
-                endingSoonOpportunities.sort((a,b) => new Date(a.dateEnd) - new Date(b.dateEnd));
-
-                // Update the displayed opportunities with the sorted and filtered list
-                this.volunteerOpportunities = endingSoonOpportunities;
-            }
-        },
-        getOrganizationsDropdown: function () {
-            fetch(URL + `localOrganizations`)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach((organization) => {
-                        this.organizations.push(organization.name);
-                        this.filteredOrganizations.push(organization.name);
-                        // console.log(this.trialOrganizations);
                     })
-                })
-        },
-        selectOrganization: function (organization) {
-            this.newVolunteerPost.orgname = organization;
-            this.filteredOrganizations = [];
-        },
-        /* user stuff */
-        loggedIn: function () {
-            let options = {
-                credentials: "include"
-            }
-            fetch(URL + "session", options)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.cookie && data.userId) {
-                        this.loggedInStatus = true;
-                        this.user = data;
-                        /* do something if logged in */
-                    } else {
-                        this.loggedInStatus = false;
-                        if (this.page == 'volunteerForm') {
-                            window.location.href = "login.html";
-                        }
-                    }
-                    this.gettingStatus = false;
-                }).catch(error => {
-                    this.loggedInStatus = false;
-                    console.log(error);
-                })
-        },
-        signUp: function () {
-            let myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            let options = {
-                method: "POST",
-                headers: myHeaders,
-                body: JSON.stringify(this.user)
-            }
-            fetch(URL + "users", options).then(response => {
-                if (response.status == 201) {
-                    this.createSession();
-                } else {
-                    response.text().then(text => alert(text));
+            },
+            selectOrganization: function (organization) {
+                this.newVolunteerPost.orgname = organization;
+                this.filteredOrganizations = [];
+            },
+            /* user stuff */
+            loggedIn: function () {
+                let options = {
+                    credentials: "include"
                 }
-            });
-        },
-        createSession: function () {
-            let myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-            let options = {
-                method: "POST",
-                headers: myHeaders,
-                body: JSON.stringify(this.user),
-                credentials: "include"
-            }
-            fetch(URL + "session", options).then(response => {
-                if (response.status == 201) {
-                    response.text().then(data => {
-                        if (data) {
-                            data = JSON.parse(data);
+                fetch(URL + "session", options)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.cookie && data.userId) {
                             this.loggedInStatus = true;
-                            // this.page = "" go to volunteer page with access to form
-                            this.getPreviousPage();
-                            this.user.name = data.name;
-                            window.location.href = this.previousPage + ".html";
+                            this.user = data;
+                            /* do something if logged in */
                         } else {
-                            alert("No session created");
+                            this.loggedInStatus = false;
+                            if (this.page == 'volunteerForm') {
+                                window.location.href = "login.html";
+                            }
                         }
+                        this.gettingStatus = false;
+                    }).catch(error => {
+                        this.loggedInStatus = false;
+                        console.log(error);
                     })
-                } else {
-                    response.text().then(text => alert(text));
+            },
+            signUp: function () {
+                let myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+                let options = {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: JSON.stringify(this.user)
                 }
-            });
-        },
-        logout: function () {
-            let options = {
-                method: "DELETE",
-                credentials: "include"
-            }
-            fetch(URL + "session", options).then(response => {
-                if (response.status == 204) {
-                    this.loggedInStatus = false;
-                } else {
-                    console.log("Couldn't log out", response.status);
+                fetch(URL + "users", options).then(response => {
+                    if (response.status == 201) {
+                        this.createSession();
+                    } else {
+                        response.text().then(text => alert(text));
+                    }
+                });
+            },
+            createSession: function () {
+                let myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+                let options = {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: JSON.stringify(this.user),
+                    credentials: "include"
                 }
-                this.page = "";
-                this.user.name = "";
-                this.user.email = "";
-                this.user.password = "";
-            });
+                fetch(URL + "session", options).then(response => {
+                    if (response.status == 201) {
+                        response.text().then(data => {
+                            if (data) {
+                                data = JSON.parse(data);
+                                this.loggedInStatus = true;
+                                // this.page = "" go to volunteer page with access to form
+                                this.getPreviousPage();
+                                this.user.name = data.name;
+                                window.location.href = this.previousPage + ".html";
+                            } else {
+                                alert("No session created");
+                            }
+                        })
+                    } else {
+                        response.text().then(text => alert(text));
+                    }
+                });
+            },
+            logout: function () {
+                let options = {
+                    method: "DELETE",
+                    credentials: "include"
+                }
+                fetch(URL + "session", options).then(response => {
+                    if (response.status == 204) {
+                        this.loggedInStatus = false;
+                    } else {
+                        console.log("Couldn't log out", response.status);
+                    }
+                    this.page = "";
+                    this.user.name = "";
+                    this.user.email = "";
+                    this.user.password = "";
+                });
+            },
+            setPage: function (page) {
+                localStorage.setItem("page", page);
+            },
+            getPreviousPage: function () {
+                let page = localStorage.getItem("page");
+                if (page) {
+                    this.previousPage = page;
+                }
+            },
+            goBackToPreviousPage: function () {
+                this.getPreviousPage();
+                if (this.previousPage == 'volunteerForm') {
+                    this.previousPage = 'volunteer';
+                }
+                window.location.href = this.previousPage + ".html";
+            },
+            goToVolunteerForm: function () {
+                this.setPage('volunteerForm');
+                if (this.loggedInStatus) {
+                    window.location.href = "volunteerForm.html";
+                } else {
+                    window.location.href = "login.html";
+                }
+            },
         },
-        setPage: function (page) {
-            localStorage.setItem("page", page);
-        },
-        getPreviousPage: function () {
-            let page = localStorage.getItem("page");
-            if (page) {
-                this.previousPage = page;
-            }
-        },
-        goBackToPreviousPage: function () {
-            this.getPreviousPage();
-            if (this.previousPage == 'volunteerForm') {
-                this.previousPage = 'volunteer';
-            }
-            window.location.href = this.previousPage + ".html";
-        },
-        goToVolunteerForm: function () {
-            this.setPage('volunteerForm');
-            if (this.loggedInStatus) {
-                window.location.href = "volunteerForm.html";
-            } else {
-                window.location.href = "login.html";
-            }
-        },
-    },
     watch: {
         state(newState, oldState) {
             this.organizationsSearchFilterState.name = newState;
