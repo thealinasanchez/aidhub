@@ -122,7 +122,9 @@
                         <div class="post-button-container">
                             <div id="likes">
                                 <p><span id="display">{{post.numLikes}}</span> Likes</p>
-                                <div id="like-button" @click="likePost(index, post.id)"></div>
+                                <button id="like-button" @click="toggleLikePost(post.id)">
+                                    {{post.liked ? 'Unlike' : 'Like'}}
+                                </button>
                             </div>
                             <div class="post-modification" v-if="loggedInStatus && post.user == user.name">
                                 <img src="./icons/edit.svg" alt="edit-icon" @click="updatePost(post.id)"

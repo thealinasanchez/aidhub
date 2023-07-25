@@ -99,7 +99,7 @@ Vue.createApp({
                 num_people: 0,
                 website: "",
                 numLikes: 0,
-                liked: false
+                likedPost: false
             },
             toggleModal: false,
             formattedStartDate: "",
@@ -318,8 +318,8 @@ Vue.createApp({
                         post.numLikes = post.numLikes || 0;
                         this.volunteerOpportunities.push(post);
                     })
-
-                    this.allVolunteerOpportunities = [...this.volunteerOpportunities];
+                    console.log(this.volunteerOpportunities);
+                    // this.allVolunteerOpportunities = [...this.volunteerOpportunities];
                 }).catch((error) => {
                     console.error("Error fetching volunteer opportunities:", error);
                 })
@@ -473,8 +473,29 @@ Vue.createApp({
                 }
             }
         },
-        likePost: function(postId) {
-            
+        togglelikePost: function(postId) {
+            const post = this.volunteerOpportunities.find((p) => p.id === postId);
+            if (post) {
+                if(!post.likedPost) {
+                    // If the post is not liked, send a POST request to like the post
+                    fetch(URL + `/users/:userId/liked/${postId}`, {
+                        method: 'POST',
+                        credentials: 'include', //Include cookies for authenticated requests
+                    }).then((response) => {
+                        if (response.ok) {
+                            // If the request is successful, update the frontend
+                            // For example, increase the number of likes on the post
+                            // and set likedPost to true
+                            post.numLikes++;
+                            post.likedPost = true;
+                        } else {
+                            console.error("Failed to like the post");
+                        }
+                    }).catch((error) => {
+                        console.error("Failed to like the post", error);
+                    })
+                }
+            }
         },
         filterBy: function (filterType) {
             // Show all volunteer opportunities
