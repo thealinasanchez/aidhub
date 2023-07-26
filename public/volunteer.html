@@ -51,18 +51,36 @@
                 </ul>
             </nav>
             <div class="nav-bar-button-container">
-                <a href="getstarted.html">
+                <a href="volunteer.html">
                     <button class="common-green-button nav-bar-button">GET STARTED</button>
                 </a>
             </div>
         </header>
         <main :style="!editPostModal ? '' : 'overflow: hidden; height: 100vh'">
             <div id="main-header">
-                <h1>Volunteer Opportunities</h1>
-                <button id="volunteerformbutton" @click="goToVolunteerForm()">Add Volunteer Opportunity</button>
-            </div>
-            <div class="container">
+                <div id="header-and-addbutton">
+                    <h1>Volunteer Opportunities</h1>
+                    <button id="volunteerformbutton" @click="goToVolunteerForm()">
+                        Add Volunteer Opportunity
+                    </button>
+                </div>
                 <!--search box-->
+                <div class="search-area">
+                    <form onsubmit="return false">
+                        <input type="text" id="search" placeholder="Search...">
+                    </form>
+                    <div id="search-buttons">
+                        <button class="btn all" @click="filterBy('all')">All</button>
+                        <button class="btn oldest" @click="filterBy('oldest')">Ending Soon</button>
+                    </div>
+                </div>
+                <!-- <div class="filer-box">
+                    <button class="btn all" @click="filterBy('all')">All</button>
+                    <button class="btn oldest" @click="filterBy('oldest')">Ending Soon</button>
+                    
+                </div> -->
+            </div>
+            <!-- <div class="container">
                 <div class="search-box">
                     <form onsubmit="return false">
                         <input type="text" id="search" placeholder="Search...">
@@ -71,9 +89,7 @@
                 <div class="filer-box">
                     <button class="btn all" @click="filterBy('all')">All</button>
                     <button class="btn oldest" @click="filterBy('oldest')">Ending Soon</button>
-                    <!-- <a href="#" class="btn oldest" data-filter="oldest" @click="filterBy('oldest')">Ending Soon</a> -->
-                </div>
-            </div>
+            </div> -->
             <div id="filtering-area"></div>
             <div class="post-container">
                 <div 
@@ -117,7 +133,9 @@
                         </div>
                         <div id="post-description" v-if="post.description">
                             <p>Description: </p>
-                            <div>{{post.description}}</div>
+                                <textarea name="desc-text" id="desc-text" cols="115" rows="10">
+                                    {{post.description}}
+                                </textarea>
                         </div>
                         <div id="post-num_people">
                             <p>Number Of People Needed: </p>
