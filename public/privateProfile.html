@@ -19,7 +19,7 @@
 
 <body>
     <div id="app">
-        <div style="display: none;">{{ page = 'privateProfile' }}</div>
+        <div style="display: none;" id="#top">{{ page = 'privateProfile' }}</div>
         <div class="top-login-header-container">
             <div class="top-login-header">
                 <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
@@ -47,7 +47,7 @@
                 </a>
             </div>
         </header>
-        <main>
+        <main :style="!editPostModal ? '' : 'overflow: hidden; height: 100vh'">
             <div>
                 <div class="profile-photo-container">
                     <img class="profile-photo" :src="editProfile.profileImageUrl" />
@@ -203,8 +203,9 @@
                                         Likes
                                     </p>
                                     <div class="edit-delete-opportunity-container">
-                                        <img @click="editVolunteerOpportunities(index)" class="edit-opportunity-icon"
-                                            src="./icons/pencil.svg" alt="edit-icon" />
+                                        <a href="#top"><img @click="editVolunteerOpportunities(index)"
+                                                class="edit-opportunity-icon" src="./icons/pencil.svg"
+                                                alt="edit-icon" /></a>
                                         <img @click="deleteVolunteerOpportunities(index)"
                                             class="delete-opportunity-icon" src="./icons/trash.svg" alt="delete-icon" />
                                     </div>
@@ -214,6 +215,89 @@
                     </div>
                 </div>
         </main>
+        <!-- edit post modal -->
+        <div class="volunteer-form-container" v-if="editPostModal">
+            <form @submit.prevent="updateVolunteerOpportunities()" id="volunteer-form">
+                <a class="back-button" @click="editPostModal = false">
+                    &larr;&nbsp;Back To Edit Profile</a>
+                <span>
+                    <label for="title">Title: </label>
+                    <input type="text" id="title" name="title" class="volunteer-form-input" required
+                        v-model="newVolunteerPost.title" placeholder="Awesome Title Goes Here...">
+                </span>
+                <span>
+                    <div id="desc-area">
+                        <label for="description">Description: </label>
+                        <textarea name="description" id="description" cols="30" rows="8"
+                            v-model="newVolunteerPost.description"></textarea>
+                    </div>
+                </span>
+                <span>
+                    <label for="orgname">Organization Name (if personal, select "personal"): </label>
+                    <label>
+                        <input type="radio" name="checkBox" v-model="newVolunteerPost.type" class="volunteer-form-input"
+                            value="personal" checked>
+                        Personal
+                    </label>
+                    <label>
+                        <input type="radio" v-model="newVolunteerPost.type" name="checkBox" value="organization">
+                        Organization
+                    </label>
+                    <div class="organization-container">
+                        <div v-show="newVolunteerPost.type === 'organization'">
+                            <input type="text" v-model="newVolunteerPost.orgname" id="organization"
+                                class="volunteer-form-input" placeholder="Enter Organization Name..."
+                                @blur="showOrganizationDropdown = false" @focus="showOrganizationDropdown = true">
+                            <div class="organization-select-container"
+                                v-if="filteredOrganizations.length > 0 && showOrganizationDropdown">
+                                <div class="organization-select" v-for="organization in filteredOrganizations"
+                                    @mousedown="selectOrganization(organization)">{{organization}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+                <span>
+                    <label for="city">City: </label>
+                    <input type="text" id="city" name="city" class="volunteer-form-input"
+                        v-model="newVolunteerPost.city" placeholder="City...">
+                </span>
+                <div class="state-container">
+                    <label for="state">State:</label>
+                    <br />
+                    <input type="text" id="state" name="state" class="volunteer-form-input" required v-model="state"
+                        placeholder="State.." autocomplete="off" @blur="showStateDropdown = false"
+                        @focus="showStateDropdown = true">
+                    <div class="state-select-container" v-show="filteredStates.length > 0 && showStateDropdown">
+                        <div class="state-select" v-for="state in filteredStates" @mousedown="selectState(state)">
+                            {{state.name}}
+                        </div>
+                    </div>
+                </div>
+                <span>
+                    <label for="dateStart">Start Date: </label>
+                    <input type="date" id="dateStart" class="volunteer-form-input" name="dateStart" min="2023-07-22"
+                        required v-model="newVolunteerPost.dateStart">
+                </span>
+                <span>
+                    <label for="dateEnd">End Date: </label>
+                    <input type="date" id="dateEnd" name="dateEnd" class="volunteer-form-input" min="2023-07-22"
+                        v-model="newVolunteerPost.dateEnd">
+                </span>
+
+                <span>
+                    <label for="num_people">Amount of Volunteers Needed: </label>
+                    <input type="number" id="num_people" name="num_people" class="volunteer-form-input" min="1" required
+                        v-model="newVolunteerPost.num_people">
+                </span>
+                <span>
+                    <label for="website">Website: </label>
+                    <input type="text" id="website" name="website" class="volunteer-form-input"
+                        v-model="newVolunteerPost.website">
+                </span>
+                <button type="submit" class="submit-volunteer-form-button" id="post">Update Volunteer
+                    Opportunity</button>
+            </form>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>

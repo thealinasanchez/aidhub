@@ -87,6 +87,7 @@ Vue.createApp({
             allVolunteerOpportunities: [], // Keeps a copy of volunteerOpportunities
             filteredVolunteerOpportunities: [], // Store the filtered and sorted volunteer opportunities
             newVolunteerPost: {
+                index: -1,
                 user: "",
                 title: "",
                 type: "",
@@ -136,7 +137,9 @@ Vue.createApp({
                 confirmPassword: "",
                 passwordMessage: "",
                 deleteAccountToggle: false
-            }
+            },
+
+            editPostModal: false
         }
     },
     methods: {
@@ -319,7 +322,6 @@ Vue.createApp({
                         post.numLikes = post.numLikes || 0;
                         this.volunteerOpportunities.push(post);
                     })
-                    console.log(this.volunteerOpportunities);
                     // this.allVolunteerOpportunities = [...this.volunteerOpportunities];
                 }).catch((error) => {
                     console.error("Error fetching volunteer opportunities:", error);
@@ -390,7 +392,7 @@ Vue.createApp({
                     }
                 });
         },
-        updateVolunteerOpportunities: function (index) {
+        updateVolunteerOpportunities: function () {
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
@@ -415,19 +417,15 @@ Vue.createApp({
                 },
                 credentials: "include"
             };
-            var volpostId = this.volunteerOpportunities[index]._id;
-            console.log(volpostId);
+            var volpostId = this.newVolunteerPost._id;
             fetch(URL + `volunteerOpportunities/${volpostId}`, requestOptions)
                 .then((response) => {
                     if (response.status === 204) {
-                        this.volunteerOpportunities[this.newVolunteerPost.index].user = this.user.name;
-                        this.volunteerOpportunities[this.newVolunteerPost.index].title = this.newVolunteerPost.title;
-                        this.volunteerOpportunities[this.newVolunteerPost.index].orgname = this.newVolunteerPost.orgname;
-                        this.volunteerOpportunities[this.newVolunteerPost.index].city = this.newVolunteerPost.city;
-                        this.volunteerOpportunities[this.newVolunteerPost.index].state = this.newVolunteerPost.state;
-                        this.volunteerOpportunities[this.newVolunteerPost.index].dateStart = this.newVolunteerPost.dateStart;
-                        this.volunteerOpportunities[this.newVolunteerPost.index].dateEnd = this.newVolunteerPost.dateEnd;
-                        this.volunteerOpportunities[this.newVolunteerPost.index].description = this.newVolunteerPost.type;
+                        if (this.page == 'volunteer') {
+                            window.location.href = "volunteer.html";
+                        } else if (this.page == 'privateProfile') {
+                            window.location.href = "privateProfile.html";
+                        }
                     }
                 })
         },
@@ -454,7 +452,7 @@ Vue.createApp({
             // Get the year, month, and day from the Date objects
             var startYear = startDate.getFullYear();
             var startMonth = startDate.getMonth() + 1;
-            var startDay = startDate.getDate();
+            var startDay = startDate.getDate() + 1;
 
             // Create formatted date strings
             var formattedStartDate = `${startMonth.toString().padStart(2, '0')}-${startDay.toString().padStart(2, '0')}-${startYear}`;
@@ -462,7 +460,7 @@ Vue.createApp({
                 var endDate = new Date(dateEnd);
                 var endYear = endDate.getFullYear();
                 var endMonth = endDate.getMonth() + 1;
-                var endDay = endDate.getDate();
+                var endDay = endDate.getDate() + 1;
                 var formattedEndDate = `${endMonth.toString().padStart(2, '0')}-${endDay.toString().padStart(2, '0')}-${endYear}`;
                 return {
                     formattedStartDate: formattedStartDate,
@@ -559,7 +557,7 @@ Vue.createApp({
                 .then(data => {
                     if (data && data.cookie && data.userId) {
                         this.userProfileImage = `https://my-profile-photos-bucket.s3.us-west-1.amazonaws.com/${data.userId}-profile-picture.jpg?v=${Date.now()}`;
-                        this.user = data;
+                        this.user.name = data.name;
                         this.loggedInStatus = true;
                         /* do something if logged in */
                     } else {
@@ -604,11 +602,10 @@ Vue.createApp({
                     response.text().then(data => {
                         if (data) {
                             data = JSON.parse(data);
-                            console.log(data);
                             this.loggedInStatus = true;
-                            this.getPreviousPage();
                             this.user.name = data.name;
                             localStorage.setItem("userId", data.userId);
+                            this.getPreviousPage();
                             window.location.href = this.previousPage + ".html";
                         } else {
                             alert("No session created");
@@ -629,6 +626,12 @@ Vue.createApp({
                     this.loggedInStatus = false;
                     if (localStorage.getItem("userId")) {
                         localStorage.removeItem("userId");
+                    }
+                    if (localStorage.getItem("publicProfileUserId")) {
+                        localStorage.removeItem("publicProfileUserId");
+                    }
+                    if (this.page == 'privateProfile') {
+                        window.location.href = "index.html";
                     }
                 } else {
                     console.log("Couldn't log out", response.status);
@@ -691,6 +694,7 @@ Vue.createApp({
             }
             if (!localStorage.getItem("userId")) {
                 window.location.href = "login.html";
+                return;
             }
             fetch(URL + `users/${localStorage.getItem("userId")}`, options)
                 .then((response) => {
@@ -826,7 +830,6 @@ Vue.createApp({
             }
             fetch(URL + `userProfile/${localStorage.getItem("userId")}`, options)
                 .then((response) => {
-                    console.log(response)
                     if (response.status == 201) {
                         this.editProfile.profileImageUrl = '';
                         this.getUserProfileImage(localStorage.getItem("userId"));
@@ -857,6 +860,18 @@ Vue.createApp({
                     console.log(error);
                     window.location.href = "index.html";
                 })
+        },
+        editVolunteerOpportunities: function (index) {
+            /* do something */
+            this.editPostModal = true;
+            this.newVolunteerPost = this.volunteerOpportunities[index];
+            this.newVolunteerPost.index = index;
+            this.state = this.volunteerOpportunities[index].state;
+            this.newVolunteerPost.dateStart = new Date(this.volunteerOpportunities[index].dateStart).toISOString().slice(0, 10);
+            if (this.volunteerOpportunities[index].dateEnd) {
+                this.newVolunteerPost.dateEnd = new Date(this.volunteerOpportunities[index].dateEnd).toISOString().slice(0, 10);
+            }
+            this.newVolunteerPost.type = this.volunteerOpportunities[index].orgname == "personal" ? "personal" : "organization";
         }
     },
     /*                                                     WATCHERS                                                     */
@@ -913,7 +928,6 @@ Vue.createApp({
                     }
                 }
             }).then((data) => {
-                console.log(data);
                 let loc = data.loc.split(",");
                 let ipLocation = {
                     city: data.city ? data.city : "",
@@ -994,7 +1008,12 @@ Vue.createApp({
             this.getOrganizationCategories();
         } else if (this.page == 'volunteer') {
             this.setPage('volunteer');
+            if (this.loggedInStatus) {
+                this.getUserInformation();
+            }
             this.getVolunteerOpportunities();
+            this.getOrganizationsDropdown();
+            this.getStates();
         } else if (this.page == 'volunteerForm') {
             this.setPage('volunteerForm');
             this.getStates();

@@ -19,7 +19,7 @@
 <body>
     <div id="app">
         <!-- Content goes here -->
-        <div style="display: none">{{page = 'volunteer'}}</div>
+        <div style="display: none" id="#top">{{page = 'volunteer'}}</div>
         <div class="top-login-header-container">
             <div class="top-login-header" v-if="loggedInStatus">
                 <div class="top-login-header-button" @click="logout()"><img src="./icons/logout.svg"
@@ -56,7 +56,7 @@
                 </a>
             </div>
         </header>
-        <main>
+        <main :style="!editPostModal ? '' : 'overflow: hidden; height: 100vh'">
             <div id="main-header">
                 <h1>Volunteer Opportunities</h1>
                 <button id="volunteerformbutton" @click="goToVolunteerForm()">Add Volunteer Opportunity</button>
@@ -80,9 +80,12 @@
                     :class="index % 2 === 0 ? 'post even' : 'post odd'">
                     <div id="volunteerpost">
                         <div id="post-user">
-                            <p>Created By: </p>
-                            <div>{{post.postedBy.name}}</div>
-                            <div id="profile" @click="goToPublicProfile(post.postedBy._id)">Profile</div>
+                            <div class="profile-photo-container" @click="goToPublicProfile(post.postedBy._id)">
+                                <img class="profile-photo"
+                                    :src="'https://my-profile-photos-bucket.s3.us-west-1.amazonaws.com/'+ post.postedBy._id +'-profile-picture.jpg' "
+                                    alt="profile-image" />
+                                <span>{{post.postedBy.name}}</span>
+                            </div>
                         </div>
                         <div id="post-title">
                             {{post.title}}
@@ -117,7 +120,7 @@
                         </div>
                         <div id="post-website" v-if="post.website">
                             <p>Website: </p>
-                            <div>{{post.website}}</div>
+                            <div><a :href="post.website" target="_blank">{{post.website}}</a></div>
                         </div>
                         <div class="post-button-container">
                             <div id="likes">
@@ -126,11 +129,11 @@
                                     {{post.liked ? 'Unlike' : 'Like'}}
                                 </button>
                             </div>
-                            <div class="post-modification" v-if="loggedInStatus && post.user == user.name">
-                                <img src="./icons/edit.svg" alt="edit-icon" @click="updatePost(post.id)"
-                                    id="post-edit-button">
-                                <img src="./icons/delete.svg" alt="delete-icon" @click="deletePost(post.id)"
-                                    id="post-delete-button">
+                            <div class="post-modification" v-if="loggedInStatus && user.name == post.postedBy.name">
+                                <a href="#top"><img src="./icons/edit.svg" alt="edit-icon"
+                                        @click="editVolunteerOpportunities(index)" id="post-edit-button"></a>
+                                <img src="./icons/trash.svg" alt="delete-icon"
+                                    @click="deleteVolunteerOpportunities(index)" class="post-delete-button">
                             </div>
                             <button id="apply-button" v-else-if="loggedInStatus">Apply</button>
                             <a href="login.html" id="login-button" v-if="!loggedInStatus">Log In To Interact</a>
@@ -138,6 +141,157 @@
                     </div>
                 </div>
             </div>
+        </main>
+        <!-- edit post modal -->
+        <div class="volunteer-form-container" v-if="editPostModal">
+            <form @submit.prevent="updateVolunteerOpportunities()" id="volunteer-form">
+                <a class="back-button" @click="editPostModal = false">
+                    &larr;&nbsp;Back To Opportunities</a>
+                <span>
+                    <label for="title">Title: </label>
+                    <input type="text" id="title" name="title" class="volunteer-form-input" required
+                        v-model="newVolunteerPost.title" placeholder="Awesome Title Goes Here...">
+                </span>
+                <span>
+                    <div id="desc-area">
+                        <label for="description">Description: </label>
+                        <textarea name="description" id="description" cols="30" rows="8"
+                            v-model="newVolunteerPost.description"></textarea>
+                    </div>
+                </span>
+                <span>
+                    <label for="orgname">Organization Name (if personal, select "personal"): </label>
+                    <label>
+                        <input type="radio" name="checkBox" v-model="newVolunteerPost.type" class="volunteer-form-input"
+                            value="personal" checked>
+                        Personal
+                    </label>
+                    <label>
+                        <input type="radio" v-model="newVolunteerPost.type" name="checkBox" value="organization">
+                        Organization
+                    </label>
+                    <div class="organization-container">
+                        <div v-show="newVolunteerPost.type === 'organization'">
+                            <input type="text" v-model="newVolunteerPost.orgname" id="organization"
+                                class="volunteer-form-input" placeholder="Enter Organization Name..."
+                                @blur="showOrganizationDropdown = false" @focus="showOrganizationDropdown = true">
+                            <div class="organization-select-container"
+                                v-if="filteredOrganizations.length > 0 && showOrganizationDropdown">
+                                <div class="organization-select" v-for="organization in filteredOrganizations"
+                                    @mousedown="selectOrganization(organization)">{{organization}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+                <span>
+                    <label for="city">City: </label>
+                    <input type="text" id="city" name="city" class="volunteer-form-input"
+                        v-model="newVolunteerPost.city" placeholder="City...">
+                </span>
+                <div class="state-container">
+                    <label for="state">State:</label>
+                    <br />
+                    <input type="text" id="state" name="state" class="volunteer-form-input" required v-model="state"
+                        placeholder="State.." autocomplete="off" @blur="showStateDropdown = false"
+                        @focus="showStateDropdown = true">
+                    <div class="state-select-container" v-show="filteredStates.length > 0 && showStateDropdown">
+                        <div class="state-select" v-for="state in filteredStates" @mousedown="selectState(state)">
+                            {{state.name}}
+                        </div>
+                    </div>
+                </div>
+                <span>
+                    <label for="dateStart">Start Date: </label>
+                    <input type="date" id="dateStart" class="volunteer-form-input" name="dateStart" min="2023-07-22"
+                        required v-model="newVolunteerPost.dateStart">
+                </span>
+                <span>
+                    <label for="dateEnd">End Date: </label>
+                    <input type="date" id="dateEnd" name="dateEnd" class="volunteer-form-input" min="2023-07-22"
+                        v-model="newVolunteerPost.dateEnd">
+                </span>
+
+                <span>
+                    <label for="num_people">Amount of Volunteers Needed: </label>
+                    <input type="number" id="num_people" name="num_people" class="volunteer-form-input" min="1" required
+                        v-model="newVolunteerPost.num_people">
+                </span>
+                <span>
+                    <label for="website">Website: </label>
+                    <input type="text" id="website" name="website" class="volunteer-form-input"
+                        v-model="newVolunteerPost.website">
+                </span>
+                <button type="submit" class="submit-volunteer-form-button" id="post">Update Volunteer
+                    Opportunity</button>
+            </form>
+        </div>
+
+
+        <footer>
+            <div class="footer-info-container">
+                <h2 class="footer-title">AidHub</h2>
+                <ul>
+                    <li class="footer-text">
+                        <a :class="page == 'organizations'? 'current-page-footer' : ''" href="organizations.html">Look
+                            up Organizations</a>
+                    </li>
+                    <li class="footer-text">
+                        <a href="getstarted.html" :class="page == 'getStarted'? 'current-page-footer' : ''">
+                            Get Started Looking at
+                            Opportunities</a>
+                    </li>
+                    <li class="footer-text"><a href="volunteer.html"
+                            :class="page == 'volunteer'? 'current-page-footer' : ''">Apply to different Volunteer
+                            Opportunities</a></li>
+                    <li class="footer-text"><a href="donation.html"
+                            :class="page == 'donate'? 'current-page-footer' : ''">Donate to a Cause</a></li>
+                </ul>
+            </div>
+            <div class="newsletter-container">
+                <div id="mc_embed_shell">
+                    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet"
+                        type="text/css">
+                    <div id="mc_embed_signup">
+                        <form
+                            action="https://gmail.us13.list-manage.com/subscribe/post?u=d407120fad598d4913dcb76b1&amp;id=8f9a8682ca&amp;f_id=001174e4f0"
+                            method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form"
+                            class="validate" target="_self" novalidate="">
+                            <div id="mc_embed_signup_scroll">
+                                <h2>Sign up for our Newsletter!</h2>
+                                <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+                                <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span
+                                            class="asterisk">*</span></label><input type="email" name="EMAIL"
+                                        class="required email" id="mce-EMAIL" required="" value=""></div>
+                                <div id="mce-responses" class="clear foot">
+                                    <div class="response" id="mce-error-response" style="display: none;"></div>
+                                    <div class="response" id="mce-success-response" style="display: none;"></div>
+                                </div>
+                                <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                                    /* real people should not fill this in and expect good things - do not remove this
+                                    or risk form bot signups */
+                                    <input type="text" name="b_d407120fad598d4913dcb76b1_8f9a8682ca" tabindex="-1"
+                                        value="">
+                                </div>
+                                <div class="optionalParent">
+                                    <div class="clear foot">
+                                        <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button"
+                                            value="Subscribe">
+                                        <p class="brandingLogo" style="margin: 0px auto;"><a
+                                                href="http://eepurl.com/iwp_bQ"
+                                                title="Mailchimp - email marketing made easy and fun"><img
+                                                    src="https://eep.io/mc-cdn-images/template_images/branding_logo_text_dark_dtp.svg"
+                                                    alt="referral badge"></a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright-container">
+                <p>&copy; 2023 AidHub</p>
+            </div>
+        </footer>
     </div>
     <script src="app.js"></script>
 </body>

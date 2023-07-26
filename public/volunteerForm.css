@@ -17,6 +17,7 @@
     display: flex;
     flex-flow: column nowrap;
     width: 800px;
+    margin: auto;
     margin-top: 10px;
     padding: 20px 25px;
     border-radius: 5px;

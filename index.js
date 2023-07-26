@@ -529,7 +529,7 @@ app.delete("/users/:userId/liked/:postId", AuthMiddleware, function (req, res) {
 app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res) {
     // console.log(req.body.categories);
     const updatedVolunteerOpportunities = {
-        user: req.body.user,
+        postedBy: req.body.postedBy,
         title: req.body.title,
         orgname: req.body.orgname,
         city: req.body.city,
@@ -543,7 +543,7 @@ app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res
 
     model.VolunteerForm.findByIdAndUpdate({ "_id": req.params.volpostId }, updatedVolunteerOpportunities, { "new": true }).then(post => {
         if (post) {
-            res.status(204).send("Volunteer post updated.");
+            res.sendStatus(204);
         }
         else {
             res.status(404).send("Volunteer post not found.");
