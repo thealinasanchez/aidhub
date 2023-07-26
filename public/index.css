@@ -164,6 +164,10 @@
     padding-bottom: 80px;
 }
 
+.index-main-image-container h2 {
+    color: var(--footer-color);
+}
+
 .index-main-image-row {
     padding: 20px 0px;
     width: 100%;

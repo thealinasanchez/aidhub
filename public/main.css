@@ -15,7 +15,7 @@
     --lightbrown: #876453;
     --button-color: #58A74C;
     --search-button-color: #4c9aa7;
-    --org-table-color: #606634;
+    --org-table-color: #1AC2ED;
     --header-color: #fcfcfc;
     --index-location-button: #24a0ed;
     --index-location-button-hover: rgb(36, 160, 237, 0.5);
@@ -38,9 +38,9 @@ img {
 }
 
 .common-green-button {
-    background-color: var(--button-color);
+    background-color: var(--footer-color);
     color: var(--offwhite);
-    border: 2px solid var(--button-color);
+    border: 2px solid #239CE8;
     border-style: outset;
     cursor: pointer;
     padding: 5px 10px;
@@ -48,9 +48,9 @@ img {
 }
 
 .common-green-button:hover {
-    background-color: #55A14A;
+    background-color: #239CE8;
     color: var(--offwhite);
-    border: 2px solid #55A14A;
+    border: 2px solid #239CE8;
 }
 
 .spinner-container {
@@ -108,7 +108,7 @@ img {
 }
 
 .top-login-header-button:hover {
-    color: var(--button-color);
+    color: var(--footer-color);
 }
 
 .top-login-header-button>img {
@@ -174,7 +174,7 @@ img {
 }
 
 .nav-links ul li:hover {
-    color: var(--button-color);
+    color: var(--footer-color);
 }
 
 .top-nav-bar>.logo-brand-container {
@@ -223,7 +223,7 @@ img {
 }
 
 .nav-bar-button:hover {
-    background-color: #55A14A;
+    background-color: #239CE8;
 }
 
 footer {
@@ -232,8 +232,8 @@ footer {
     border-top: 15px solid var(--footer-color);
     grid-column: 1/9;
     grid-row: 5/6;
-    background-color: #1a1a1a;
-    color: var(--footer-color);
+    background-color: white;
+    color: black;
     padding-top: 20px;
 }
 
@@ -253,6 +253,7 @@ footer {
 .footer-title {
     font-size: 28px;
     font-weight: bold;
+    color: var(--footer-color);
 }
 
 .footer-text {
@@ -262,12 +263,12 @@ footer {
 
 .footer-text::marker {
     font-size: 20px;
-    color: var(--footer-color);
+    
 }
 
 .footer-text a {
     font-size: 20px;
-    color: #f4ecff;
+    color: black;
     text-decoration: none;
 }
 
@@ -318,7 +319,6 @@ footer {
 @media only screen and (max-width: 1100px) {
     #app {
         grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,150px))minmax(0px,1fr);
-        background-color: green;
     }
 
     .top-login-header-button {
