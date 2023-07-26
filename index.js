@@ -97,7 +97,6 @@ app.get("/users/:userId", function (request, response) { //AuthMiddleware
 });
 
 app.put("/users/:userId", AuthMiddleware, function (request, response) {
-    console.log(request.query);
     model.User.findOne({ "_id": request.params.userId }).then(user => {
         if (user) {
             if (request.body.hasOwnProperty("name")) {
@@ -118,20 +117,20 @@ app.put("/users/:userId", AuthMiddleware, function (request, response) {
             }
             if (request.query.hasOwnProperty("postId")) {
                 let index = user.liked.indexOf(request.query.postId);
-                let status = 200;
+                let statusVal = 200;
                 if (index == -1) {
                     user.liked.push(request.query.postId);
-                    status = 201;
+                    statusVal = 200;
                 }
                 else {
                     user.liked.splice(index, 1);
-                    status = 204;
+                    statusVal = 201;
                 }
                 user.markModified("liked");
                 user.save().then(() => {
-                    response.sendStatus(status);
+                    response.sendStatus(statusVal);
+                    return;
                 })
-                return;
             } else {
                 user.save().then(() => {
                     response.status(200).json(user);
@@ -462,137 +461,134 @@ app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
     })
 })
 
-app.get("/users/:userId/liked", function (req, res) {
-    model.User.findOne({ "_id": req.params.userId }).then(user => {
-        if (user) {
-            console.log(user);
-            console.log(user.liked);
-            res.send(user.liked);
-        }
-    })
-})
+// app.get("/users/:userId/liked", function (req, res) {
+//     model.User.findOne({ "_id": req.params.userId }).then(user => {
+//         if (user) {
+//             console.log(user);
+//             console.log(user.liked);
+//             res.send(user.liked);
+//         }
+//     })
+// })
 
-app.get("/users/:userId/liked/:postId", function (req, res) {
-    model.User.findOne({ "_id": req.params.postId }).then(like => {
-        if (like) {
-            res.status(200).send(like);
-        } else {
-            console.log("Like not found.");
-            res.status(404).send("Like not found.");
-        }
-    }).catch(() => {
-        console.log("Bad request (GET by ID).");
-        res.status(400).send("Like not found.");
-    })
-})
+// app.get("/users/:userId/liked/:postId", function (req, res) {
+//     model.User.findOne({ "_id": req.params.postId }).then(like => {
+//         if (like) {
+//             res.status(200).send(like);
+//         } else {
+//             console.log("Like not found.");
+//             res.status(404).send("Like not found.");
+//         }
+//     }).catch(() => {
+//         console.log("Bad request (GET by ID).");
+//         res.status(400).send("Like not found.");
+//     })
+// })
 
-app.post("/users/:userId/liked/:postId", AuthMiddleware, function (req, res) {
-    const postId = request.params.postId;
-    const userId = request.session.userId;
+// app.post("/users/:userId/liked/:postId", AuthMiddleware, function (req, res) {
+//     const postId = request.params.postId;
+//     const userId = request.session.userId;
 
-    model.User.findOne({ "_id": userId }).then(user => {
-        if (user) {
-            // Check if the post ID is not already in the liked array
-            if (!user.liked.includes(postId)) {
-                // Add the post ID to the liked array
-                user.liked.push(postId);
+//     model.User.findOne({ "_id": userId }).then(user => {
+//         if (user) {
+//             // Check if the post ID is not already in the liked array
+//             if (!user.liked.includes(postId)) {
+//                 // Add the post ID to the liked array
+//                 user.liked.push(postId);
 
-                // Save the updated user document
-                user.save().then(() => {
-                    response.status(200).send("Post liked successfully.");
-                }).catch(() => {
-                    response.status(500).send("Failed to like the post.");
-                });
-            } else {
-                response.status(409).send("Post already liked by the user.");
-            }
-        } else {
-            response.status(404).send("User not found.");
-        }
-    }).catch(() => {
-        response.status(500).send("Failed to like the post.");
-    })
-})
+//                 // Save the updated user document
+//                 user.save().then(() => {
+//                     response.status(200).send("Post liked successfully.");
+//                 }).catch(() => {
+//                     response.status(500).send("Failed to like the post.");
+//                 });
+//             } else {
+//                 response.status(409).send("Post already liked by the user.");
+//             }
+//         } else {
+//             response.status(404).send("User not found.");
+//         }
+//     }).catch(() => {
+//         response.status(500).send("Failed to like the post.");
+//     })
+// })
 
-app.delete("/users/:userId/liked/:postId", AuthMiddleware, function (req, res) {
-    const postId = request.params.postId;
-    const userId = request.params.userId;
+// app.delete("/users/:userId/liked/:postId", AuthMiddleware, function (req, res) {
+//     const postId = request.params.postId;
+//     const userId = request.params.userId;
 
-    model.User.findOne({ "_id": userId }).then(user => {
-        if (user) {
-            // Check if the post ID is in the liked array
-            const postIndex = user.liked.indexOf(postId);
-            if (postIndex !== -1) {
-                // Remove the post ID from the liked array
-                user.liked.splice(postIndex, 1);
+//     model.User.findOne({ "_id": userId }).then(user => {
+//         if (user) {
+//             // Check if the post ID is in the liked array
+//             const postIndex = user.liked.indexOf(postId);
+//             if (postIndex !== -1) {
+//                 // Remove the post ID from the liked array
+//                 user.liked.splice(postIndex, 1);
 
-                // Save the updated user document
-                user.save().then(() => {
-                    response.status(200).send("Post un-liked successfully.");
-                }).catch(() => {
-                    response.status(500).send("Failed to un-like the post.");
-                });
-            } else {
-                response.status(404).send("Post not liked by the user.");
-            }
-        } else {
-            response.status(404).send("User not found.");
-        }
-    }).catch(() => {
-        response.status(500).send("Failed to unlike the post.");
-    })
-})
+//                 // Save the updated user document
+//                 user.save().then(() => {
+//                     response.status(200).send("Post un-liked successfully.");
+//                 }).catch(() => {
+//                     response.status(500).send("Failed to un-like the post.");
+//                 });
+//             } else {
+//                 response.status(404).send("Post not liked by the user.");
+//             }
+//         } else {
+//             response.status(404).send("User not found.");
+//         }
+//     }).catch(() => {
+//         response.status(500).send("Failed to unlike the post.");
+//     })
+// })
 
 
 // PUT FOR VOLUNTEERFORM SCHEMA
 app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res) {
-    console.log("HERE:", req.body);
     if (req.body.hasOwnProperty("like")) {
         model.VolunteerForm.findOne({ "_id": req.params.volpostId }).then((post) => {
-            console.log("Liked", post.numLikes);
-            post.numLikes++;
+            post.numLikes = post.numLikes + 1;
             post.markModified("numLikes");
             post.save().then(() => {
-                res.sendStatus(200);
-                return;
+                res.status(200).json(post.numLikes);
             })
         })
     }
-    else if (req.body.hasOwnProperty("unlike")){
+    else if (req.body.hasOwnProperty("unlike")) {
         model.VolunteerForm.findOne({ "_id": req.params.volpostId }).then((post) => {
-            console.log("unliked", post.numLikes);
-            post.numLikes--;
+            post.numLikes = post.numLikes - 1;
             post.markModified("numLikes");
             post.save().then(() => {
-                res.sendStatus(200);
-                return;
+                res.status(200).json(post.numLikes);
             })
         })
-    }
-    // console.log(req.body.categories);
-    const updatedVolunteerOpportunities = {
-        postedBy: req.body.postedBy,
-        title: req.body.title,
-        orgname: req.body.orgname,
-        city: req.body.city,
-        state: req.body.state,
-        dateStart: req.body.dateStart,
-        dateEnd: req.body.dateEnd,
-        description: req.body.description,
-        num_people: req.body.num_people,
-        website: req.body.website
-    }
+    } else {
+        // console.log(req.body.categories);
+        const updatedVolunteerOpportunities = {
+            postedBy: req.body.postedBy,
+            title: req.body.title,
+            orgname: req.body.orgname,
+            city: req.body.city,
+            state: req.body.state,
+            dateStart: req.body.dateStart,
+            dateEnd: req.body.dateEnd,
+            description: req.body.description,
+            num_people: req.body.num_people,
+            website: req.body.website,
+            numLikes: req.body.numLikes ? req.body.numLikes : 0
+        }
 
-    model.VolunteerForm.findByIdAndUpdate({ "_id": req.params.volpostId }, updatedVolunteerOpportunities, { "new": true }).then(post => {
-        if (post) {
-            res.sendStatus(204);
-        }
-        else {
-            res.status(404).send("Volunteer post not found.");
-        }
-    }).catch(() => {
-        res.status(422).send("Unable to update.");
-    });
+        model.VolunteerForm.findByIdAndUpdate({ "_id": req.params.volpostId }, updatedVolunteerOpportunities, { "new": true }).then(post => {
+            if (post) {
+                res.sendStatus(204);
+            }
+            else {
+                res.status(404).send("Volunteer post not found.");
+            }
+        }).catch(() => {
+            res.status(422).send("Unable to update.");
+        });
+    }
 });
 
 // DELETE FOR VOLUNTEERFORM SCHEMA

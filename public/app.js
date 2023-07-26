@@ -85,7 +85,6 @@ Vue.createApp({
 
             volunteerOpportunities: [],
             filteredVolunteerOpportunities: [],
-            allOpportunities: [], // Store the filtered and sorted volunteer opportunities
             searchValue: "",
             newVolunteerPost: {
                 index: -1,
@@ -318,13 +317,11 @@ Vue.createApp({
                         var formattedDates = this.formatDate(post.dateStart, post.dateEnd);
                         post.formattedStartDate = formattedDates.formattedStartDate;
                         post.formattedEndDate = formattedDates.formattedEndDate;
-                        post.user = post.postedBy.name ? post.postedBy.name : "Anonymous";
+
                         // Initialize numLikes to 0 if it doesn't exist in the data
                         post.numLikes = post.numLikes || 0;
                         this.volunteerOpportunities.push(post);
                     })
-                    // console.log(this.volunteerOpportunities);
-                    // this.allVolunteerOpportunities = [...this.volunteerOpportunities];
                 }).catch((error) => {
                     console.error("Error fetching volunteer opportunities:", error);
                 })
@@ -481,54 +478,57 @@ Vue.createApp({
             }
             const userId = localStorage.getItem('userId');
             const postId = post._id;
-                    // If the post is not liked, send a POST request to like the post
-                    // fetch (URL + users/${userId}?postId=${postId})
-                    fetch(URL + `users/${userId}?postId=${postId}`, {
-                        method: 'PUT',
-                        credentials: 'include', //Include cookies for authenticated requests
+            fetch(URL + `users/${userId}?postId=${postId}`, {
+                method: 'PUT',
+                credentials: 'include', //Include cookies for authenticated requests
+            }).then((response) => {
+                if (response.status == 200) {
+                    // If the request is successful, update the frontend
+                    // For example, increase the number of likes on the post
+                    // and set likedPost to true
+                    fetch(URL + `volunteerOpportunities/${postId}`, {
+                        method: "PUT",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            like: true
+                        })
                     }).then((response) => {
-                        if (response.status == 201) {
-                            // If the request is successful, update the frontend
-                            // For example, increase the number of likes on the post
-                            // and set likedPost to true
-                            fetch(URL + `volunteerOpportunities/${postId}`, {
-                                method: "PUT",
-                                credentials: "include",
-                                body: JSON.stringify({
-                                    "like" : true
-                                })
-                            }).then((response) => {
-                                if (response.status == 200) {
-                                    // we updated post likes
-                                    // reload page or something
-                                    post.numLikes++;
-                                    post.likedPost = true;
-                                    console.log(post.numLikes);
-                                }
-                            })
-                        } else if (response.status == 204) {
-                            fetch(URL + `volunteerOpportunities/${postId}`, {
-                                method: "PUT",
-                                credentials: "include",
-                                body: JSON.stringify({
-                                    "unlike" : true
-                                })
-                            }).then((response) => {
-                                if (response.status == 200) {
-                                    // we updated post likes
-                                    // reload page or something
-                                    post.numLikes--;
-                                    post.likedPost = false;
-                                    console.log(post.numLikes);
-                                }
-                            })
+                        if (response.status == 200) {
+                            // we updated post likes
+                            // reload page or something
+                            response.json().then(data => {
+                                post.numLikes = data;
+                            });
                         }
-                        else {
-                            console.error("Failed to like the post");
+                    })
+                } else if (response.status == 201) {
+                    fetch(URL + `volunteerOpportunities/${postId}`, {
+                        method: "PUT",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            unlike: true
+                        })
+                    }).then((response) => {
+                        if (response.status == 200) {
+                            // we updated post likes
+                            response.json().then(data => {
+                                post.numLikes = data;
+                            });
                         }
-                    }).catch((error) => {
-                        console.error("Failed to like the post", error);
-                    });
+                    })
+                }
+                else {
+                    console.error("Failed to like the post");
+                }
+            }).catch((error) => {
+                console.error("Failed to like the post", error);
+            });
         },
         filterBy: function (filter) {
             // Show all volunteer opportunities
@@ -540,16 +540,15 @@ Vue.createApp({
                 // Filter the opportunities that have a valid end date and the end date 
                 // is greater than or equal to the current date
                 let endingSoonOpportunities = this.volunteerOpportunities.filter((post) => {
+                    console.log(post.formattedEndDate, new Date(post.formattedEndDate), currentDate);
                     return (
                         post.formattedEndDate && new Date(post.formattedEndDate) >= currentDate
                     );
                 });
+                console.log(endingSoonOpportunities);
                 // Sort the filtered opportunities by their end dates in ascending order
-                endingSoonOpportunities = endingSoonOpportunities.sort((a, b) => new Date(a.dateEnd) - new Date(b.dateEnd));
-                
                 // Update the displayed opportunities with the sorted and filtered list
-                this.filteredVolunteerOpportunities = endingSoonOpportunities;
-                console.log("Filtered opportunities ending soon:", this.filteredVolunteerOpportunities);
+                this.filteredVolunteerOpportunities = endingSoonOpportunities.sort((a, b) => new Date(a.dateEnd) - new Date(b.dateEnd));
             }
         },
         getOrganizationsDropdown: function () {
@@ -1013,10 +1012,6 @@ Vue.createApp({
     },
     created: function () {
         this.loggedIn();
-        // Set allVolunteerOpportunities initially when the component is created
-        this.allVolunteerOpportunities = this.volunteerOpportunities;
-        // Set filteredVolunteerOpportunities to allVolunteerOpportunities to display all posts initially
-        this.filteredVolunteerOpportunities = this.volunteerOpportunities;
     },
     mounted: function () {
         if (this.page == 'index') {
@@ -1034,6 +1029,7 @@ Vue.createApp({
             this.getVolunteerOpportunities();
             this.getOrganizationsDropdown();
             this.getStates();
+            // Set filteredVolunteerOpportunities to all of the volunteerOpportunities to display all posts initially
             this.filteredVolunteerOpportunities = this.volunteerOpportunities;
         } else if (this.page == 'volunteerForm') {
             this.setPage('volunteerForm');
