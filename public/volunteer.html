@@ -80,7 +80,7 @@
                     id="volunteerthings" 
                     v-for="(post, index) in filteredVolunteerOpportunities"
                     :class="index % 2 === 0 ? 'post even' : 'post odd'"
-                    :key="post.id"
+                    :key="post._id"
                 >
                 <!-- v-for="(post,index) in volunteerOpportunities" -->
                     <div id="volunteerpost">
@@ -130,7 +130,7 @@
                         <div class="post-button-container">
                             <div id="likes">
                                 <p><span id="display">{{post.numLikes}}</span> Likes</p>
-                                <button id="like-button" @click="toggleLikePost(post._id)">
+                                <button id="like-button" @click="toggleLikePost(post)">
                                     {{post.liked ? 'Unlike' : 'Like'}}
                                 </button>
                             </div>

@@ -97,6 +97,7 @@ app.get("/users/:userId", function (request, response) { //AuthMiddleware
 });
 
 app.put("/users/:userId", AuthMiddleware, function (request, response) {
+    console.log(request.query);
     model.User.findOne({ "_id": request.params.userId }).then(user => {
         if (user) {
             if (request.body.hasOwnProperty("name")) {
@@ -114,6 +115,23 @@ app.put("/users/:userId", AuthMiddleware, function (request, response) {
             if (request.body.hasOwnProperty("password")) {
                 user.setPassword(request.body.password);
                 user.markModified("password");
+            }
+            if (request.query.hasOwnProperty("postId")) {
+                let index = user.liked.indexOf(request.query.postId);
+                let status = 200;
+                if (index == -1) {
+                    user.liked.push(request.query.postId);
+                    status = 201;
+                }
+                else {
+                    user.liked.splice(index, 1);
+                    status = 204;
+                }
+                user.markModified("liked");
+                user.save().then(() => {
+                    response.sendStatus(status);
+                })
+                return;
             }
             user.save().then(() => {
                 response.status(200).json(user);
@@ -527,6 +545,29 @@ app.delete("/users/:userId/liked/:postId", AuthMiddleware, function (req, res) {
 
 // PUT FOR VOLUNTEERFORM SCHEMA
 app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res) {
+    console.log(req.query);
+    if (req.body.hasOwnProperty("like")) {
+        model.VolunteerForm.findOne({ "_id": req.params.volpostId }).then((post) => {
+            console.log("Liked", post.numLikes);
+            post.numLikes++;
+            post.markModified("numLikes");
+            post.save().then(() => {
+                res.sendStatus(200);
+            })
+        })
+        return;
+    }
+    else if (req.body.hasOwnProperty("unlike")){
+        model.VolunteerForm.findOne({ "_id": req.params.volpostId }).then((post) => {
+            console.log("unliked", post.numLikes);
+            post.numLikes--;
+            post.markModified("numLikes");
+            post.save().then(() => {
+                res.sendStatus(200);
+            })
+        })
+        return;
+    }
     // console.log(req.body.categories);
     const updatedVolunteerOpportunities = {
         postedBy: req.body.postedBy,
