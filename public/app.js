@@ -473,12 +473,17 @@ Vue.createApp({
                 }
             }
         },
-        togglelikePost: function(postId) {
-            const post = this.volunteerOpportunities.find((p) => p.id === postId);
+        toggleLikePost: function(postId) {
+            const post = this.volunteerOpportunities.find((p) => p._id === postId);
+            fetch(URL + "user").then(response => response.json()).then((data) => {
+                data.forEach((user) => {
+                    // huuuh???
+                })
+            })
             if (post) {
                 if(!post.likedPost) {
                     // If the post is not liked, send a POST request to like the post
-                    fetch(URL + `/users/:userId/liked/${postId}`, {
+                    fetch(URL + `/users/${userId}/liked/${postId}`, {
                         method: 'POST',
                         credentials: 'include', //Include cookies for authenticated requests
                     }).then((response) => {
@@ -496,7 +501,7 @@ Vue.createApp({
                     });
                 } else {
                     // If the post is liked, send a DELETE request to unlike the post
-                    fetch(URL + `/users/:userId/liked/${postId}`, {
+                    fetch(URL + `/users/${userId}/liked/${postId}`, {
                         method: 'DELETE',
                         credentials: 'include', // Include cookies for authentication
                     }).then((response) => {
@@ -505,10 +510,13 @@ Vue.createApp({
                             // For example, decrease the number of likes on the post
                             // and let likedPost to false
                             post.numLikes--;
-                            
-
+                            post.likedPost = false;
+                        } else {
+                            console.error("Failed to unlike the post");
                         }
-                    })
+                    }).catch((error) => {
+                        console.error("Failed to unlike the post:", error);
+                    });
                 }
             }
         },

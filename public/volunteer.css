@@ -123,7 +123,7 @@
     margin-top: 10px;
 }
 
-.post-button-container #like-button {
+/* .post-button-container #like-button {
     background-image: url("icons/like.svg");
     background-size: cover;
     background-position: center;
@@ -131,7 +131,7 @@
     height: 20px;
     background-color: rgba(255,255,255,0);
     cursor: pointer;
-}
+} */
 
 .post-likes-container {
     display: flex;

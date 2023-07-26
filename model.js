@@ -51,21 +51,6 @@ const VolunteerFormSchema = Schema({
     }
 })
 
-// const likesSchema = Schema({
-//     postId: {
-//         type: Schema.Types.ObjectId,
-//         ref: 'VolunteerForm',
-//         required: true
-//     }, 
-//     userId: {
-//         type: Schema.Types.ObjectId,
-//         ref: 'User',
-//         required: true
-//     }, 
-//     numLikes: { type: Number, default: 0 }, 
-//     likedPost: { type: Boolean, default: false }, 
-// })
-
 const DonationFormSchema = Schema({
     user: {
         type: String,

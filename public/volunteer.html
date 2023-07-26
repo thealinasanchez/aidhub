@@ -76,8 +76,12 @@
             </div>
             <div id="filtering-area"></div>
             <div class="post-container">
-                <div id="volunteerthings" v-for="(post,index) in volunteerOpportunities"
-                    :class="index % 2 === 0 ? 'post even' : 'post odd'">
+                <div 
+                    id="volunteerthings" 
+                    v-for="(post,index) in volunteerOpportunities"
+                    :class="index % 2 === 0 ? 'post even' : 'post odd'"
+                    :key="post.id"
+                >
                     <div id="volunteerpost">
                         <div id="post-user">
                             <p>Created By: </p>
@@ -122,7 +126,7 @@
                         <div class="post-button-container">
                             <div id="likes">
                                 <p><span id="display">{{post.numLikes}}</span> Likes</p>
-                                <button id="like-button" @click="toggleLikePost(post.id)">
+                                <button id="like-button" @click="toggleLikePost(post._id)">
                                     {{post.liked ? 'Unlike' : 'Like'}}
                                 </button>
                             </div>
