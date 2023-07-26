@@ -78,10 +78,11 @@
             <div class="post-container">
                 <div 
                     id="volunteerthings" 
-                    v-for="(post,index) in volunteerOpportunities"
+                    v-for="(post, index) in filteredVolunteerOpportunities"
                     :class="index % 2 === 0 ? 'post even' : 'post odd'"
                     :key="post.id"
                 >
+                <!-- v-for="(post,index) in volunteerOpportunities" -->
                     <div id="volunteerpost">
                         <div id="post-user">
                             <p>Created By: </p>

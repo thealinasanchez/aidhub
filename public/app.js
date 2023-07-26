@@ -84,8 +84,8 @@ Vue.createApp({
             /* organizations.html end */
 
             volunteerOpportunities: [],
-            allVolunteerOpportunities: [], // Keeps a copy of volunteerOpportunities
-            filteredVolunteerOpportunities: [], // Store the filtered and sorted volunteer opportunities
+            allOpportunities: [], // Store the filtered and sorted volunteer opportunities
+            searchValue: "",
             newVolunteerPost: {
                 user: "",
                 title: "",
@@ -319,7 +319,7 @@ Vue.createApp({
                         post.numLikes = post.numLikes || 0;
                         this.volunteerOpportunities.push(post);
                     })
-                    console.log(this.volunteerOpportunities);
+                    // console.log(this.volunteerOpportunities);
                     // this.allVolunteerOpportunities = [...this.volunteerOpportunities];
                 }).catch((error) => {
                     console.error("Error fetching volunteer opportunities:", error);
@@ -474,18 +474,8 @@ Vue.createApp({
                 }
             }
         },
-<<<<<<< HEAD
         toggleLikePost: function(postId) {
             const post = this.volunteerOpportunities.find((p) => p._id === postId);
-            fetch(URL + "user").then(response => response.json()).then((data) => {
-                data.forEach((user) => {
-                    // huuuh???
-                })
-            })
-=======
-        togglelikePost: function (postId) {
-            const post = this.volunteerOpportunities.find((p) => p.id === postId);
->>>>>>> 7a138a8b99d6d0a7ecbed1e64e7ff205e3e5714d
             if (post) {
                 if (!post.likedPost) {
                     // If the post is not liked, send a POST request to like the post
@@ -516,14 +506,9 @@ Vue.createApp({
                             // For example, decrease the number of likes on the post
                             // and let likedPost to false
                             post.numLikes--;
-<<<<<<< HEAD
                             post.likedPost = false;
                         } else {
                             console.error("Failed to unlike the post");
-=======
-
-
->>>>>>> 7a138a8b99d6d0a7ecbed1e64e7ff205e3e5714d
                         }
                     }).catch((error) => {
                         console.error("Failed to unlike the post:", error);
@@ -531,12 +516,12 @@ Vue.createApp({
                 }
             }
         },
-        filterBy: function (filterType) {
+        filterBy: function (filter) {
             // Show all volunteer opportunities
-            if (filterType === 'all') {
-                this.allVolunteerOpportunities = [...this.volunteerOpportunities];
+            if (filter === 'all') {
+                this.filteredVolunteerOpportunities = this.volunteerOpportunities;
                 // Show volunteer opportunities ending soon
-            } else if (filterType === 'oldest') {
+            } else if (filter === 'oldest') {
                 let currentDate = new Date();
                 // Filter the opportunities that have a valid end date and the end date 
                 // is greater than or equal to the current date
@@ -545,11 +530,12 @@ Vue.createApp({
                         post.formattedEndDate && new Date(post.formattedEndDate) >= currentDate
                     );
                 });
+                console.log("Filtered opportunities ending soon:", endingSoonOpportunities);
                 // Sort the filtered opportunities by their end dates in ascending order
                 endingSoonOpportunities.sort((a, b) => new Date(a.dateEnd) - new Date(b.dateEnd));
 
                 // Update the displayed opportunities with the sorted and filtered list
-                this.volunteerOpportunities = endingSoonOpportunities;
+                this.filteredVolunteerOpportunities = endingSoonOpportunities;
             }
         },
         getOrganizationsDropdown: function () {
@@ -1013,6 +999,7 @@ Vue.createApp({
         } else if (this.page == 'volunteer') {
             this.setPage('volunteer');
             this.getVolunteerOpportunities();
+            this.filteredVolunteerOpportunities = this.volunteerOpportunities;
         } else if (this.page == 'volunteerForm') {
             this.setPage('volunteerForm');
             this.getStates();
