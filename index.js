@@ -132,25 +132,26 @@ app.put("/users/:userId", AuthMiddleware, function (request, response) {
                     response.sendStatus(status);
                 })
                 return;
+            } else {
+                user.save().then(() => {
+                    response.status(200).json(user);
+                }).catch((errors) => {
+                    if (errors.code === 11000) {
+                        if (errors.keyPattern.hasOwnProperty("email")) {
+                            response.status(422).send("This email or username already has an account. Please sign in.");
+                        }
+                        if (errors.keyPattern.hasOwnProperty("name")) {
+                            response.status(422).send("This username is already taken. Please choose another.");
+                        }
+                    } else {
+                        let error_list = [];
+                        for (key in errors.errors) {
+                            error_list.push(errors.errors[key].properties.message)
+                        }
+                        response.status(422).send(error_list.join(" "));
+                    }
+                })
             }
-            user.save().then(() => {
-                response.status(200).json(user);
-            }).catch((errors) => {
-                if (errors.code === 11000) {
-                    if (errors.keyPattern.hasOwnProperty("email")) {
-                        response.status(422).send("This email or username already has an account. Please sign in.");
-                    }
-                    if (errors.keyPattern.hasOwnProperty("name")) {
-                        response.status(422).send("This username is already taken. Please choose another.");
-                    }
-                } else {
-                    let error_list = [];
-                    for (key in errors.errors) {
-                        error_list.push(errors.errors[key].properties.message)
-                    }
-                    response.status(422).send(error_list.join(" "));
-                }
-            })
         } else {
             response.status(404).send("User not found");
         }
@@ -545,7 +546,7 @@ app.delete("/users/:userId/liked/:postId", AuthMiddleware, function (req, res) {
 
 // PUT FOR VOLUNTEERFORM SCHEMA
 app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res) {
-    console.log(req.query);
+    console.log("HERE:", req.body);
     if (req.body.hasOwnProperty("like")) {
         model.VolunteerForm.findOne({ "_id": req.params.volpostId }).then((post) => {
             console.log("Liked", post.numLikes);
@@ -553,9 +554,9 @@ app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res
             post.markModified("numLikes");
             post.save().then(() => {
                 res.sendStatus(200);
+                return;
             })
         })
-        return;
     }
     else if (req.body.hasOwnProperty("unlike")){
         model.VolunteerForm.findOne({ "_id": req.params.volpostId }).then((post) => {
@@ -564,9 +565,9 @@ app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res
             post.markModified("numLikes");
             post.save().then(() => {
                 res.sendStatus(200);
+                return;
             })
         })
-        return;
     }
     // console.log(req.body.categories);
     const updatedVolunteerOpportunities = {
