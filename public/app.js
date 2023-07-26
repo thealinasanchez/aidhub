@@ -117,6 +117,7 @@ Vue.createApp({
 
             editProfile: {
                 userId: "",
+                profileImageToggle: false,
                 profileImage: null,
                 profileImageUrl: "",
                 profileImageError: false,
@@ -473,6 +474,7 @@ Vue.createApp({
                 }
             }
         },
+<<<<<<< HEAD
         toggleLikePost: function(postId) {
             const post = this.volunteerOpportunities.find((p) => p._id === postId);
             fetch(URL + "user").then(response => response.json()).then((data) => {
@@ -480,8 +482,12 @@ Vue.createApp({
                     // huuuh???
                 })
             })
+=======
+        togglelikePost: function (postId) {
+            const post = this.volunteerOpportunities.find((p) => p.id === postId);
+>>>>>>> 7a138a8b99d6d0a7ecbed1e64e7ff205e3e5714d
             if (post) {
-                if(!post.likedPost) {
+                if (!post.likedPost) {
                     // If the post is not liked, send a POST request to like the post
                     fetch(URL + `/users/${userId}/liked/${postId}`, {
                         method: 'POST',
@@ -505,14 +511,19 @@ Vue.createApp({
                         method: 'DELETE',
                         credentials: 'include', // Include cookies for authentication
                     }).then((response) => {
-                        if(response.ok) {
+                        if (response.ok) {
                             // If the request is successful, update the frontend
                             // For example, decrease the number of likes on the post
                             // and let likedPost to false
                             post.numLikes--;
+<<<<<<< HEAD
                             post.likedPost = false;
                         } else {
                             console.error("Failed to unlike the post");
+=======
+
+
+>>>>>>> 7a138a8b99d6d0a7ecbed1e64e7ff205e3e5714d
                         }
                     }).catch((error) => {
                         console.error("Failed to unlike the post:", error);
@@ -733,7 +744,7 @@ Vue.createApp({
             fetch(URL + `users/${localStorage.getItem('userId')}`, options)
                 .then((response) => {
                     if (response.status == 200) {
-                        this.getVolunteerOpportunitiesByUser();
+                        this.getVolunteerOpportunitiesByUser(localStorage.getItem('userId'));
                         this.editProfile.nameEditToggle = false;
                         this.editProfile.aboutEditToggle = false;
                         this.editProfile.emailEditToggle = false;
