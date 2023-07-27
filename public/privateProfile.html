@@ -42,7 +42,7 @@
                 </ul>
             </nav>
             <div class="nav-bar-button-container">
-                <a href="getstarted.html">
+                <a href="volunteer.html">
                     <button class="common-green-button nav-bar-button">GET STARTED</button>
                 </a>
             </div>
@@ -161,8 +161,8 @@
                     <button @click="editProfileDeleteAccountToggle()" class="delete-account-button"
                         v-if="!editProfile.deleteAccountToggle">Delete Account</button>
                     <div class="delete-account-confirm" v-else>
-                        <h5 class="delete-account-text">This will Permanently Delete Your Account along with any Posted
-                            Content</h5>
+                        <h5 class="delete-account-text">WARNING: This will permanently delete your account along with any posted
+                            content</h5>
                         <button @click="deleteAccount()" class="delete-account-button">Continue</button>
                         <button @click="editProfileDeleteAccountToggle()"
                             class="cancel-delete-account-button">Cancel</button>

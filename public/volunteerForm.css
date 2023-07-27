@@ -121,3 +121,13 @@
 #num_people {
     width: 70px;
 }
+
+#post {
+    background-color: var(--volunteer-button-color);
+    border: 2px solid var(--volunteer-button-hover);
+    border-style: outset;
+}
+
+#post:hover {
+    background-color: var(--volunteer-button-hover);
+}

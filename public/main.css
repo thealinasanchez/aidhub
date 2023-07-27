@@ -10,15 +10,19 @@
     --offwhite: #F7F7F7;
     --lightblue: #98D7FF;
     --darkblue: #62B4E7;
-    /* --footer-color: #4c9aa7; */
     --footer-color: #24a0ed;
     --lightbrown: #876453;
     --button-color: #58A74C;
-    --search-button-color: #4c9aa7;
-    --org-table-color: #1AC2ED;
+    --search-button-color: #58B0BF;
+    --org-table-color: #58B0BF;
     --header-color: #fcfcfc;
     --index-location-button: #24a0ed;
     --index-location-button-hover: rgb(36, 160, 237, 0.5);
+    /* VOLUNTEER.HTML */
+    --volunteer-button-color: #24a0ed;
+    --volunteer-button-hover: #229BE6;
+    --post-even: #AFDBF5;
+    --post-odd: #4682B4;
 }
 
 #app {
@@ -295,13 +299,25 @@ footer {
     align-items: center;
     gap: 10px;
     /* border: 2px solid var(--footer-color); */
-    border-radius: 5px;
+    border-radius: 10px;
     margin: 40px auto;
-    box-shadow: 0px 2px 5px 3px var(--footer-color);
+    box-shadow: 0px 2px 5px 3px rgba(0, 0, 0, 0.35);
 }
 
 #mc_embed_signup {
     font: 14px Helvetica, Arial, sans-serif;
+}
+
+#mc_embed_shell {
+    background-color: var(--footer-color);
+    border-radius: 10px;
+}
+
+#mc_embed_shell img {
+    height: 31px;
+    width: 192px;
+    margin-bottom: 7px;
+    border-radius: 3px;
 }
 
 .copyright-container {
@@ -323,5 +339,9 @@ footer {
 
     .top-login-header-button {
         margin-right: 20px;
+    }
+
+    input#mce-EMAIL {
+        min-width: 307px;
     }
 }
