@@ -19,7 +19,7 @@
     --org-table-text-color: black;
     --header-color: #fcfcfc;
     --index-location-button: #24a0ed;
-    --index-location-button-hover: rgb(36, 160, 237, 0.5);
+    --index-location-button-hover: rgba(36, 160, 237, 0.5);
     /* VOLUNTEER.HTML */
     --volunteer-button-color: #24a0ed;
     --volunteer-button-hover: #229BE6;

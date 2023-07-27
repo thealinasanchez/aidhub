@@ -3,7 +3,6 @@
     grid-column: 1/9;
     overflow-x: hidden;
     position: relative;
-    overflow: hidden;
 }
 
 .slideshow-container {
@@ -71,7 +70,7 @@
     text-align: center;
     margin: auto;
     position: absolute;
-    top: 96%;
+    top: 90%;
     right: 50%;
 }
 
