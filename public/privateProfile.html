@@ -172,6 +172,12 @@
             <div class="applications-section-container">
                 <div class="current-applications-section">
                     <h1>Current Applications:</h1>
+                    <div class="applications-container">
+                        <div class="application" v-for="application in applications">
+                            <h1>{{ application.applicant.name }} Applied To:<br /> {{ application.volunteerPost.title }}
+                            </h1>
+                        </div>
+                    </div>
                 </div>
                 <div class="posted-opportunities-section">
                     <h1>Posted Opportunities:</h1>

@@ -76,13 +76,9 @@
             </div>
             <div id="filtering-area"></div>
             <div class="post-container">
-                <div 
-                    id="volunteerthings" 
-                    v-for="(post, index) in filteredVolunteerOpportunities"
-                    :class="index % 2 === 0 ? 'post even' : 'post odd'"
-                    :key="post._id"
-                >
-                <!-- v-for="(post,index) in volunteerOpportunities" -->
+                <div id="volunteerthings" v-for="(post, index) in filteredVolunteerOpportunities"
+                    :class="index % 2 === 0 ? 'post even' : 'post odd'" :key="post._id">
+                    <!-- v-for="(post,index) in volunteerOpportunities" -->
                     <div id="volunteerpost">
                         <div id="post-user">
                             <div class="profile-photo-container" @click="goToPublicProfile(post.postedBy._id)">
@@ -128,9 +124,9 @@
                             <div><a :href="post.website" target="_blank">{{post.website}}</a></div>
                         </div>
                         <div class="post-button-container">
-                            <div id="likes">
+                            <div id="likes" v-if="loggedInStatus">
                                 <p><span id="display">{{post.numLikes}}</span> Likes</p>
-                                <button id="like-button" @click="toggleLikePost(post)">
+                                <button id="like-button" v-if="!post.likeWaiting" @click="toggleLikePost(post)">
                                     {{post.liked ? 'Unlike' : 'Like'}}
                                 </button>
                             </div>
@@ -140,8 +136,13 @@
                                 <img src="./icons/trash.svg" alt="delete-icon"
                                     @click="deleteVolunteerOpportunities(index)" class="post-delete-button">
                             </div>
-                            <button id="apply-button" v-else-if="loggedInStatus">Apply</button>
-                            <a href="login.html" id="login-button" v-if="!loggedInStatus">Log In To Interact</a>
+                            <button id="apply-button"
+                                v-else-if="loggedInStatus && !post.applied && !post.appliedWaiting"
+                                @click="applyToOpportunity(post)">Apply</button>
+                            <button id="applied-button"
+                                v-else-if="loggedInStatus && post.applied && !post.appliedWaiting"
+                                @click="deleteApplication(post)">Unapply</button>
+                            <a href=" login.html" id="login-button" v-if="!loggedInStatus">Log In To Interact</a>
                         </div>
                     </div>
                 </div>
@@ -248,8 +249,6 @@
                     <li class="footer-text"><a href="volunteer.html"
                             :class="page == 'volunteer'? 'current-page-footer' : ''">Apply to different Volunteer
                             Opportunities</a></li>
-                    <li class="footer-text"><a href="donation.html"
-                            :class="page == 'donate'? 'current-page-footer' : ''">Donate to a Cause</a></li>
                 </ul>
             </div>
             <div class="newsletter-container">

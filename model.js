@@ -47,51 +47,74 @@ const VolunteerFormSchema = Schema({
     }
 })
 
-const DonationFormSchema = Schema({
-    user: {
-        type: String,
-        required: [true, "Must have a username."]
-    },
-    title: { type: String },
-    orgname: {
-        type: String,
-        required: [true, "Donation opportunity must be hosted by am organization."]
-    },
-    description: { type: String },
-    website: {
-        type: String,
-        required: [true, "Donation opportunity must have a donation website."]
-    },
-    min_d: {
-        type: Number,
-        required: [true, "Donation opportunity must have a minimum donation amount."]
-    },
-    goal: { type: Number }
+// const DonationFormSchema = Schema({
+//     user: {
+//         type: String,
+//         required: [true, "Must have a username."]
+//     },
+//     title: { type: String },
+//     orgname: {
+//         type: String,
+//         required: [true, "Donation opportunity must be hosted by am organization."]
+//     },
+//     description: { type: String },
+//     website: {
+//         type: String,
+//         required: [true, "Donation opportunity must have a donation website."]
+//     },
+//     min_d: {
+//         type: Number,
+//         required: [true, "Donation opportunity must have a minimum donation amount."]
+//     },
+//     goal: { type: Number }
 
+// })
+
+const ApplicationSchema = Schema({
+    postedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RedactedUser",
+        required: [true, "Must have a user"]
+    },
+    volunteerPost: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "VolunteerForm",
+        required: [true, "Must have a volunteer opportunity"]
+    },
+    applicant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RedactedUser",
+        required: [true, "Must have a user"]
+    },
+    status: {
+        type: String,
+        default: "pending",
+        required: [true, "Must have status"]
+    }
 })
 
-const JournalEntrySchema = Schema({
-    orgname: {
-        type: String,
-        required: [true, "Organization must have a name."]
-    },
-    categories: {
-        type: [String],
-    },
-    city: {
-        type: String,
-        required: [true, "Organization must be in at least one city."]
-    },
-    state: {
-        type: String,
-        required: [true, "Organization must be in at least one state."],
-        maxLength: 2,
-        minLength: 2
-    },
-    missionStatement: {
-        type: String,
-    }
-});
+// const JournalEntrySchema = Schema({
+//     orgname: {
+//         type: String,
+//         required: [true, "Organization must have a name."]
+//     },
+//     categories: {
+//         type: [String],
+//     },
+//     city: {
+//         type: String,
+//         required: [true, "Organization must be in at least one city."]
+//     },
+//     state: {
+//         type: String,
+//         required: [true, "Organization must be in at least one state."],
+//         maxLength: 2,
+//         minLength: 2
+//     },
+//     missionStatement: {
+//         type: String,
+//     }
+// });
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -158,15 +181,17 @@ RedactedUser.createCollection({
     }]
 });
 
-const JournalEntry = mongoose.model("JournalEntry", JournalEntrySchema);
+// const JournalEntry = mongoose.model("JournalEntry", JournalEntrySchema);
 const VolunteerForm = mongoose.model("VolunteerForm", VolunteerFormSchema);
-const DonationForm = mongoose.model("DonationForm", DonationFormSchema);
+// const DonationForm = mongoose.model("DonationForm", DonationFormSchema);
+const Application = mongoose.model("Application", ApplicationSchema);
 
 
 module.exports = {
-    JournalEntry: JournalEntry,
+    // JournalEntry: JournalEntry,
+    Application: Application,
     VolunteerForm: VolunteerForm,
-    DonationForm: DonationForm,
+    // DonationForm: DonationForm,
     User: User,
     RedactedUser, RedactedUser
 }

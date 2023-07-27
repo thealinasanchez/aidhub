@@ -100,7 +100,12 @@ Vue.createApp({
                 num_people: 0,
                 website: "",
                 numLikes: 0,
-                likedPost: false
+
+                // extra parameters that don't go to the server
+                liked: false,
+                applied: false,
+                likeWaiting: false,
+                appliedWaiting: false,
             },
             toggleModal: false,
             formattedStartDate: "",
@@ -139,7 +144,8 @@ Vue.createApp({
                 deleteAccountToggle: false
             },
 
-            editPostModal: false
+            editPostModal: false,
+            applications: []
         }
     },
     methods: {
@@ -311,6 +317,28 @@ Vue.createApp({
         },
         // VOLUNTEER OPPORTUNITIES STUFF
         getVolunteerOpportunities: function () {
+            // get applications
+            var applications = [];
+            var likedPosts = [];
+            if (localStorage.getItem('userId')) {
+                let options = {
+                    credentials: "include",
+                }
+                fetch(URL + `applications/applicantUser/${localStorage.getItem('userId')}`, options)
+                    .then(response => {
+                        if (response.ok) {
+                            response.json()
+                                .then(data => {
+                                    applications = data;
+                                });
+                        }
+                    })
+                fetch(URL + `users/${localStorage.getItem('userId')}`, options)
+                    .then(response => response.json())
+                    .then(user => {
+                        likedPosts = user.liked;
+                    })
+            }
             fetch(URL + 'volunteerOpportunities')
                 .then(response => response.json()).then((data) => {
                     data.forEach((post) => {
@@ -318,8 +346,18 @@ Vue.createApp({
                         post.formattedStartDate = formattedDates.formattedStartDate;
                         post.formattedEndDate = formattedDates.formattedEndDate;
 
+                        // add applied if applied
+                        if (applications.length > 0 && applications.find(application => application.volunteerPost == post._id)) {
+                            post.applied = true;
+                        }
+
+                        if (likedPosts.length > 0 && likedPosts.includes(post._id)) {
+                            post.liked = true;
+                        }
                         // Initialize numLikes to 0 if it doesn't exist in the data
                         post.numLikes = post.numLikes || 0;
+                        post.likeWaiting = false;
+                        post.appliedWaiting = false;
                         this.volunteerOpportunities.push(post);
                     })
                 }).catch((error) => {
@@ -438,6 +476,10 @@ Vue.createApp({
                 .then((response) => {
                     if (response.status === 204) {
                         console.log("success");
+                        let indexFilter = this.filteredVolunteerOpportunities.indexOf(this.volunteerOpportunities[index]);
+                        if (indexFilter != -1) {
+                            this.filteredVolunteerOpportunities.splice(indexFilter, 1);
+                        }
                         this.volunteerOpportunities.splice(index, 1);
                     } else {
                         alert("Unable to delete volunteer post");
@@ -472,6 +514,8 @@ Vue.createApp({
             }
         },
         toggleLikePost: function (post) {
+            post.likeWaiting = true;
+            post.liked = !post.liked;
             if (!localStorage.getItem('userId')) {
                 console.log("User data Not saved on local storage")
                 return
@@ -501,6 +545,7 @@ Vue.createApp({
                             // reload page or something
                             response.json().then(data => {
                                 post.numLikes = data;
+                                post.likeWaiting = false;
                             });
                         }
                     })
@@ -519,6 +564,7 @@ Vue.createApp({
                             // we updated post likes
                             response.json().then(data => {
                                 post.numLikes = data;
+                                post.likeWaiting = false;
                             });
                         }
                     })
@@ -536,16 +582,17 @@ Vue.createApp({
                 this.filteredVolunteerOpportunities = this.volunteerOpportunities;
                 // Show volunteer opportunities ending soon
             } else if (filter === 'oldest') {
-                let currentDate = new Date();
                 // Filter the opportunities that have a valid end date and the end date 
                 // is greater than or equal to the current date
+                let currentDate = new Date(new Date().toLocaleDateString());
                 let endingSoonOpportunities = this.volunteerOpportunities.filter((post) => {
-                    console.log(post.formattedEndDate, new Date(post.formattedEndDate), currentDate);
-                    return (
-                        post.formattedEndDate && new Date(post.formattedEndDate) >= currentDate
-                    );
+                    let date = this.formatDate(post.startDate, post.dateEnd);
+                    if (date.hasOwnProperty("formattedEndDate")) {
+                        return (
+                            new Date(date.formattedEndDate.replaceAll("-", "/")) >= currentDate
+                        );
+                    }
                 });
-                console.log(endingSoonOpportunities);
                 // Sort the filtered opportunities by their end dates in ascending order
                 // Update the displayed opportunities with the sorted and filtered list
                 this.filteredVolunteerOpportunities = endingSoonOpportunities.sort((a, b) => new Date(a.dateEnd) - new Date(b.dateEnd));
@@ -881,7 +928,6 @@ Vue.createApp({
                 })
         },
         editVolunteerOpportunities: function (index) {
-            /* do something */
             this.editPostModal = true;
             this.newVolunteerPost = this.volunteerOpportunities[index];
             this.newVolunteerPost.index = index;
@@ -891,6 +937,65 @@ Vue.createApp({
                 this.newVolunteerPost.dateEnd = new Date(this.volunteerOpportunities[index].dateEnd).toISOString().slice(0, 10);
             }
             this.newVolunteerPost.type = this.volunteerOpportunities[index].orgname == "personal" ? "personal" : "organization";
+        },
+        applyToOpportunity: function (post) {
+            post.appliedWaiting = true;
+            if (!localStorage.getItem('userId')) {
+                console.log("User data Not saved on local storage")
+                return;
+            }
+            let options = {
+                method: "POST",
+                credentials: "include",
+            }
+            fetch(URL + `applications/${post._id}?userId=${localStorage.getItem("userId")}`, options)
+                .then(response => {
+                    if (response.status == 201) {
+                        console.log("Applied to post");
+                        post.applied = true;
+                    } else {
+                        console.log("Couldn't apply to post");
+                    }
+                    post.appliedWaiting = false;
+                })
+                .catch(error => console.log(error));
+        },
+        deleteApplication: function (post) {
+            post.appliedWaiting = true;
+            if (!localStorage.getItem('userId')) {
+                console.log("User data Not saved on local storage")
+                return;
+            }
+            let options = {
+                method: "DELETE",
+                credentials: "include",
+            }
+            fetch(URL + `applications/${post._id}?userId=${localStorage.getItem("userId")}`, options)
+                .then(response => {
+                    if (response.status == 204) {
+                        console.log("Deleted application");
+                        post.applied = false;
+                    } else {
+                        console.log("Couldn't delete application");
+                    }
+                    post.appliedWaiting = false;
+                })
+                .catch(error => console.log(error));
+        },
+        getApplications: function () {
+            if (!localStorage.getItem('userId')) {
+                console.log("User data Not saved on local storage")
+                return;
+            }
+            let options = {
+                credentials: "include",
+            }
+            fetch(URL + `applications/postedUser/${localStorage.getItem("userId")}`, options)
+                .then(response => response.json())
+                .then(data => {
+                    this.applications = data;
+                })
+                .catch(error => console.log(error));
         }
     },
     /*                                                     WATCHERS                                                     */
@@ -1037,6 +1142,7 @@ Vue.createApp({
             this.getOrganizationsDropdown();
         } else if (this.page == 'privateProfile') {
             this.getUserInformation();
+            this.getApplications();
             this.getVolunteerOpportunitiesByUser(localStorage.getItem("userId") ? localStorage.getItem("userId") : "");
         } else if (this.page == 'publicProfile') {
             this.getPublicProfile();

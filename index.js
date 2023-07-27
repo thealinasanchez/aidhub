@@ -461,6 +461,109 @@ app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
     })
 })
 
+app.get("/applications", AuthMiddleware, function (req, res) {
+    model.Application.find().populate("postedBy").populate("volunteerPost").then(entries => {
+        res.json(entries);
+    });
+});
+
+app.get("/applications/postedUser/:userId", AuthMiddleware, function (req, res) {
+    model.Application.find({ "postedBy": req.params.userId }).populate("postedBy").populate("applicant").populate("volunteerPost").then(entries => {
+        if (entries) {
+            res.json(entries);
+        }
+        else {
+            res.status(404).send("Application not found.");
+        }
+    });
+});
+
+app.get("/applications/applicantUser/:userId", AuthMiddleware, function (req, res) {
+    model.Application.find({ "applicant": req.params.userId }).then(entries => {
+        if (entries) {
+            res.json(entries);
+        }
+        else {
+            res.status(404).send("Application not found.");
+        }
+    });
+});
+
+app.get("/applications/:appId", AuthMiddleware, function (req, res) {
+    model.Application.findOne({ "_id": req.params.appId }).populate("postedBy").populate("volunteerPost").then(app => {
+        if (app) {
+            res.status(200).send(app);
+        } else {
+            console.log("Application not found.");
+            res.status(404).send("Application not found.");
+        }
+    }).catch(() => {
+        console.log("Bad request (GET by ID).");
+        res.status(400).send("Application not found.");
+    })
+});
+
+app.post("/applications/:postId", AuthMiddleware, function (req, res) {
+    if (!req.query.hasOwnProperty("userId")) {
+        res.status(400).send("No user ID provided.");
+        return;
+    }
+    model.VolunteerForm.findOne({ "_id": req.params.postId }).then(post => {
+        const newEntry = new model.Application({
+            postedBy: post.postedBy,
+            volunteerPost: req.params.postId,
+            applicant: req.query.userId,
+            status: "Pending"
+        });
+        newEntry.save().then((entry) => {
+            console.log("New application added.");
+            res.status(201).send(entry);
+        }).catch((errors) => {
+            console.log(errors);
+            let error_list = [];
+            for (var key in errors.errors) {
+                error_list.push(errors.errors[key].message)
+            }
+            res.status(422).send(error_list);
+        })
+    });
+});
+
+app.put("/applications/:appId", AuthMiddleware, function (req, res) {
+    model.Application.findOne({ "_id": req.params.appId }).then(app => {
+        if (app) {
+            if (req.body.hasOwnProperty("status")) {
+                app.status = req.body.status;
+                app.markModified("status");
+            }
+            app.save().then(() => {
+                res.status(200).send(app.populate("postedBy").populate("volunteerPost"));
+            }).catch((errors) => {
+                console.log(errors);
+            })
+        } else {
+            res.status(404).send("Application not found.");
+        }
+    })
+});
+
+app.delete("/applications/:postId", AuthMiddleware, function (req, res) {
+    if (!req.query.hasOwnProperty("userId")) {
+        res.status(400).send("No user ID provided.");
+        return;
+    }
+    model.Application.findOneAndDelete({ "volunteerPost": req.params.postId, "applicant": req.query.userId }).then(app => {
+        if (app) {
+            res.status(204).send("Application deleted.");
+        }
+        else {
+            res.status(404).send("Application not found.");
+        }
+    }).catch(() => {
+        res.status(422).send("Unable to delete.");
+    });
+});
+
 // app.get("/users/:userId/liked", function (req, res) {
 //     model.User.findOne({ "_id": req.params.userId }).then(user => {
 //         if (user) {
