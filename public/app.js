@@ -472,7 +472,7 @@ Vue.createApp({
                 method: "DELETE",
                 credentials: "include"
             };
-            this.deleteApplications(this.volunteerOpportunities[index]);
+            this.deleteApplication(this.volunteerOpportunities[index]);
             fetch(URL + `volunteerOpportunities/${volpostId}`, requestOptions)
                 .then((response) => {
                     if (response.status === 204) {
