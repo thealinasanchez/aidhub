@@ -70,14 +70,14 @@
                     <img :src="image.src" :alt="image.alt" class="slideshow-image">
                     <div class="slideshow-image-caption">{{ image.caption }}</div>
                 </div>
-                <div class="slideshow-dots-container">
-                    <span v-for="(slide,index) in slideShow.slides"
-                        :class="index == slideShow.currentIndex && 'slide-show-dot-active'" class="slideshow-dot"
-                        @click="moveToSlide(index)"></span>
-                </div>
             </div>
             <a class="slide-show-next-btn" @click="moveToNextSlide()">&#10095;</a>
             <a class="slide-show-prev-btn" @click="moveToPreviousSlide()">&#10094;</a>
+        </div>
+        <div class="slideshow-dots-container">
+            <span v-for="(slide,index) in slideShow.slides"
+                :class="index == slideShow.currentIndex && 'slide-show-dot-active'" class="slideshow-dot"
+                @click="moveToSlide(index)"></span>
         </div>
         <br />
         <main class="main-section-container">

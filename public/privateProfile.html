@@ -119,9 +119,11 @@
                         <form class="email-edit-form" @submit.prevent="editProfileEmailSubmit" v-else>
                             <input autocomplete="off" type="email" class="account-settings-info-text edit-email-input"
                                 v-model="editProfile.email" />
-                            <img @click="editProfileEmailSubmit()" class="email-icon accept-icon"
-                                src="./icons/check.svg" />
-                            <img @click="editProfileEmailToggle()" class="email-icon cancel-icon" src="./icons/x.svg" />
+                            <div id="edit-email-buttons">
+                                <img @click="editProfileEmailSubmit()" id="email-edit-accept-icon"
+                                    src="./icons/check.svg" />
+                                <img @click="editProfileEmailToggle()" id="email-edit-cancel-icon" src="./icons/x.svg" />
+                            </div>
                         </form>
                         <img @click="editProfileEmailToggle()" class="edit-email-icon" src="./icons/pencil.svg"
                             alt="edit-icon" v-if="!editProfile.emailEditToggle" />
@@ -174,7 +176,7 @@
                     <h1>Current Applications:</h1>
                     <div class="applications-container">
                         <div class="application" v-for="application in applications">
-                            <h1>{{ application.applicant.name }} Applied To:<br /> {{ application.volunteerPost.title }}
+                            <h1>User&nbsp;<div id="user">{{ application.applicant.name }}&nbsp;</div>applied to:&nbsp;{{ application.volunteerPost.title }}
                             </h1>
                         </div>
                     </div>
@@ -182,31 +184,31 @@
                 <div class="posted-opportunities-section">
                     <h1>Posted Opportunities:</h1>
                     <div class="opportunities-container">
-                        <div class="opportunity" v-for="(opportuninity, index) in volunteerOpportunities">
-                            <p class="opportunity-user">{{ opportuninity.user }}</p>
-                            <h1 class="opportunity-title">{{ opportuninity.title }}</h1>
-                            <p class="opportunity-description">{{ opportuninity.description }}</p>
+                        <div class="opportunity" v-for="(opportunity, index) in volunteerOpportunities">
+                            <p class="opportunity-user">{{ opportunity.user }}</p>
+                            <h1 class="opportunity-title">{{ opportunity.title }}</h1>
+                            <p class="opportunity-description">{{ opportunity.description }}</p>
                             <div class="opportunities-info-container">
-                                <p class="opportunity-organization">Organization:&nbsp; {{ opportuninity.orgname }}</p>
-                                <p class="opportunity-city">City:&nbsp; {{ opportuninity.city }}</p>
-                                <p class="opportunity-state">State:&nbsp; {{ opportuninity.state }}</p>
+                                <p class="opportunity-organization">Organization:&nbsp; {{ opportunity.orgname }}</p>
+                                <p class="opportunity-city">City:&nbsp; {{ opportunity.city }}</p>
+                                <p class="opportunity-state">State:&nbsp; {{ opportunity.state }}</p>
                                 <p class="opportunities-start-date">Start Date:&nbsp; {{
-                                    opportuninity.formattedStartDate
+                                    opportunity.formattedStartDate
                                     }}
                                 </p>
-                                <p class="opportunities-end-date" v-if="opportuninity.formattedEndDate">End
-                                    Date:&nbsp;{{ opportuninity.formattedEndDate }}
+                                <p class="opportunities-end-date" v-if="opportunity.formattedEndDate">End
+                                    Date:&nbsp;{{ opportunity.formattedEndDate }}
                                 </p>
                                 <p class="opportunities-num-people">Number of People Needed:&nbsp; {{
-                                    opportuninity.num_people }}
+                                    opportunity.num_people }}
                                 </p>
-                                <p class="opportunities-website" v-if="opportuninity.website">Website:&nbsp; <a
-                                        :href="opportuninity.website" target="_blank">{{
-                                        opportuninity.website }}</a>
+                                <p class="opportunities-website" v-if="opportunity.website">Website:&nbsp; <a
+                                        :href="opportunity.website" target="_blank">{{
+                                            opportunity.website }}</a>
                                 </p>
                                 <div class="opportunities-interaction-container">
                                     <p class="opportunities-likes-container"><span class="opportunity-likes">{{
-                                            opportuninity.numLikes }}</span>
+                                        opportunity.numLikes }}</span>
                                         Likes
                                     </p>
                                     <div class="edit-delete-opportunity-container">
