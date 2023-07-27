@@ -199,12 +199,39 @@ main {
     width: 80%;
 }
 
-.edit-about-button {
-    font-size: 15px;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    align-items: center;
+.edit-about-save-button {
+    cursor: pointer;
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: rgba(0,255,0,0.2);
+    font-size: 18px;
+    font-weight: bolder;
+    border: none;
+    margin-top: 3px;
+}
+
+.edit-about-save-button:hover {
+    background-color: #00BA69;
+    color: white;
+}
+
+.edit-about-cancel-button {
+    cursor: pointer;
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(255,0,0,0.2);
+    font-size: 18px;
+    font-weight: bolder;
+    margin-right: 31px;
+    margin-top: 3px;
+}
+
+.edit-about-cancel-button:hover {
+    background-color: #CA2A2D;
+    color: white;
 }
 
 .edit-about-icon {
@@ -737,6 +764,8 @@ main {
     color: var(--post-odd);
 }
 
+
+
 @media only screen and (max-width: 1100px) {
     #app {
         grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,150px))minmax(0px,1fr);
@@ -747,6 +776,11 @@ main {
     #app {
         background-color: green;
     }
+
+    .username-text-edit {
+        width: 309px;
+    }
+
 }
 
 @media screen and (max-width: 600px) {
