@@ -134,7 +134,7 @@
 
 .org-row-head {
     background-color: var(--org-table-color);
-    color: white;
+    color: var(--org-table-text-color);
     font-weight: bold;
     font-size: 18px;
 }
@@ -200,6 +200,6 @@
 
 @media only screen and (max-width: 1100px) {
     #app {
-        grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,150px))minmax(0px,1fr);
+        grid-template-columns: minmax(0px, 1fr)repeat(6, minmax(0, 150px))minmax(0px, 1fr);
     }
 }

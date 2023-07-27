@@ -15,6 +15,8 @@
     --button-color: #58A74C;
     --search-button-color: #58B0BF;
     --org-table-color: #58B0BF;
+    /* --org-table-color: rgba(34, 210, 10, 0.4); */
+    --org-table-text-color: black;
     --header-color: #fcfcfc;
     --index-location-button: #24a0ed;
     --index-location-button-hover: rgb(36, 160, 237, 0.5);
@@ -233,10 +235,10 @@ img {
 footer {
     display: grid;
     grid-template-columns: minmax(0px, 0.5fr) 1fr 0.75fr 1.25fr minmax(0px, 0.5fr);
-    border-top: 15px solid var(--footer-color);
+    /* border-top: 15px solid var(--footer-color); */
     grid-column: 1/9;
     grid-row: 5/6;
-    background-color: white;
+    background: linear-gradient(180deg, rgba(190, 190, 190, 0.1) 0%, rgba(240, 240, 240, 0.1) 100%);
     color: black;
     padding-top: 20px;
 }
@@ -252,6 +254,7 @@ footer {
     margin: auto;
     width: 460px;
     padding: 20px;
+    padding-top: 0px;
 }
 
 .footer-title {
@@ -267,7 +270,7 @@ footer {
 
 .footer-text::marker {
     font-size: 20px;
-    
+
 }
 
 .footer-text a {
@@ -321,10 +324,12 @@ footer {
 }
 
 .copyright-container {
-    grid-column: 2/5;
+    grid-column: 1/6;
     font-size: 14px;
-    margin-bottom: 20px;
+    margin-top: 20px;
     text-align: center;
+    padding: 15px;
+    margin-bottom: 10px;
 }
 
 .disabled-button {
@@ -334,7 +339,7 @@ footer {
 
 @media only screen and (max-width: 1100px) {
     #app {
-        grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,150px))minmax(0px,1fr);
+        grid-template-columns: minmax(0px, 1fr)repeat(6, minmax(0, 150px))minmax(0px, 1fr);
     }
 
     .top-login-header-button {

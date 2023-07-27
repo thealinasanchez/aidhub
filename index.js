@@ -461,6 +461,14 @@ app.post("/volunteerOpportunities", AuthMiddleware, function (req, res) {
     })
 })
 
+app.delete("/volunteerOpportunities/postedBy/:userId", AuthMiddleware, function (req, res) {
+    model.VolunteerForm.deleteMany({ "postedBy": req.params.userId }).then(() => {
+        res.status(204).send("Volunteer posts deleted.");
+    }).catch(() => {
+        res.status(422).send("Unable to delete.");
+    });
+});
+
 app.get("/applications", AuthMiddleware, function (req, res) {
     model.Application.find().populate("postedBy").populate("volunteerPost").then(entries => {
         res.json(entries);
@@ -564,6 +572,22 @@ app.delete("/applications/:postId", AuthMiddleware, function (req, res) {
     });
 });
 
+app.delete("/applications/postedBy/:userId", AuthMiddleware, function (req, res) {
+    model.Application.deleteMany({ "postedBy": req.params.userId }).then(() => {
+        res.status(204).send("Applications deleted.");
+    }).catch(() => {
+        res.status(422).send("Unable to delete.");
+    });
+});
+
+app.delete("/applications/applicant/:userId", AuthMiddleware, function (req, res) {
+    model.Application.deleteMany({ "applicant": req.params.userId }).then(() => {
+        res.status(204).send("Applications deleted.");
+    }).catch(() => {
+        res.status(422).send("Unable to delete.");
+    });
+});
+
 // app.get("/users/:userId/liked", function (req, res) {
 //     model.User.findOne({ "_id": req.params.userId }).then(user => {
 //         if (user) {
@@ -659,11 +683,16 @@ app.put("/volunteerOpportunities/:volpostId", AuthMiddleware, function (req, res
     }
     else if (req.body.hasOwnProperty("unlike")) {
         model.VolunteerForm.findOne({ "_id": req.params.volpostId }).then((post) => {
-            post.numLikes = post.numLikes - 1;
-            post.markModified("numLikes");
-            post.save().then(() => {
+            if (post.numLikes == 0) {
                 res.status(200).json(post.numLikes);
-            })
+                return;
+            } else {
+                post.numLikes = post.numLikes - 1;
+                post.markModified("numLikes");
+                post.save().then(() => {
+                    res.status(200).json(post.numLikes);
+                })
+            }
         })
     } else {
         // console.log(req.body.categories);

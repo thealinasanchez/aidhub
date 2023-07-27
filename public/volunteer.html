@@ -51,8 +51,8 @@
                 </ul>
             </nav>
             <div class="nav-bar-button-container">
-                <a href="volunteer.html">
-                    <button class="common-green-button nav-bar-button">GET STARTED</button>
+                <a href="contact.html">
+                    <button class="common-green-button nav-bar-button">CONTACT US</button>
                 </a>
             </div>
         </header>
@@ -129,7 +129,7 @@
                         </div>
                         <div id="post-description" v-if="post.description">
                             <p>Description: </p>
-                                <textarea name="desc-text" id="desc-text" cols="115" rows="10">
+                            <textarea name="desc-text" id="desc-text" cols="115" rows="10">
                                     {{post.description}}
                                 </textarea>
                         </div>
@@ -259,14 +259,16 @@
                         <a :class="page == 'organizations'? 'current-page-footer' : ''" href="organizations.html">Look
                             up Organizations</a>
                     </li>
-                    <li class="footer-text">
+                    <!-- <li class="footer-text">
                         <a href="getstarted.html" :class="page == 'getStarted'? 'current-page-footer' : ''">
                             Get Started Looking at
                             Opportunities</a>
-                    </li>
+                    </li> -->
                     <li class="footer-text"><a href="volunteer.html"
                             :class="page == 'volunteer'? 'current-page-footer' : ''">Apply to different Volunteer
                             Opportunities</a></li>
+                    <li class="footer-text"><a href="contact.html"
+                            :class="page == 'contact'? 'current-page-footer' : ''">Contact Us</a></li>
                 </ul>
             </div>
             <div class="newsletter-container">

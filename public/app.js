@@ -472,6 +472,7 @@ Vue.createApp({
                 method: "DELETE",
                 credentials: "include"
             };
+            this.deleteApplications(this.volunteerOpportunities[index]);
             fetch(URL + `volunteerOpportunities/${volpostId}`, requestOptions)
                 .then((response) => {
                     if (response.status === 204) {
@@ -481,6 +482,20 @@ Vue.createApp({
                             this.filteredVolunteerOpportunities.splice(indexFilter, 1);
                         }
                         this.volunteerOpportunities.splice(index, 1);
+                    } else {
+                        alert("Unable to delete volunteer post");
+                    }
+                });
+        },
+        deleteVolunteerOpportunitiesByUser: function (userId) {
+            let options = {
+                method: "DELETE",
+                credentials: "include"
+            }
+            fetch(URL + `volunteerOpportunities/postedBy/${userId}`, options)
+                .then(response => {
+                    if (response.status == 204) {
+                        console.log("success");
                     } else {
                         alert("Unable to delete volunteer post");
                     }
@@ -713,10 +728,13 @@ Vue.createApp({
                 method: "DELETE",
                 credentials: "include"
             }
+            this.deleteVolunteerOpportunitiesByUser(localStorage.getItem("userId"));
+            this.deleteApplicationsByPostedUser(localStorage.getItem("userId"));
+            this.deleteApplicationsByApplicantUser(localStorage.getItem("userId"));
             fetch(URL + `users/${localStorage.getItem("userId")}`, options).then(response => {
-                this.logout();
-                this.loggedInStatus = false;
                 if (response.status == 204) {
+                    this.loggedInStatus = false;
+                    this.logout();
                 } else {
                     alert("Couldn't delete account", response.status);
                 }
@@ -979,6 +997,36 @@ Vue.createApp({
                         console.log("Couldn't delete application");
                     }
                     post.appliedWaiting = false;
+                })
+                .catch(error => console.log(error));
+        },
+        deleteApplicationsByPostedUser: function (userId) {
+            let options = {
+                method: "DELETE",
+                credentials: "include",
+            }
+            fetch(URL + `applications/postedBy/${userId}`, options)
+                .then(response => {
+                    if (response.status == 204) {
+                        console.log("Deleted applications");
+                    } else {
+                        console.log("Couldn't delete applications");
+                    }
+                })
+                .catch(error => console.log(error));
+        },
+        deleteApplicationsByApplicantUser: function (userId) {
+            let options = {
+                method: "DELETE",
+                credentials: "include",
+            }
+            fetch(URL + `applications/applicant/${userId}`, options)
+                .then(response => {
+                    if (response.status == 204) {
+                        console.log("Deleted applications");
+                    } else {
+                        console.log("Couldn't delete applications");
+                    }
                 })
                 .catch(error => console.log(error));
         },

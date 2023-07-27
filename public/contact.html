@@ -7,19 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidHub</title>
     <link href="main.css" rel="stylesheet" type="text/css">
-    <link href="index.css" rel="stylesheet" type="text/css">
+    <link href="contact.css" rel="stylesheet" type="text/css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
-    <!-- Map Visualization Stuff -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
     <!-- vue stuff -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
@@ -45,7 +38,7 @@
         </div>
         <div class="header-background">
         </div>
-        <div style="display: none">{{ page = 'index' }}</div>
+        <div style="display: none">{{ page = 'contact' }}</div>
         <header class="top-nav-bar">
             <a class="logo-brand-container" href="index.html">
                 <h2>AidHub</h2>
@@ -58,85 +51,14 @@
                 </ul>
             </nav>
             <div class="nav-bar-button-container">
-                <a href="contact.html">
+                <a href=contact.html">
                     <button class="common-green-button nav-bar-button">CONTACT US</button>
                 </a>
             </div>
         </header>
         <!-- Slideshow Stuff -->
-        <div class="slideshow">
-            <div class="slideshow-container">
-                <div v-for="(image, index) in slideShow.slides" class="slideshow-slide">
-                    <img :src="image.src" :alt="image.alt" class="slideshow-image">
-                    <div class="slideshow-image-caption">{{ image.caption }}</div>
-                </div>
-                <div class="slideshow-dots-container">
-                    <span v-for="(slide,index) in slideShow.slides"
-                        :class="index == slideShow.currentIndex && 'slide-show-dot-active'" class="slideshow-dot"
-                        @click="moveToSlide(index)"></span>
-                </div>
-            </div>
-            <a class="slide-show-next-btn" @click="moveToNextSlide()">&#10095;</a>
-            <a class="slide-show-prev-btn" @click="moveToPreviousSlide()">&#10094;</a>
-        </div>
-        <br />
-        <div class="index-ask-location-container" v-if="indexLocation.askForLocation">
-            <div class="index-ask-location-blur">
-                <div class="index-ask-location-card">
-                    <h2>Find Organizations Near You</h2>
-                    <button class="index-ask-location-button" @click="indexAskLocationAccept()">Use Current
-                        Location</button>
-                </div>
-            </div>
-        </div>
-        <div class="index-spinner-container spinner-container" v-else-if="indexLocation.spinner">
-            <img src="icons/spinner.svg" alt="spinner" class="spinner" v-if="indexLocation.spinner" />
-        </div>
-        <div id="map" v-else></div>
-        <br />
-        <div class="index-main-info-container">
-            <div class="index-main-info-row">
-                <p class="index-main-info-text">
-                    An estimated <strong>23.2%</strong> of Americans or more than <strong>60.7 million</strong>
-                    people formally volunteered
-                    with organizations between September 2020 and 2021. In total, these volunteers served an
-                    estimated 4.1 billion hours with an economic value of <strong>$122.9 billion</strong>.
-                    <br />
-                    <a href="https://americorps.gov/about/our-impact/volunteering-civic-life"
-                        target="_blank"><cite>Source</cite></a>
-                </p>
-                <img src="./images/volunteerPlant.jpg" alt="volunteer image" class="index-main-info-image">
-            </div>
-        </div>
         <main class="main-section-container">
-            <div class="index-main-image-container">
-                <div class="index-main-image-row">
-                    <img src="volunteering4.jpg" alt="about image" class="index-main-image">
-                    <div class="index-main-image-text">
-                        <h2>About</h2>
-                        <p class="about-text"> &nbsp; &nbsp; &nbsp; &nbsp;
-                            Welcome to AidHub, a place where compassion meets action, and together, we make
-                            a meaningful difference. Our platform is dedicated to helping people like you find inspiring
-                            volunteer opportunities that align with your passions, skills, and schedule, making it
-                            easier than ever to contribute to nonprofit organizations and create positive change in the
-                            world.
-                        </p>
-                    </div>
-                </div>
-                <div class="index-main-image-row">
-                    <div class="index-main-image-text">
-                        <h2>Mission</h2>
-                        <p class="mission-text">
-                            At AidHub, our mission is clear and resolute - we aim to empower change and
-                            make the world a better place through the collective efforts of volunteers and nonprofit
-                            organizations. We recognize the immense value of volunteers' time, skills, and dedication,
-                            and we are committed to facilitating their journey towards making a difference in
-                            their
-                            <strong>communities and beyond.</strong>
-                        </p>
-                    </div>
-                    <img src="volunteering3.jpg" alt="mission image" class="index-main-image">
-                </div>
+            <h1>Give me Money plz</h1>
         </main>
         <footer class="index-footer">
             <div class="footer-info-container">
@@ -146,11 +68,11 @@
                         <a :class="page == 'organizations'? 'current-page-footer' : ''" href="organizations.html">Look
                             up Organizations</a>
                     </li>
-                    <!-- <li class="footer-text">
+                    <li class="footer-text">
                         <a href="getstarted.html" :class="page == 'getStarted'? 'current-page-footer' : ''">
                             Get Started Looking at
                             Opportunities</a>
-                    </li> -->
+                    </li>
                     <li class="footer-text"><a href="volunteer.html"
                             :class="page == 'volunteer'? 'current-page-footer' : ''">Apply to different Volunteer
                             Opportunities</a></li>
@@ -204,11 +126,6 @@
             </div>
         </footer>
     </div>
-    <!--
-    <script type="module">
-        import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-    </script>
-    -->
     <script src="app.js"></script>
 </body>
 
