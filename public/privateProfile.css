@@ -209,6 +209,7 @@ main {
     font-weight: bolder;
     border: none;
     margin-top: 3px;
+    margin-right: 3px;
 }
 
 .edit-about-save-button:hover {
