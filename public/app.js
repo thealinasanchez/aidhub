@@ -476,7 +476,7 @@ Vue.createApp({
             fetch(URL + `volunteerOpportunities/${volpostId}`, requestOptions)
                 .then((response) => {
                     if (response.status === 204) {
-                        console.log("success");
+                        console.log("Deleted Volunteer Post Success");
                         let indexFilter = this.filteredVolunteerOpportunities.indexOf(this.volunteerOpportunities[index]);
                         if (indexFilter != -1) {
                             this.filteredVolunteerOpportunities.splice(indexFilter, 1);
