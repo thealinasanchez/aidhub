@@ -66,9 +66,6 @@
                 </div>
                 <!--search box-->
                 <div class="search-area">
-                    <form onsubmit="return false">
-                        <input type="text" id="search" placeholder="Search...">
-                    </form>
                     <div id="search-buttons">
                         <button class="btn all" @click="filterBy('all')">All</button>
                         <button class="btn oldest" @click="filterBy('oldest')">Ending Soon</button>
@@ -139,26 +136,28 @@
                             <p>Website: </p>
                             <div><a :href="post.website" target="_blank">{{post.website}}</a></div>
                         </div>
+                    </div>
+                    <div class="post-interaction-area">
                         <div class="post-button-container">
                             <div id="likes" v-if="loggedInStatus">
-                                <p><span id="display">{{post.numLikes}}</span> Likes</p>
+                                <p><span id="display">{{post.numLikes}}</span>&nbsp;Like(s)&nbsp;</p>
                                 <button id="like-button" v-if="!post.likeWaiting" @click="toggleLikePost(post)">
                                     {{post.liked ? 'Unlike' : 'Like'}}
                                 </button>
                             </div>
-                            <div class="post-modification" v-if="loggedInStatus && user.name == post.postedBy.name">
-                                <a href="#top"><img src="./icons/edit.svg" alt="edit-icon"
-                                        @click="editVolunteerOpportunities(index)" id="post-edit-button"></a>
-                                <img src="./icons/trash.svg" alt="delete-icon"
-                                    @click="deleteVolunteerOpportunities(index)" class="post-delete-button">
-                            </div>
                             <button id="apply-button"
-                                v-else-if="loggedInStatus && !post.applied && !post.appliedWaiting"
-                                @click="applyToOpportunity(post)">Apply</button>
+                            v-else-if="loggedInStatus && !post.applied && !post.appliedWaiting"
+                            @click="applyToOpportunity(post)">Apply</button>
                             <button id="applied-button"
-                                v-else-if="loggedInStatus && post.applied && !post.appliedWaiting"
-                                @click="deleteApplication(post)">Unapply</button>
+                            v-else-if="loggedInStatus && post.applied && !post.appliedWaiting"
+                            @click="deleteApplication(post)">Unapply</button>
                             <a href=" login.html" id="login-button" v-if="!loggedInStatus">Log In To Interact</a>
+                        </div>
+                        <div class="post-modification" v-if="loggedInStatus && user.name == post.postedBy.name">
+                            <a href="#top"><img src="./icons/edit.svg" alt="edit-icon"
+                                    @click="editVolunteerOpportunities(index)" id="post-edit-button"></a>
+                            <img src="./icons/trash.svg" alt="delete-icon"
+                                @click="deleteVolunteerOpportunities(index)" class="post-delete-button">
                         </div>
                     </div>
                 </div>

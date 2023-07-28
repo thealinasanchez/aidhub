@@ -90,6 +90,7 @@
 }
 
 /* post container */
+
 .post-container .post {
     border-radius: 9px;
     box-shadow: 0px 2px 5px 3px rgba(0, 0, 0, 0.35);
@@ -102,6 +103,76 @@
     background-color: var(--post-odd);
     color: #F8F8FF;
 }
+
+.odd #login-button {
+    cursor: pointer;
+    background-color: var(--post-even);
+    border: 2px solid #A8D4ED;
+    border-style: outset;
+    padding: 3px 8px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: black;
+    margin-bottom: 5px;
+    width: 142px;
+    height: 32px;
+}
+
+.odd #login-button:hover {
+    background-color: #A8D4ED;
+    border-style: none;
+    width: 142px;
+    height: 31px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.even #login-button {
+    cursor: pointer;
+    background-color: var(--post-odd);
+    border: 2px solid #447EAD;
+    border-style: outset;
+    padding: 3px 8px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #F8F8FF;
+    margin-bottom: 5px;
+    width: 142px;
+    height: 32px;
+}
+
+.even #login-button:hover {
+    background-color: #447EAD;
+    border-style: none;
+    width: 142px;
+    height: 31px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.post-modification {
+    width: 113px;
+    margin-bottom: 4px;
+}
+
+.post-modification img {
+    cursor: pointer;
+    width: 50px;
+    padding: 10px;
+}
+
+.odd .post-modification img:hover {
+    background-color: var(--post-even);
+    border-radius: 5px;
+}
+
+.even .post-modification img:hover {
+    background-color: var(--post-odd);
+    border-radius: 5px;
+}
+
 
 /* volunteer posting area */
 #volunteerthings {
@@ -208,32 +279,6 @@
     align-items: center;
 }
 
-#login-button {
-    cursor: pointer;
-    background-color: var(--volunteer-button-color);
-    border: 2px solid var(--volunteer-button-hover);
-    border-style: outset;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 117px;
-    height: 32px;
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
-}
-
-#login-button:hover {
-    background-color: var(--volunteer-button-hover);
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 117px;
-    height: 32px;
-}
-
 #login-button.odd {
     background-color: var(--post-even);
 }
@@ -268,7 +313,7 @@
 /* Edit Post Modal */
 .volunteer-form-container {
     position: absolute;
-    z-index: 3;
+    z-index: 8;
     top: 110px;
     width: 100%;
     height: 100%;
@@ -413,4 +458,63 @@
     margin-left: 8px;
     margin-top: 2px;
     margin-bottom: 2px;
+}
+
+.post-interaction-area {
+    display: flex;
+    justify-content: space-between;
+}
+
+#likes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8%;
+    margin-bottom: 5%;
+}
+
+#likes p {
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#like-button {
+    width: 49px;
+}
+
+@media only screen and (max-width: 1100px) {
+    #app {
+        grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,150px))minmax(0px,1fr);
+    }
+}  
+
+@media screen and (max-width: 768px) {
+    footer {
+        display: flex;
+        flex-flow: column wrap;
+    }
+
+    #mc_embed_shell {
+        width: 488px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .logo-brand-container h2 {
+        display: none;
+    }
+
+    .nav-bar-button {
+        width: 140px;
+        height: 34px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 8px;
+        margin-top: 3px;
+    }
+
 }

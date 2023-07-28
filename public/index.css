@@ -253,17 +253,29 @@
     grid-row: auto;
 }
 
+.about-text,
+.mission-text {
+    width: 100%;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 25px;
+}
+
 @media only screen and (max-width: 1100px) {
+    #app {
+        grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,150px))minmax(0px,1fr);
+    }
+
     .slideshow {
-        height: 80vh;
+        height: 75vh;
     }
 
     .slideshow-container {
-        height: 80vh;
+        height: 75vh;
     }
 
     .slideshow-image {
-        height: 80vh;
+        height: 75vh;
     }
 
     .slideshow-dots-container {
@@ -271,6 +283,8 @@
         justify-content: center;
         align-items: center;
         right: 46%;
+        bottom: 77px;
+        margin-bottom: 11px;
     }
 
     .index-main-image-row {
@@ -283,12 +297,104 @@
         height: 420px;
         margin: 0px 30px;
     }
+
+    .index-main-info-text {
+        margin-right: 53px;
+    }
 }
 
-.about-text,
-.mission-text {
-    width: 100%;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 25px;
+@media screen and (max-width: 768px) {
+    footer {
+        display: flex;
+        flex-flow: column wrap;
+    }
+
+    #mc_embed_shell {
+        width: 488px;
+    }
+
+    .slideshow {
+        height: 70vh;
+    }
+
+    .slideshow-container {
+        height: 70vh;
+    }
+
+    .slideshow-image {
+        height: 70vh;
+    }
+
+    .slideshow-dots-container {
+        margin-bottom: 50px;
+    }
+
+    .index-ask-location-container {
+        margin-top: 29px;
+        width: 97%;
+        margin-left: 1%;
+    }
+
+    .index-main-info-container {
+        height: 556px;
+    }
+
+    .index-main-info-image {
+        border-radius: 0px;
+        height: 557px;
+    }
+
+    .index-main-info-text {
+        font-size: 27px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .logo-brand-container h2 {
+        display: none;
+    }
+    .nav-bar-button {
+        width: 140px;
+        height: 34px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 8px;
+        margin-top: 3px;
+    }
+    .slideshow {
+        height: 58vh;
+    }
+
+    .slideshow-container {
+        height: 58vh;
+    }
+
+    .slideshow-image {
+        height: 58vh;
+    }
+
+    .slideshow-dots-container {
+        margin-bottom: 141px;
+    }
+
+    .index-ask-location-card {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .index-ask-location-button {
+        padding: 8px 10px;
+        font-size: 17px;
+    }
+
+    .index-main-info-image {
+        display: none;
+    }
+
+    .index-main-image-row {
+        display: flex;
+        flex-flow: column nowrap;
+    }
 }

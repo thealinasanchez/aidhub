@@ -200,6 +200,48 @@
 
 @media only screen and (max-width: 1100px) {
     #app {
-        grid-template-columns: minmax(0px, 1fr)repeat(6, minmax(0, 150px))minmax(0px, 1fr);
+        grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,150px))minmax(0px,1fr);
     }
+}  
+
+@media screen and (max-width: 768px) {
+    footer {
+        display: flex;
+        flex-flow: column wrap;
+    }
+
+    #mc_embed_shell {
+        width: 488px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .logo-brand-container h2 {
+        display: none;
+    }
+
+    .nav-bar-button {
+        width: 140px;
+        height: 34px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 8px;
+        margin-top: 3px;
+    }
+
+    #org-page-title {
+        display: flex;
+        margin-right: 7%;
+    }
+
+    .org-search-area {
+        float: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 13%;
+    }
+
 }
