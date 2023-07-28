@@ -21,6 +21,7 @@ main {
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+    margin-right: 10px;
 }
 
 .username-container {
@@ -156,4 +157,149 @@ main {
     margin-top: 10px;
     background-color: #fcfcfc;
     box-shadow: 0px 0px 5px 0px rgba(21, 253, 33, 0.45);
+}
+
+@media only screen and (max-width: 1100px) {
+    #app {
+        grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,150px))minmax(0px,1fr);
+    }
+}  
+
+@media screen and (max-width: 768px) {
+    .username-text-edit {
+        width: 309px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    /* #app {
+        background-color: green;
+    } */
+
+    .profile-photo-container {
+        width: 180px;
+        height: 180px;
+    }
+
+    .profile-photo-blur {
+        font-size: 12px;
+    }
+
+    .info-container {
+        padding-left: 0px;
+    }
+
+    .about-container {
+        padding: 10px;
+        max-height: 135px;
+    }
+
+    .edit-about-me-button {
+        padding: 3px 3px;
+        font-size: 17px;
+    }
+
+    .current-applications-section h1 {
+        font-size: 26px;
+    }
+
+    .posted-opportunities-section h1 {
+        font-size: 26px;
+    }
+
+    .logo-brand-container h2 {
+        display: none;
+    }
+
+    .nav-bar-button {
+        width: 140px;
+        height: 34px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 8px;
+        margin-top: 3px;
+    }
+
+    .username-edit-form {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    .about-text-area {
+        max-height: 71px;
+        margin-top: 2px;
+    }
+
+    .about-title {
+        width: 118px;
+    }
+
+    .about-text {
+        margin-top: 4px;
+    }
+
+    .account-settings-section {
+        width: 100%;
+    }
+
+    .account-settings-section-container h1 {
+        font-size: 24px;
+    }
+
+    .account-settings-section h4 {
+        font-size: 21px;
+    }
+
+    .account-settings-info {
+        padding: 4px 0px;
+    }
+
+    .edit-password-input {
+        width: 184px;
+    }
+
+    .cancel-delete-account-button {
+        margin-top: 6px;
+    }
+
+    .opportunity {
+        margin: 7px 0px;
+        padding: 7px;
+    }
+
+    .email-edit-form {
+        width: 195.5px;
+    }
+
+    .edit-email-input {
+        padding-left: 7px;
+    }
+
+    #volunteer-form {
+        margin-top: 20px;
+        width: 549px;
+        height: 709px;
+    }
+
+    #description {
+        height: 80px;
+    }
+
+    .submit-volunteer-form-button {
+        margin-top: 0px;
+        padding: 4px 9px;
+        background-color: var(--footer-color);
+        color: var(--offwhite);
+        border: 2px solid #239CE8;
+        border-style: outset;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .back-button {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
 }
