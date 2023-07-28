@@ -156,6 +156,12 @@
 
 }
 
+@media screen and (max-width: 682px) {
+    #volunteer-form {
+        width: 641px;
+    }
+}
+
 @media screen and (max-width: 600px) {
     .logo-brand-container h2 {
         display: none;
