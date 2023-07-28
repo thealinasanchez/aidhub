@@ -1,0 +1,20 @@
+
+
+#alina-jumping {
+    display: block;
+    width: 500px;
+    height: 300px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.alina-section {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.alina-section p {
+    width: 500px;
+    padding: 2px;
+    font-size: 17px;
+}
