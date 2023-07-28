@@ -1,4 +1,8 @@
-
+.title {
+    font-size: 30px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
 
 #alina-jumping {
     display: block;
@@ -21,6 +25,10 @@
     font-size: 17px;
 }
 
+#alina-qr {
+    float: right;
+}
+
 #alina-qr h3 {
     margin-left: 70px;
     margin-top: 20px;
@@ -29,6 +37,10 @@
 .thomas-section {
     display: flex;
     flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    font-size: 17px;
 }
 
 #thomas-boi {
@@ -44,4 +56,13 @@
     width: 500px;
     padding: 2px;
     font-size: 17px;
+}
+
+#thomas-qr {
+    float: left;
+}
+
+#thomas-qr h3 {
+    margin-top: 20px;
+    text-align: center;
 }
