@@ -88,7 +88,7 @@
                     <div class="about-me-title-container">
                         <span class="about-title">About Me:</span>
                         <button @click="editProfileAboutToggle()" class="edit-about-me-button"
-                            v-if="!editProfile.aboutEditToggle">Edit About Me
+                            v-if="!editProfile.aboutEditToggle">Edit
                             <img class="edit-about-me-icon" src="./icons/pencil.svg" alt="edit-icon" />
                         </button>
                         <div class="edit-about-button-container" v-else>
@@ -103,7 +103,7 @@
                     <p class="about-text" v-if="!editProfile.aboutEditToggle">
                         {{ user.about }}
                     </p>
-                    <textarea class="about-text about-text-area" v-else v-model="editProfile.about"></textarea>
+                    <textarea class="about-text-area" v-else v-model="editProfile.about"></textarea>
                 </div>
             </div>
             <hr class="divider" />
@@ -302,8 +302,7 @@
                     <input type="text" id="website" name="website" class="volunteer-form-input"
                         v-model="newVolunteerPost.website">
                 </span>
-                <button type="submit" class="submit-volunteer-form-button" id="post">Update Volunteer
-                    Opportunity</button>
+                <button type="submit" class="submit-volunteer-form-button" id="post">Update</button>
             </form>
         </div>
     </div>
