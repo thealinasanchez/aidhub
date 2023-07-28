@@ -1,17 +1,18 @@
-<<<<<<< HEAD
 
 
 #alina-jumping {
     display: block;
     width: 500px;
-    height: 300px;
-    margin-right: 10px;
+    height: 350px;
+    margin-left: 10px;
     border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.45);
 }
 
 .alina-section {
     display: flex;
     flex-flow: row nowrap;
+    margin-bottom: 20px;
 }
 
 .alina-section p {
@@ -19,17 +20,28 @@
     padding: 2px;
     font-size: 17px;
 }
-=======
-.title {
-    text-align: center;
-    font-size: 2rem;
-    margin: 1rem 0;
+
+#alina-qr h3 {
+    margin-left: 70px;
+    margin-top: 20px;
 }
 
-.profile-photo {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    object-position: 50% 40%;
+.thomas-section {
+    display: flex;
+    flex-flow: row nowrap;
 }
->>>>>>> 3090931e5a3d0e6aa447f45fb614c33f9dca6e0c
+
+#thomas-boi {
+    display: block;
+    width: 386px;
+    height: 470px;
+    border-radius: 5px;
+    margin-right: 10px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.45);
+}
+
+.thomas-section p {
+    width: 500px;
+    padding: 2px;
+    font-size: 17px;
+}
