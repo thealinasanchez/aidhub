@@ -1,5 +1,5 @@
-// var URL = "http://localhost:6300/";
-var URL = "https://aidhub-production.up.railway.app/";
+var URL = "http://localhost:6300/";
+// var URL = "https://aidhub-production.up.railway.app/";
 Vue.createApp({
     data() {
         return {

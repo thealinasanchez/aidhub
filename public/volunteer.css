@@ -262,6 +262,11 @@
     margin-top: 10px;
 }
 
+#apply-button {
+    width: 200px;
+    height: 200px;
+}
+
 /* .post-button-container #like-button {
     background-image: url("icons/like.svg");
     background-size: cover;
