@@ -171,7 +171,7 @@
 .index-main-info-row {
     width: 100%;
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     justify-content: space-between;
     margin-left: 10%;
     align-items: center;
@@ -253,6 +253,14 @@
     grid-row: auto;
 }
 
+.about-text,
+.mission-text {
+    width: 100%;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 25px;
+}
+
 @media only screen and (max-width: 1100px) {
     .slideshow {
         height: 80vh;
@@ -285,10 +293,60 @@
     }
 }
 
-.about-text,
-.mission-text {
-    width: 100%;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 25px;
+@media only screen and (max-width: 960px) {
+
+    .index-ask-location-container {
+        width: 100dvw;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .index-main-info-container {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .index-main-info-row {
+        margin-left: 0px;
+    }
+
+    .index-main-info-text {
+        width: 100dvw;
+        text-align: center;
+    }
+
+    .index-main-info-image {
+        display: none;
+    }
+
+    .index-main-image-row {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .index-main-image-row:nth-of-type(2) {
+        flex-flow: column-reverse nowrap;
+    }
+
+    .index-main-image {
+        height: auto;
+        width: 100dvw;
+        margin: 0px;
+        margin-bottom: 20px;
+    }
+
+    .index-main-image-text {
+        width: 100dvw;
+        text-align: center;
+    }
+
+    .about-text,
+    .mission-text {
+        font-size: 20px;
+        width: 100dvw;
+    }
 }

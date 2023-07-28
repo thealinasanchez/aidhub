@@ -337,6 +337,10 @@ footer {
     background-color: gray !important;
 }
 
+.hamburger-menu {
+    display: none;
+}
+
 @media only screen and (max-width: 1100px) {
     #app {
         grid-template-columns: minmax(0px, 1fr)repeat(6, minmax(0, 150px))minmax(0px, 1fr);
@@ -348,5 +352,92 @@ footer {
 
     input#mce-EMAIL {
         min-width: 307px;
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    .logo-brand-container {
+        font-size: 16px;
+        margin-left: 10px;
+    }
+
+    .nav-bar-button {
+        font-size: 15px;
+        width: 120px;
+    }
+
+    .hamburger-menu {
+        display: initial;
+        cursor: pointer;
+        background-color: transparent;
+        outline: none;
+        border: none;
+        width: 40px;
+        height: 40px;
+    }
+
+    main {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-links ul {
+        transform: translateY(-200%);
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-evenly;
+        align-items: center;
+        position: absolute;
+        top: 100px;
+        background-color: white;
+        right: 0;
+        width: 140px;
+        height: auto;
+        gap: 0px;
+    }
+
+    .clicked-menu-icon {
+        transform: translateY(0%);
+    }
+
+    .nav-links ul li {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        width: 100%;
+        height: 100%;
+    }
+
+    .nav-links ul li a {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        padding: 12px 0px;
+    }
+
+    .show-nav {
+        transform: translateY(0%) !important;
+    }
+
+    .top-login-header-button {
+        margin-right: 10px;
+    }
+
+    footer {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .footer-info-container {
+        width: 100dvw;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .footer-title {
+        text-align: center;
+        width: 100%;
     }
 }

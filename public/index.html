@@ -51,7 +51,7 @@
                 <h2>AidHub</h2>
             </a>
             <nav class="nav-links">
-                <ul>
+                <ul :class="[menuToggle ? 'show-nav' : '']">
                     <li><a class="nav-link" href="index.html">HOME</a></li>
                     <li><a class="nav-link" href="organizations.html">ORGANIZATIONS</a></li>
                     <li><a class="nav-link" href="volunteer.html">VOLUNTEERING</a></li>
@@ -61,6 +61,8 @@
                 <a href="contact.html">
                     <button class="common-green-button nav-bar-button">CONTACT US</button>
                 </a>
+                <button class="hamburger-menu" @click="toggleMenuOpen()"><img class="hamburger-menu"
+                        :src="[menuToggle ? 'icons/delete.svg' : 'icons/menu.svg']" /></button>
             </div>
         </header>
         <!-- Slideshow Stuff -->

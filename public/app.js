@@ -3,6 +3,7 @@ var URL = "https://aidhub-production.up.railway.app/";
 Vue.createApp({
     data() {
         return {
+            menuToggle: false,
             page: '',
             getStartedForm: {
                 open: false
@@ -1044,6 +1045,9 @@ Vue.createApp({
                     this.applications = data;
                 })
                 .catch(error => console.log(error));
+        },
+        toggleMenuOpen: function () {
+            this.menuToggle = !this.menuToggle;
         }
     },
     /*                                                     WATCHERS                                                     */
