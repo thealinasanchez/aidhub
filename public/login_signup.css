@@ -113,3 +113,26 @@ main {
 .login-submit-button:hover {
     background-color: #4d4d4d;
 }
+
+@media only screen and (max-width: 1100px) {
+    #app {
+        grid-template-columns:minmax(0px, 1fr)repeat(6,minmax(0,150px))minmax(0px,1fr);
+    }
+}  
+
+@media screen and (max-width: 768px) {
+
+    /* .login-container {
+        width: 710px;
+    } */
+}
+
+@media screen and (max-width: 500px) {
+    #mc_embed_shell {
+        width: 380px;
+    }
+
+    .login-container {
+        width: 466px;
+    }
+}

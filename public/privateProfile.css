@@ -925,3 +925,30 @@ main {
         margin-bottom: 5px;
     }
 }
+
+@media screen and (max-width: 500px) {
+    .username-edit-form {
+        width: 200px;
+    }
+
+    .username-text-edit {
+        width: 228px;
+    }
+
+    .about-container {
+        max-height: 136px;
+        max-width: 234px;
+    }
+
+    .edit-email-input {
+        width: 184px;
+    }
+
+    .current-applications-section h1 {
+        font-size: 21px;
+    }
+
+    .posted-opportunities-section h1 {
+        font-size: 21px;
+    }
+}
