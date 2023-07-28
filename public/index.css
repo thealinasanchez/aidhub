@@ -70,7 +70,7 @@
     text-align: center;
     margin: auto;
     position: absolute;
-    top: 90%;
+    top: calc(60px + 80vh);
     right: 50%;
 }
 
@@ -149,6 +149,7 @@
 }
 
 .index-spinner-container {
+    grid-column: 2/8;
     width: 100%;
     margin-top: 60px;
     height: 500px;
