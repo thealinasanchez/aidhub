@@ -518,3 +518,22 @@
     }
 
 }
+
+@media screen and (max-width: 500px) {
+    #mc_embed_shell {
+        width: 380px;
+    }
+
+    #volunteerformbutton {
+        width: 131px;
+        height: 43px;
+    }
+
+    #header-and-addbutton h1 {
+        font-size: 28px;
+    }
+
+    .post-modification img {
+        width: 48px;
+    }
+}

@@ -397,4 +397,42 @@
         display: flex;
         flex-flow: column nowrap;
     }
+
+    #mission {
+        display: flex;
+        flex-flow: column-reverse nowrap;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    #mc_embed_shell {
+        width: 380px;
+    }
+    .slideshow-dots-container {
+        margin-bottom: 72px;
+    }
+
+    .slideshow {
+        height: 56vh;
+    }
+
+    .slideshow-container {
+        height: 56vh;
+    }
+
+    .slideshow-image {
+        height: 56vh;
+    }
+
+    .index-ask-location-container {
+        height: 300px;
+    }
+
+    .index-main-info-container {
+        height: 400px;
+    }
+
+    .mission-text {
+        margin-bottom: 20px;
+    }
 }

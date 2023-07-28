@@ -245,3 +245,21 @@
     }
 
 }
+
+@media screen and (max-width: 500px) {
+    #mc_embed_shell {
+        width: 380px;
+    }
+
+    .org-search-area {
+        margin-left: 7%;
+    }
+
+    .org-row-head {
+        font-size: 13px;
+    }
+
+    .org-row-body {
+        font-size: 13px;
+    }
+}

@@ -32,7 +32,7 @@
     font-size: 17px;
 }
 
-#alina-qr {
+/* #alina-qr {
     float: right;
 }
 
@@ -43,7 +43,7 @@
 
 #alina-qr img {
     border-radius: 5px;
-}
+} */
 
 .thomas-section {
     display: flex;
@@ -67,6 +67,13 @@
     width: 596px;
     padding: 2px;
     font-size: 17px;
+}
+
+.QR {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 10px;
 }
 
 @media only screen and (max-width: 1100px) {
@@ -95,7 +102,7 @@
 
     .thomas-section {
         display: flex;
-        flex-flow: column nowrap;
+        flex-flow: column-reverse nowrap;
     }
 
     .thomas-section p {
@@ -169,5 +176,45 @@
     #thomas-qr h3 {
         margin-top: 20px;
         text-align: center;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .alina-section p {
+        width: 460px;
+    }
+
+    #alina-jumping {
+        width: 455px;
+        height: 345px;
+    }
+
+    .thomas-section p {
+        width: 455px;
+    }
+
+    #thomas-boi {
+        width: 460px;
+        height: 491px;
+        margin-top: 20px;
+    }
+
+    .QR {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .QR img {
+        width: 169px;
+        height: 151px;
+    }
+
+    #thomas-qr {
+        margin-bottom: 30px;
+    }
+
+    #mc_embed_shell {
+        width: 380px;
     }
 }
