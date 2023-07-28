@@ -1,4 +1,8 @@
-
+.title {
+    font-size: 30px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
 
 .main-section-container h1 {
     display: flex;
@@ -28,6 +32,9 @@
     font-size: 17px;
 }
 
+#alina-qr {
+    float: right;
+}
 
 #alina-qr h3 {
     margin-left: 70px;
@@ -41,6 +48,10 @@
 .thomas-section {
     display: flex;
     flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    font-size: 17px;
 }
 
 #thomas-boi {
@@ -150,5 +161,13 @@
 
     .thomas-section p {
         width: 555px;
+    }
+    #thomas-qr {
+        float: left;
+    }
+
+    #thomas-qr h3 {
+        margin-top: 20px;
+        text-align: center;
     }
 }
